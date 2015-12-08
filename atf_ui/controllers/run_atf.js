@@ -13,7 +13,7 @@ function RunATF(test_suits, test_suite_path) {
 
         test_cases.forEach(function(file) {
 
-            console.log('Executed ' + atf_bin + ' with script: ' + test_suite_path + test_suit + "/" + file);
+            console.log('----------Executed ' + atf_bin + ' with script: ' + test_suite_path + test_suit + "/" + file);
 
             //var atf_process = child_process.spawnSync(atf_bin,
             //    [test_suite_path + test_suit + "/" + file],
@@ -27,10 +27,10 @@ function RunATF(test_suits, test_suite_path) {
             try {
                 var history = child_process.execSync(atf_bin + " " + test_suite_path + test_suit + "/" + file,
                     {'cwd': atf_bin_folder});
-                console.log('HISTORY! ' + history);
+                console.log('----------HISTORY! ' + history);
                 process.send('' + history);
             } catch (err) {
-                console.log('Error --------- ' + err);
+                console.log('----------Error --------- ' + err);
             }
 
             //console.log("ATF LOG FROM run_atf.js - " + atf_process.stdout.toString());
@@ -38,7 +38,7 @@ function RunATF(test_suits, test_suite_path) {
             // All console.log output will be redirected to parent process
             // that will handle logs via process.stdout and process.stderr
             //atf_process.stdout.on('data', function (data) {
-            //    console.log('stdout: ' + data);
+            //    console.log('----------stdout: ' + data);
             //});
             //
             //atf_process.stderr.on('data', function (data) {
@@ -46,7 +46,7 @@ function RunATF(test_suits, test_suite_path) {
             //});
             //
             //atf_process.on('exit', function (code) {
-            //    console.log('child process exited with code: ' + code);
+            //    console.log('----------child process exited with code: ' + code);
             //});
 
         });

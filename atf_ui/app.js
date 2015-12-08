@@ -7,6 +7,11 @@ var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var multer  = require('multer');
 
+// DB mongo
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/users');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var controller = require('./controllers/controller.js');
@@ -21,9 +26,8 @@ var app = express();
  */
 fs.readFile('/tmp/config.json', 'utf8', function (err, data) {
     if (err) {
-        console.log("No predefined configuration found...................");
+        console.log("----------No predefined configuration found...................");
         app.locals.mainConfig = null;
-
 
         //data = {file_path: '',
         //        hb_timeout: '',
@@ -37,10 +41,10 @@ fs.readFile('/tmp/config.json', 'utf8', function (err, data) {
         //};
 
         if (fs.writeFileSync("/tmp/config.json", JSON.stringify(app.locals.mainConfig), "utf8")) {
-            console.log("ERROR: The configuration file was not created!..................");
+            console.log("----------ERROR: The configuration file was not created!..................");
             console.log(app.locals.mainConfig);
         } else {
-            console.log("The configuration file was created successfuly!..................");
+            console.log("----------The configuration file was created successfuly!..................");
             console.log(app.locals.mainConfig);
         }
 
@@ -48,7 +52,7 @@ fs.readFile('/tmp/config.json', 'utf8', function (err, data) {
     }
     app.locals.mainConfig = JSON.parse(data);
     console.log(app.locals.mainConfig);
-    console.log("Configuration read successful...................");
+    console.log("----------Configuration read successful...................");
 });
 
 // view engine setup
@@ -71,14 +75,22 @@ app.use(multer({
     }
 }));
 
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    res.locals.session = req.session;
+    next();
+});
+
 app.use('/', routes);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    req.db = db;
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers

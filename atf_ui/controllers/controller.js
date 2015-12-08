@@ -51,16 +51,16 @@ controller.init = function(){
 
         console.log(controller.clients);
         controller.clients[0].sdl = ws;
-        console.log("SDLLogServer New connection established.");
+        console.log("----------SDLLogServer New connection established.");
 
         ws.on('message', function(message) {
-            console.log('SDLLogServer Got message:  ' + message);
+            console.log('----------SDLLogServer Got message:  ' + message);
 
             controller.clients[0].sdl.send(message);
         });
 
         ws.on('close', function() {
-            console.log('SDLLogServer Connection closed.');
+            console.log('----------SDLLogServer Connection closed.');
             delete controller.clients[0];
         });
 
@@ -69,16 +69,16 @@ controller.init = function(){
     ATFLogServer.on('connection', function(ws) {
 
         controller.clients[0].atf = ws;
-        console.log("ATFLogServer New connection established.");
+        console.log("----------ATFLogServer New connection established.");
 
         ws.on('message', function(message) {
-            console.log('ATFLogServer Got message:  ' + message);
+            console.log('----------ATFLogServer Got message:  ' + message);
 
             controller.clients[0].atf.send(message);
         });
 
         ws.on('close', function() {
-            console.log('ATFLogServer Connection closed.');
+            console.log('----------ATFLogServer Connection closed.');
             delete controller.clients[0];
         });
 
@@ -108,9 +108,9 @@ controller.newUser = function(req, res) {
     switch (req.body.objectData) {
         case 'login' :
         {
-            console.log('Received request login................');
-            console.log('User Name is................' + req.body.data);
-            console.log('MainConfig is................');
+            console.log('----------Received request login................');
+            console.log('----------User Name is................' + req.body.data);
+            console.log('----------MainConfig is................');
             console.log(req.app.locals.mainConfig);
 
             req.session.userName = req.body.data;
@@ -120,7 +120,7 @@ controller.newUser = function(req, res) {
                 req.app.locals.mainConfig[req.body.data] = {};
             }
 
-            console.log('MainConfig is................');
+            console.log('----------MainConfig is................');
             console.log(req.app.locals.mainConfig);
 
             res.status(201).send('new user');
@@ -128,10 +128,27 @@ controller.newUser = function(req, res) {
         }
         default:
         {
-            console.log('Undefined route: ' + req.body.objectData);
+            console.log('----------Undefined route: ' + req.body.objectData);
             res.status(404).end();
         }
     }
+};
+
+controller.login = function(req, res){
+    console.log('----------Login POST controller with data: ', req.body);
+    req.db.get('usercollection').find(
+        {
+            "userName":req.body.userName,
+            "password":req.body.password
+        },
+        {},
+        function(e, docs){
+            if (docs.length === 1) {
+                req.session.user = docs[0];
+                res.redirect("back");
+            }
+        }
+    );
 };
 
 /**
@@ -142,13 +159,15 @@ controller.newUser = function(req, res) {
  */
 controller.saveConfiguration = function(req, res) {
 
-    console.log("Save Configuration enter...................");
+    console.log("----------Save Configuration enter...................");
 
-    console.log("User Name " + req.session.userName);
+    console.log("----------User Name " + req.session.userName);
 
-    req.app.locals.mainConfig[req.session.userName] = req.body;
+    req.db.get('usercollection').insert(req.body);
 
-    console.log("MainConfig is...........");
+   /* req.app.locals.mainConfig[req.session.userName] = req.body;
+
+    console.log("----------MainConfig is...........");
     console.log(req.app.locals.mainConfig);
 
     // SYNC method to write configuration data to FS
@@ -159,9 +178,9 @@ controller.saveConfiguration = function(req, res) {
     );
 
     if (result) {
-        console.log("ERROR: File was not writed to FS...................");
+        console.log("----------ERROR: File was not writed to FS...................");
     } else {
-        console.log("File writed to FS...................");
+        console.log("----------File writed to FS...................");
     }
 
     // SYNC method
@@ -172,23 +191,23 @@ controller.saveConfiguration = function(req, res) {
     if (JSON.stringify( req.app.locals.mainConfig ) === data) {
 
         console.log(req.app.locals.mainConfig);
-        console.log("Data saved successfully...................");
+        console.log("----------Data saved successfully...................");
         // Go to next configuration view 'test_suite'
-        console.log("Test suite rendered...................");
+        console.log("----------Test suite rendered...................");
     } else {
 
         console.log(data);
         console.log(JSON.stringify( req.app.locals.mainConfig ));
 
-        console.log("Data wasn't saved successfully...................");
+        console.log("----------Data wasn't saved successfully...................");
         // Go to start page
-        console.log("Index rendered...................");
+        console.log("----------Index rendered...................");
     }
 
     fs.readFile(__dirname + "/../../atf_bin" + "/modules/config.lua", 'utf8',
         function(err, data) {
             if (err) {
-                console.log("Failed to read ATF config file. " + err);
+                console.log("----------Failed to read ATF config file. " + err);
                 return;
             }
             var updatedData = '';
@@ -196,11 +215,11 @@ controller.saveConfiguration = function(req, res) {
                 updatedData = data.replace(/local config = \{ \}/,
                     "local config = { }\nconfig.SDLStoragePath = \"" + req.app.locals.mainConfig.SDLStoragePath+"\"");
             } else {
-                updatedData = data.replace(/config\.SDLStoragePath.*/,
+                updatedData = data.replace(/config\.SDLStoragePath.*!/,
                     "config.SDLStoragePath = \"" + req.app.locals.mainConfig.SDLStoragePath+"\"");
             }
             fs.writeFileSync(__dirname + "/../../atf_bin" + "/modules/config.lua", updatedData, 'utf8');
-    });
+    });*/
 
     res.redirect("back");
 };
@@ -258,7 +277,7 @@ controller.test_suite_config = function(req, res) {
 
     switch (req.body.objectData) {
         case 'test_cases_list' : {
-            console.log('Received request test_cases_list................');
+            console.log('----------Received request test_cases_list................');
 
             results = [];
             list = fs.readdirSync(uploadPath);
@@ -274,7 +293,7 @@ controller.test_suite_config = function(req, res) {
             break;
         }
         case 'test_suite_list' : {
-            console.log('Received request test_suits_list................');
+            console.log('----------Received request test_suits_list................');
 
             results = [];
             list = fs.readdirSync(testSuitePath);
@@ -290,7 +309,7 @@ controller.test_suite_config = function(req, res) {
             break;
         }
         case 'test_suite_description' : {
-            console.log('Received request test_suite_description................');
+            console.log('----------Received request test_suite_description................');
 
             if(req.body.data){
                 currentTestSuite = req.body.data;
@@ -318,7 +337,7 @@ controller.test_suite_config = function(req, res) {
             break;
         }
         case 'start_atf' : {
-            console.log('Received request to run ATF for testsuits: ' + req.body.data.test_suits);
+            console.log('----------Received request to run ATF for testsuits: ' + req.body.data.test_suits);
             this.copyAdditionalFiles();
 
             var test_suits = req.body.data.test_suits;
@@ -330,7 +349,7 @@ controller.test_suite_config = function(req, res) {
                 break;
             }
             if (!this.sdl_process) {
-                console.log("Start SDL.............");
+                console.log("----------Start SDL.............");
 
                 var proc = child_process.exec;
 
@@ -403,9 +422,9 @@ controller.test_suite_config = function(req, res) {
             break;
         }
         case 'add_test_suit' : {
-            console.log('Received request to add new test suit with scripts: ' + req.body.data.test_scripts);
+            console.log('----------Received request to add new test suit with scripts: ' + req.body.data.test_scripts);
             path = "/tmp/testsuits/" + req.body.data.folder_name + "/";
-            console.log('path ' + path);
+            console.log('----------path ' + path);
             fs.mkdirSync(path, function(err) {
                     if (err && err.code != 'EEXIST') {
                         logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
@@ -421,7 +440,7 @@ controller.test_suite_config = function(req, res) {
             break;
         }
         default: {
-            console.log('Undefined route: ' + req.body.objectData);
+            console.log('----------Undefined route: ' + req.body.objectData);
             res.status(404).end();
         }
     }

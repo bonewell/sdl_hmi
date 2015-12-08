@@ -4,14 +4,26 @@ block content
     h1= title
     p Welcome to #{title}
     <br>
-    p Sign in
 
-    input(type="text", name="user_name", id="sing_in")
-    #enter(class="button") Ok
+    form(action='/login',method='post')
+        select(name='userName', value='')
+            each user, i in users
+                option(value="#{user.userName}")= user.userName
 
-    p
-        a(id='config', class='button disabled', href='http://localhost:3000/config') go to config
-    p
-        a(id='test_suite', class='button disabled', href='http://localhost:3000/test_suite') go to test_suite
+        p User password
+        input(name='password', value='')
+
+        p
+            input(type='submit', value="Enter")
+
+    if session.user
+
+        p Hi #{session.user.userName}
+
+        p
+            a(id='config', class='button', href='http://localhost:3000/config') go to config
+        p
+            a(id='test_suite', class='button', href='http://localhost:3000/test_suite') go to test_suite
 
     script(src="/javascripts/start.js")
+
