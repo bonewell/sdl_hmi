@@ -30,76 +30,46 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set (PROJECT QtHmi)
-
-#Jenkins integration section
-#dont modify this section if you dont know details about integration with Jenkins!!!
 option(BUILD_TESTS "Possibility to build and run tests" OFF)
 option(ENABLE_LOG "Logging feature" ON)
 
-set(OS_TYPE_OPTION 	"$ENV{OS_TYPE}")
-set(DEBUG_OPTION 	"$ENV{DEBUG}")
-set(ENABLE_LOG_OPTION 	"$ENV{ENABLE_LOG}")
-set(ARCH_TYPE_OPTION	"$ENV{ARCH_TYPE}")
+set(OS_TYPE_OPTION "$ENV{OS_TYPE}")
+set(ARCH_TYPE_OPTION "$ENV{ARCH_TYPE}")
 
 if (ARCH_TYPE_OPTION)
   if (NOT (${ARCH_TYPE_OPTION} STREQUAL "x86") AND NOT (${ARCH_TYPE_OPTION} STREQUAL "armv7"))
     message(AUTHOR_WARNING "HW architecture is not defined, using x86. Allowed values are x86/armv7 (case sensitive)")
-    set(ARCH_TYPE_OPTION	"x86")
+    set(ARCH_TYPE_OPTION "x86")
   endif ()
 else ()
-    set(ARCH_TYPE_OPTION	"x86")
-endif()
+    set(ARCH_TYPE_OPTION "x86")
+endif ()
 
 set(objcopy "objcopy")
 if (OS_TYPE_OPTION)
   if (${OS_TYPE_OPTION} STREQUAL "QNX")
-    message(STATUS "Jenkins integration: set build process for QNX")
+    message(STATUS "Set build process for QNX")
     #do not use include after project() command.
     #Such usecase results in infinite cycle of reinitialization of compiler and other variables
     INCLUDE("./qnx_6.5.0_linux_x86.cmake")
     set(objcopy "nto${ARCH_TYPE_OPTION}-objcopy")
-    #tests are not supported yet for QNX build
-    set (BUILD_TESTS OFF)
   endif()
 endif()
 
-if (DEBUG_OPTION)
-  if (${DEBUG_OPTION} STREQUAL "DBG_OFF")
-    message(STATUS "Jenkins integration: build release version")
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
-  endif()
-endif()
-
-if (ENABLE_LOG_OPTION)
-  if (${ENABLE_LOG_OPTION} STREQUAL "LOG_OFF")
-    message(STATUS "Jenkins integration: Log is turned off")
-    set (ENABLE_LOG OFF)
-  endif()
-endif()
-
-#Jenkins integration section end
-
-project (${PROJECT})
+project(QtHmi)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-# Please do not change compiler/linker flags if You do not know how particular
-# flag is handled by CMake
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-set(ARCHIVE_OUTPUT_DIRECTORY ./bin)
 
 set(CMAKE_CXX_FLAGS "-fPIC -std=gnu++0x -Wall -Werror -Wuninitialized -Wvla")
-
 set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG -s -O2")
 set(CMAKE_CXX_FLAGS_DEBUG   " -DDEBUG -g3 -ggdb3")
 
-if(ENABLE_LOG)
+if (ENABLE_LOG)
   message(STATUS "Log is turned on")
   add_definitions(-DENABLE_LOG)
 endif()
-
-# --- Interface generator
 
 find_package(PythonInterp)
 if(NOT PYTHONINTERP_FOUND)
@@ -134,7 +104,7 @@ endif()
 
 set(RTLIB rt)
 if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
-set(RTLIB )
+  set(RTLIB )
 endif()
 
 set(main_qml "MainWindow.qml")
@@ -160,7 +130,6 @@ install(FILES ${CMAKE_SOURCE_DIR}/log4cxx.properties
   PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
   DESTINATION bin)
 
-# --- Source
 add_subdirectory(./qml_plugins)
 
 if (CMAKE_SYSTEM_NAME STREQUAL "QNX")

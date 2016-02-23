@@ -31,14 +31,14 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 set(QT_HMI_TESTS_LIST 
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_AddCommand.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_AddSubMenu.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_DeleteCommand.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_ScrollableMessage.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_SetMediaClockTimer.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_Show.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/src/tst_Slider.qml
-    ${COMPONENTS_DIR}/qt_hmi/test/readme.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_AddCommand.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_AddSubMenu.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_DeleteCommand.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_ScrollableMessage.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_SetMediaClockTimer.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_Show.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_Slider.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/readme.txt
 )
 
 include_directories(
@@ -57,7 +57,7 @@ set(SOURCES
 
 set(target qt_hmi_test)
 
-create_test("qt_hmi_test" "${SOURCES}" "")
+add_executable(${target} ${SOURCES})
 qt5_use_modules(${target} Core Qml Quick QuickTest)
 
 foreach( file_i ${QT_HMI_TESTS_LIST})
