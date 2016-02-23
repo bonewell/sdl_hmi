@@ -30,15 +30,13 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set(components_dir ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
-set(dbus_dir ${components_dir}/dbus)
-set(codegen_dir ${dbus_dir}/codegen)
+set(codegen_dir ${CMAKE_SOURCE_DIR}/tools/codegen)
 set(codegen ${codegen_dir}/make_qml_dbus_cpp.py)
 set(codegen_request_to_sdl ${codegen_dir}/make_request_to_sdl.py)
 set(codegen_hmi_requests ${codegen_dir}/make_hmi_requests.py)
 set(codegen_notification_qml ${codegen_dir}/make_notifications_qml.py)
 set(parser ${codegen_dir}/ford_xml_parser.py)
-set(interfaces_dir ${components_dir}/interfaces)
+set(interfaces_dir ${CMAKE_SOURCE_DIR})
 set(api_xml ${interfaces_dir}/QT_HMI_API.xml)
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.cc ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h
@@ -106,7 +104,7 @@ include_directories(
 #  ${LOG4CXX_INCLUDE_DIRECTORY}
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_BINARY_DIR}/src/components
+#  ${CMAKE_BINARY_DIR}/src/components
 #  ${CMAKE_SOURCE_DIR}/src/components/utils/include/
 )
 

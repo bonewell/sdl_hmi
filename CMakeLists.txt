@@ -406,8 +406,8 @@ if(BUILD_TESTS)
   # and must not be added separately
 endif()
 
-# --- Components
-add_subdirectory(./src/components)
+# --- Source
+add_subdirectory(./src)
 
 # Building tests
 if(BUILD_TESTS)
