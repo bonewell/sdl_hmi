@@ -34,17 +34,17 @@
 
 #include "log4cxx_plugin.h"
 
-#if ENABLE_LOG
+#ifdef ENABLE_LOG
 #  include <log4cxx/log4cxx.h>
 #  include <log4cxx/propertyconfigurator.h>
 #endif  // ENABLE_LOG
 
-#if ENABLE_LOG
+#ifdef ENABLE_LOG
 log4cxx::LoggerPtr logger_ = log4cxx::LoggerPtr(
                               log4cxx::Logger::getLogger("Log4cxxPlugin"));
 #endif  // ENABLE_LOG
 
-#if ENABLE_LOG
+#ifdef ENABLE_LOG
 void saveLog(QtMsgType type, log4cxx::spi::LocationInfo &location, const std::string &msg) {
   switch (type) {
   case QtDebugMsg:
@@ -68,7 +68,7 @@ void saveLog(QtMsgType type, log4cxx::spi::LocationInfo &location, const std::st
 
 #if QT_4
 void smartLogger(QtMsgType type, const char *msg) {
-#if ENABLE_LOG
+#ifdef ENABLE_LOG
   log4cxx::spi::LocationInfo location("", "", -1);
   saveLog(type, location, std::string(msg));
 #endif  // ENABLE_LOG
@@ -76,7 +76,7 @@ void smartLogger(QtMsgType type, const char *msg) {
 #elif QT_5
 void smartLogger(QtMsgType type, const QMessageLogContext &context,
                  const QString &msg) {
-#if ENABLE_LOG
+#ifdef ENABLE_LOG
   log4cxx::spi::LocationInfo location(context.file,
                                       context.function ? context.function : "",
                                       context.line);
@@ -86,7 +86,7 @@ void smartLogger(QtMsgType type, const QMessageLogContext &context,
 #endif  // QT_VERSION
 
 void Log4cxxPlugin::registerTypes(const char *uri) {
-#if ENABLE_LOG
+#ifdef ENABLE_LOG
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
 #endif  // ENABLE_LOG
 
