@@ -31,19 +31,13 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 set(QT_HMI_TESTS_LIST 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_AddCommand.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_AddSubMenu.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_DeleteCommand.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_ScrollableMessage.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_SetMediaClockTimer.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_Show.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tst_Slider.qml
-    ${CMAKE_CURRENT_SOURCE_DIR}/readme.txt
-)
-
-include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR} 
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_AddCommand.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_AddSubMenu.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_DeleteCommand.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_ScrollableMessage.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_SetMediaClockTimer.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_Show.qml
+    ${CMAKE_CURRENT_SOURCE_DIR}/tst_Slider.qml
 )
 
 set(CONFIG
@@ -52,10 +46,10 @@ set(CONFIG
 )
 
 set(SOURCES
-    qt_hmi_test.cc
+    tst_sdl_hmi_qt.cc
 )
 
-set(target qt_hmi_test)
+set(target tst_sdl_hmi_qt)
 
 add_executable(${target} ${SOURCES})
 qt5_use_modules(${target} Core Qml Quick QuickTest)
