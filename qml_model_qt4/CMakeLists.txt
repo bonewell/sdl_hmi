@@ -30,12 +30,10 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set(components_dir ${CMAKE_CURRENT_SOURCE_DIR}/../..)
-set(dbus_dir ${components_dir}/dbus)
-set(codegen_dir ${dbus_dir}/codegen)
+set(codegen_dir ${CMAKE_SOURCE_DIR}/codegen)
 set(codegen ${codegen_dir}/make_qml_dbus_qml.py)
 set(parser ${codegen_dir}/ford_xml_parser.py)
-set(interfaces_dir ${components_dir}/interfaces)
+set(interfaces_dir ${CMAKE_SOURCE_DIR})
 set(api_xml ${interfaces_dir}/QT_HMI_API.xml)
 set(proxy_dir ${CMAKE_CURRENT_BINARY_DIR}/hmi_api)
 set(qml_dirs hmi_api controls models popups views)

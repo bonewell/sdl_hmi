@@ -28,9 +28,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-
-if(BUILD_TESTS)
-
 cmake_minimum_required(VERSION 2.8.11)
 
 set(QT_HMI_TESTS_LIST 
@@ -66,5 +63,3 @@ qt5_use_modules(${target} Core Qml Quick QuickTest)
 foreach( file_i ${QT_HMI_TESTS_LIST})
     file(COPY ${file_i} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endforeach( file_i )
-
-endif()
