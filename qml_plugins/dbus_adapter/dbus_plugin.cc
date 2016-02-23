@@ -41,8 +41,10 @@
 #include "dbus_controller.h"
 #include "request_to_sdl.h"
 
-#include <log4cxx/logger.h>
-#include <log4cxx/propertyconfigurator.h>
+#ifdef ENABLE_LOG
+#  include <log4cxx/logger.h>
+#  include <log4cxx/propertyconfigurator.h>
+#endif  // ENABLE_LOG
 
 #include <QtCore/QString>
 #include <QtDBus/QDBusConnection>
@@ -56,11 +58,16 @@
 #  include <QtQml/QQmlListReference>
 #  include <QtQml/QQmlEngine>
 #endif  // QT_VERSION
+
+#ifdef ENABLE_LOG
 log4cxx::LoggerPtr logger_ = log4cxx::LoggerPtr(
                               log4cxx::Logger::getLogger("DBusPlugin"));
+#endif  // ENABLE_LOG
 
 void DbusPlugin::registerTypes(const char *uri) {
+#ifdef ENABLE_LOG
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
+#endif  // ENABLE_LOG
 
   // @uri sdl.core.api
   qmlRegisterType<HmiProxy>(uri, 1, 0, "HMIAdapter");

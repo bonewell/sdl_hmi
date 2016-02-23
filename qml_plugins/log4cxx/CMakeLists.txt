@@ -32,7 +32,7 @@ cmake_minimum_required(VERSION 2.8.11)
 
 set(target QmlLog4cxx)
 set(destination com/ford/sdl/hmi/log4cxx)
-set(install_destination bin/hmi/plugins/${destination})
+set(install_destination bin/plugins/${destination})
 set(library_name ${CMAKE_SHARED_LIBRARY_PREFIX}${target}${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 set(CMAKE_AUTOMOC ON)

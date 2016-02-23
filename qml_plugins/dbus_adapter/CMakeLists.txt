@@ -81,7 +81,7 @@ add_custom_command(
 
 set(target DbusAdapter)
 set(destination com/ford/sdl/hmi/dbus_adapter)
-set(install_destination bin/hmi/plugins/${destination})
+set(install_destination bin/plugins/${destination})
 set(library_name ${CMAKE_SHARED_LIBRARY_PREFIX}${target}${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 set(CMAKE_AUTOMOC ON)

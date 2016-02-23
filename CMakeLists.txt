@@ -1,4 +1,4 @@
-# Copyright (c) 2014, Ford Motor Company
+# Copyright (c) 2014-2016, Ford Motor Company
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -95,6 +95,7 @@ set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG -s -O2")
 set(CMAKE_CXX_FLAGS_DEBUG   " -DDEBUG -g3 -ggdb3")
 
 if(ENABLE_LOG)
+  message(STATUS "Log is turned on")
   add_definitions(-DENABLE_LOG)
 endif()
 
@@ -135,6 +136,26 @@ set(RTLIB rt)
 if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
 set(RTLIB )
 endif()
+
+set(main_qml "MainWindow.qml")
+set(plugins_dir "plugins")
+
+if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
+  set(start_command "./start-qml.sh")
+  set(command_arguments "${main_qml} ${plugins_dir}")
+else ()
+  execute_process(
+    COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${qt_version} -b qmlscene
+    OUTPUT_VARIABLE start_command
+  )
+  set(command_arguments "${main_qml} -I ${plugins_dir}")
+endif ()
+
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/start_hmi.sh
+  "#!/bin/sh\n${start_command} ${command_arguments}\n")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/start_hmi.sh
+  PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_EXECUTE
+  DESTINATION bin)
 
 # --- Source
 add_subdirectory(./qml_plugins)

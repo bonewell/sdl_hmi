@@ -34,16 +34,18 @@
 
 #include "log4cxx_plugin.h"
 
-#include <log4cxx/log4cxx.h>
-#include <log4cxx/propertyconfigurator.h>
+#if ENABLE_LOG
+#  include <log4cxx/log4cxx.h>
+#  include <log4cxx/propertyconfigurator.h>
+#endif  // ENABLE_LOG
 
+#if ENABLE_LOG
 log4cxx::LoggerPtr logger_ = log4cxx::LoggerPtr(
                               log4cxx::Logger::getLogger("Log4cxxPlugin"));
+#endif  // ENABLE_LOG
 
-#if QT_4
-void smartLogger(QtMsgType type, const char *msg) {
-  log4cxx::spi::LocationInfo location("", "", -1);
-
+#if ENABLE_LOG
+void saveLog(QtMsgType type, log4cxx::spi::LocationInfo &location, const std::string &msg) {
   switch (type) {
   case QtDebugMsg:
     (*logger_).debug(msg, location);
@@ -62,34 +64,31 @@ void smartLogger(QtMsgType type, const char *msg) {
     break;
   }
 }
+#endif  // ENABLE_LOG
+
+#if QT_4
+void smartLogger(QtMsgType type, const char *msg) {
+#if ENABLE_LOG
+  log4cxx::spi::LocationInfo location("", "", -1);
+  saveLog(type, location, std::string(msg));
+#endif  // ENABLE_LOG
+}
 #elif QT_5
 void smartLogger(QtMsgType type, const QMessageLogContext &context,
                  const QString &msg) {
+#if ENABLE_LOG
   log4cxx::spi::LocationInfo location(context.file,
                                       context.function ? context.function : "",
                                       context.line);
-  switch (type) {
-  case QtDebugMsg:
-    (*logger_).debug(msg.toStdString(), location);
-    break;
-  case QtWarningMsg:
-    (*logger_).warn(msg.toStdString(), location);
-    break;
-  case QtCriticalMsg:
-    (*logger_).error(msg.toStdString(), location);
-    break;
-  case QtFatalMsg:
-    (*logger_).fatal(msg.toStdString(), location);
-    break;
-  default:
-    (*logger_).info(msg.toStdString(), location);
-    break;
-  }
+  saveLog(type, location, msg.toStdString());
+#endif  // ENABLE_LOG
 }
 #endif  // QT_VERSION
 
 void Log4cxxPlugin::registerTypes(const char *uri) {
+#if ENABLE_LOG
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
+#endif  // ENABLE_LOG
 
 #if QT_4
   qInstallMsgHandler(smartLogger);

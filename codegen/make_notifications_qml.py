@@ -381,7 +381,14 @@ source_out.write("""
 """)
 
 source_out.write("#include \"sdl_proxy.h\"\n")
+source_out.write("#ifdef ENABLE_LOG\n")
 source_out.write("#include <log4cxx/logger.h>\n")
 source_out.write("extern log4cxx::LoggerPtr logger_;\n")
+source_out.write("#else  // ENABLE_LOG\n")
+source_out.write("#define LOG4CXX_ERROR(logger, message)\n")
+source_out.write("#define LOG4CXX_WARN(logger, message)\n")
+source_out.write("#define LOG4CXX_DEBUG(logger, message)\n")
+source_out.write("#define LOG4CXX_TRACE(logger, message)\n")
+source_out.write("#endif  // ENABLE_LOG\n\n")
 
 impl.make_source(source_out)
