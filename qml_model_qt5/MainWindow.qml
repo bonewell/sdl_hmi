@@ -387,10 +387,6 @@ Rectangle {
             console.debug("exit onAppUnregistered")
         }
 
-        onPlayTone: {
-            beep.play()
-        }
-
         onOnSDLClose: {
 
         }
