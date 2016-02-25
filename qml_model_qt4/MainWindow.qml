@@ -307,10 +307,6 @@ Rectangle {
             console.debug("exit")
         }
 
-        onPlayTone: {
-            beep.play()
-        }
-
     }
 
     Component.onCompleted: {
