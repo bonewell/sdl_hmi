@@ -42,6 +42,20 @@ router.post('/login', function(req, res, next) {
 });
 
 /* POST main configuration page form submit handler. */
+router.get('/register', function(req, res, next) {
+
+    console.log("----------Register GET enter...................");
+    controller.register(req, res);
+});
+
+/* POST main configuration page form submit handler. */
+router.get('/addConfig', function(req, res, next) {
+
+    console.log("----------addConfig GET enter...................");
+    controller.addConfig(req, res);
+});
+
+/* POST main configuration page form submit handler. */
 router.post('/upload', function(req, res, next) {
     console.log('----------TRYING TO UPLOAD................');
     console.log(req.body);

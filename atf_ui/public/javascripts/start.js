@@ -34,3 +34,11 @@ $('#enter').click(function(){
         $('#sing_in').val()
     );
 });
+
+$('#Register').click(function(){
+    request(
+        'register',
+        function(data){
+        }
+    );
+});

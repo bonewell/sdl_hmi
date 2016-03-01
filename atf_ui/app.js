@@ -15,6 +15,7 @@ var db = monk('localhost:27017/users');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var controller = require('./controllers/controller.js');
+var model = require('./model/model.js');
 var fs = require('fs');
 
 var app = express();

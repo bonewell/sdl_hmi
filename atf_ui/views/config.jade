@@ -1,49 +1,54 @@
 extends layout
 
 block content
-    h1= title
-    p(style={color: '#3c78d8'}) Welcome to #{title}
+    ul(class="nav nav-tabs")
+        li(role="presentation", class="active")
+            a(href="#") Config1
+        li(role="presentation")
+            a(href="/addConfig") +
 
-    #main_configuration_container(class='main_container')
-        form(action='/save',method='post')
-            p User name
-            input(name='userName', value='#{session.user.userName}')
 
-            p User email
-            input(name='email', value='#{session.user.email}')
+    if session.user
+        #main_configuration_container(class='main_container')
+            form(action='/save',method='post')
+                p User name
+                input(name='userName', value='#{session.user.userName}')
 
-            p User password
-            input(name='password', value='#{session.user.password}')
+                p User email
+                input(name='email', value='#{session.user.email}')
 
-            p heartBeat timeout
-            input(name='hb_timeout', value='#{session.user.hb_timeout}')
+                p User password
+                input(name='password', value='#{session.user.password}')
 
-            p testRecord folder
-            input(name='testRecord_path', type='text', value='#{session.user.testRecord_path}')
+                p heartBeat timeout
+                input(name='hb_timeout', value='#{session.user.hb_timeout}')
 
-            p Mobile connection string
-            input(name='MOB_connection_str', value='#{session.user.MOB_connection_str}')
+                p testRecord folder
+                input(name='testRecord_path', type='text', value='#{session.user.testRecord_path}')
 
-            p HMI connection string
-            input(name='HMI_connection_str', value='#{session.user.HMI_connection_str}')
+                p Mobile connection string
+                input(name='MOB_connection_str', value='#{session.user.MOB_connection_str}')
 
-            p PerfLog connection string
-            input(name='PerfLog_connection_str', value='#{session.user.PerfLog_connection_str}')
+                p HMI connection string
+                input(name='HMI_connection_str', value='#{session.user.HMI_connection_str}')
 
-            p Time for launch SDLProc
-            input(name='launch_time', value='#{session.user.launch_time}')
+                p PerfLog connection string
+                input(name='PerfLog_connection_str', value='#{session.user.PerfLog_connection_str}')
 
-            p Client PerfLog connection string
-            input(name='client_PerfLog_connection_str', value='#{session.user.client_PerfLog_connection_str}')
+                p Time for launch SDLProc
+                input(name='launch_time', value='#{session.user.launch_time}')
 
-            p terminal CMD
-            input(name='terminal_name', value='#{session.user.terminal_name}')
+                p Client PerfLog connection string
+                input(name='client_PerfLog_connection_str', value='#{session.user.client_PerfLog_connection_str}')
 
-            p SDLStoragePath
-            input(name="SDLStoragePath", value='#{session.user.SDLStoragePath}')
+                p terminal CMD
+                input(name='terminal_name', value='#{session.user.terminal_name}')
 
-            p
-            input(type='submit')
-            input(type='reset')
+                p SDLStoragePath
+                input(name="SDLStoragePath", value='#{session.user.SDLStoragePath}')
+
+                p
+                input(type='submit')
+                input(type='reset')
 
     a(class='button', href='http://localhost:3000') Back

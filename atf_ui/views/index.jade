@@ -1,29 +1,41 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
-    <br>
 
     form(action='/login',method='post')
-        select(name='userName', value='')
-            each user, i in users
-                option(value="#{user.userName}")= user.userName
 
-        p User password
-        input(name='password', value='')
+        .input-group
+            .input-group-btn
+                button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | User name
+                    span.caret
+                ul.dropdown-menu
+                    li
+                        a(href='#') asdhasdj
+                    li
+                        a(href='#') dasdasdasd
+                    li
+                        a(href='#') fsdfsdfsdf
+                    // each user, i in users
+                    //li(value="#{user.userName}")= user.userName
+
+            input.form-control(type='text', aria-label='...')
+
+        .input-group.input-group-lg
+            span.input-group-addon User password
+            input.form-control(name='password', value='', type="password", placeholder="password", aria-describedby="sizing-addon1")
 
         p
-            input(type='submit', value="Enter")
+            input.btn.btn-success(type='submit', value="Enter")
+
+        p
+            a(id='test_suite', class='btn btn-info', href='/register') Register new user
 
     if session.user
 
         p Hi #{session.user.userName}
 
         p
-            a(id='config', class='button', href='http://localhost:3000/config') go to config
+            a(id='config', class='button', href='/config') go to config
         p
-            a(id='test_suite', class='button', href='http://localhost:3000/test_suite') go to test_suite
-
-    script(src="/javascripts/start.js")
-
+            a(id='test_suite', class='button', href='/test_suite') go to test_suite

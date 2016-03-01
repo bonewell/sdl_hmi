@@ -1,9 +1,18 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="/javascripts/jquery-1.8.2.js")
+extends ../node_modules/jade-bootstrap/_bootstrap
 
-  body
-    block content
+block body
+  link(rel="stylesheet",href="stylesheets/style.css")
+  link(rel="stylesheet",href="stylesheets/spectrum.css")
+  .header
+    .container
+      h1= title
+      p Welcome to #{title}
+      <br>
+  .container
+    .col-lg-6
+      block content
+block scripts
+  script(src="/javascripts/jquery-1.11.2.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+  script(src="/javascripts/start.js")
+  script(src="/javascripts/spectrum.js")

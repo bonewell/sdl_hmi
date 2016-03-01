@@ -134,6 +134,15 @@ controller.newUser = function(req, res) {
     }
 };
 
+controller.register = function(req, res){
+    console.log('----------Login POST controller with data: ', req.body);
+    res.render('config')
+};
+
+controller.addConfig = function (req, res) {
+
+};
+
 controller.login = function(req, res){
     console.log('----------Login POST controller with data: ', req.body);
     req.db.get('usercollection').find(

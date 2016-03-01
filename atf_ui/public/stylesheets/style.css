@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -7,12 +6,21 @@ a {
   color: #00B7FF;
 }
 
+.header{
+    background-color: #3C3CA9;
+    color: #F8FFF0;
+    margin-bottom: 40px;
+}
+
 .disabled {
     display: none !important;
 }
 
-input {
-    margin: 10px;
+/*input {*/
+    /*margin: 10px;*/
+/*}*/
+.input-group{
+    margin-bottom: 10px;
 }
 
 .button {
@@ -69,12 +77,6 @@ input {
 .functional_block.right {
     float: right;
     /*background-color: rgba(202, 235, 252, 0.48);*/
-}
-
-.header {
-    background-color: rgba(142, 142, 142, 0.2);
-    padding: 30px;
-    margin: 0px;
 }
 
 .uploadForm {
