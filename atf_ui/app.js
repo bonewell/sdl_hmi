@@ -7,54 +7,17 @@ var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var multer  = require('multer');
 
-// DB mongo
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/users');
+// DB mongodb
+var Db = require('mongodb').Db;
+var Server = require('mongodb').Server;
+var db = new Db('ATF', new Server('localhost', 27017), {w:1});
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var controller = require('./controllers/controller.js');
 var model = require('./model/model.js');
-var fs = require('fs');
 
 var app = express();
-
-/**
- * ASYNC method of read configuration data from FS
- *
- * Used app.locals to share variables data access for routes namespace
- */
-fs.readFile('/tmp/config.json', 'utf8', function (err, data) {
-    if (err) {
-        console.log("----------No predefined configuration found...................");
-        app.locals.mainConfig = null;
-
-        //data = {file_path: '',
-        //        hb_timeout: '',
-        //        testRecord_path: '',
-        //        MOB_connection_str: '',
-        //        HMI_connection_str: '',
-        //        PerfLog_connection_str: '',
-        //        launch_time: '',
-        //        terminal_name: '',
-        //        SDLStoragePath: ''
-        //};
-
-        if (fs.writeFileSync("/tmp/config.json", JSON.stringify(app.locals.mainConfig), "utf8")) {
-            console.log("----------ERROR: The configuration file was not created!..................");
-            console.log(app.locals.mainConfig);
-        } else {
-            console.log("----------The configuration file was created successfuly!..................");
-            console.log(app.locals.mainConfig);
-        }
-
-        return;
-    }
-    app.locals.mainConfig = JSON.parse(data);
-    console.log(app.locals.mainConfig);
-    console.log("----------Configuration read successful...................");
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -119,5 +82,6 @@ app.use(function(err, req, res, next) {
 });
 
 controller.init();
+model.init(db);
 
 module.exports = app;

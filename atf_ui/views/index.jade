@@ -10,14 +10,9 @@ block content
                     | User name
                     span.caret
                 ul.dropdown-menu
-                    li
-                        a(href='#') asdhasdj
-                    li
-                        a(href='#') dasdasdasd
-                    li
-                        a(href='#') fsdfsdfsdf
-                    // each user, i in users
-                    //li(value="#{user.userName}")= user.userName
+                    each user, i in users
+                        li
+                            a(href='/chosen/#{user.userName}') #{user.userName}
 
             input.form-control(type='text', aria-label='...')
 

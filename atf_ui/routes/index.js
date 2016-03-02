@@ -6,9 +6,14 @@ var controller = require('../controllers/controller.js');
 router.get('/', function(req, res, next) {
 
     var db = req.db;
-    var collection = db.get('usercollection');
-    collection.find({},{},function(e,docs){
-        res.render('index', { title: 'ATF', users: docs });
+    var users = [];
+
+    var collection = db.collection("users");
+
+    // Fetch the users list
+    collection.find({}).toArray(function(err, docs) {
+        console.log(docs);
+        res.render('index', { users: docs });
     });
 });
 

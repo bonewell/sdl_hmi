@@ -135,8 +135,17 @@ controller.newUser = function(req, res) {
 };
 
 controller.register = function(req, res){
-    console.log('----------Login POST controller with data: ', req.body);
-    res.render('config')
+    console.log('----------Register GET controller with data: ', req.body);
+
+
+
+    req.db.users.find({user: "defaultUser"}, function(err, doc){
+        if (!err) {
+            console.log("ERR----------Can not find default user! ", doc);
+            res.render('config', doc);
+        }
+    })
+
 };
 
 controller.addConfig = function (req, res) {
