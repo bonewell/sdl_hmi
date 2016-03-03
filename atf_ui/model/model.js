@@ -3,6 +3,24 @@ var express = require('express');
 var model = {};
 var MongoClient = require('mongodb').MongoClient;
 
+
+/**
+ * Default user configuration params
+ * You must change data here and delete database to new params take effect
+ * */
+model.defaultConfig = {
+    file_path: 'default',
+    hb_timeout: 'default',
+    testRecord_path: 'default',
+    MOB_connection_str: 'default',
+    HMI_connection_str: 'default',
+    PerfLog_connection_str: 'default',
+    client_PerfLog_connection_str: 'default',
+    launch_time: 'default',
+    terminal_name: 'default',
+    SDLStoragePath: 'default'
+};
+
 model.init = function(main_db){
 
     console.log("----------MODEL INIT FUNCTION!");
@@ -31,19 +49,9 @@ model.init = function(main_db){
 
                         collection.insert({
                             userName: "defaultUser",
-                            config: [
-                                {
-                                    file_path: 'default',
-                                    hb_timeout: 'default',
-                                    testRecord_path: 'default',
-                                    MOB_connection_str: 'default',
-                                    HMI_connection_str: 'default',
-                                    PerfLog_connection_str: 'default',
-                                    launch_time: 'default',
-                                    terminal_name: 'default',
-                                    SDLStoragePath: 'default'
-                                }
-                            ]
+                            userEmail: "default@mail.com",
+                            userPassword: "default",
+                            config: [model.defaultConfig]
                         }, function (err, doc) {
                             if (err) {
                                 console.log("ERR----------Can not insert default user", err);

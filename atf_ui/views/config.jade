@@ -2,53 +2,59 @@ extends layout
 
 block content
     ul(class="nav nav-tabs")
-        li(role="presentation", class="active")
-            a(href="#") Config1
-        li(role="presentation")
-            a(href="/addConfig") +
+        each config, i in session.config
+            li(role="presentation", class="active")
+                a(href="#") Config#{i+1}
 
+        -if (session.userName != "defaultUser")
+            li(role="presentation")
+                a(href="/addConfig") +
 
-    if session.user
-        #main_configuration_container(class='main_container')
-            form(action='/save',method='post')
+    -if (status == "register")
+        -var reg = true
+
+    #main_configuration_container(class='main_container')
+        form(action='/save',method='post')
+
+            -if (reg && configIndex == 0)
                 p User name
-                input(name='userName', value='#{session.user.userName}')
+                input(name='userName', placeholder="User name")
 
                 p User email
-                input(name='email', value='#{session.user.email}')
+                input(name='email', placeholder="User email")
 
                 p User password
-                input(name='password', value='#{session.user.password}')
+                input(name='password', type="password", placeholder="User password")
 
-                p heartBeat timeout
-                input(name='hb_timeout', value='#{session.user.hb_timeout}')
+            p heartBeat timeout
+            input(name='hb_timeout', value='#{session.config[configIndex].hb_timeout}')
 
-                p testRecord folder
-                input(name='testRecord_path', type='text', value='#{session.user.testRecord_path}')
+            p testRecord folder
+            input(name='testRecord_path', type='text', value='#{session.config[configIndex].testRecord_path}')
 
-                p Mobile connection string
-                input(name='MOB_connection_str', value='#{session.user.MOB_connection_str}')
+            p Mobile connection string
+            input(name='MOB_connection_str', value='#{session.config[configIndex].MOB_connection_str}')
 
-                p HMI connection string
-                input(name='HMI_connection_str', value='#{session.user.HMI_connection_str}')
+            p HMI connection string
+            input(name='HMI_connection_str', value='#{session.config[configIndex].HMI_connection_str}')
 
-                p PerfLog connection string
-                input(name='PerfLog_connection_str', value='#{session.user.PerfLog_connection_str}')
+            p PerfLog connection string
+            input(name='PerfLog_connection_str', value='#{session.config[configIndex].PerfLog_connection_str}')
 
-                p Time for launch SDLProc
-                input(name='launch_time', value='#{session.user.launch_time}')
+            p Time for launch SDLProc
+            input(name='launch_time', value='#{session.config[configIndex].launch_time}')
 
-                p Client PerfLog connection string
-                input(name='client_PerfLog_connection_str', value='#{session.user.client_PerfLog_connection_str}')
+            p Client PerfLog connection string
+            input(name='client_PerfLog_connection_str', value='#{session.config[configIndex].client_PerfLog_connection_str}')
 
-                p terminal CMD
-                input(name='terminal_name', value='#{session.user.terminal_name}')
+            p terminal CMD
+            input(name='terminal_name', value='#{session.config[configIndex].terminal_name}')
 
-                p SDLStoragePath
-                input(name="SDLStoragePath", value='#{session.user.SDLStoragePath}')
+            p SDLStoragePath
+            input(name="SDLStoragePath", value='#{session.config[configIndex].SDLStoragePath}')
 
-                p
-                input(type='submit')
-                input(type='reset')
+            p
+            input(type='submit')
+            input(type='reset')
 
     a(class='button', href='http://localhost:3000') Back

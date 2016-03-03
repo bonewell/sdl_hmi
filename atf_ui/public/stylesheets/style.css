@@ -13,7 +13,11 @@ a {
 }
 
 .disabled {
-    display: none !important;
+    /*display: none !important;*/
+}
+
+form{
+    padding: 10px;
 }
 
 /*input {*/

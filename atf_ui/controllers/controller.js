@@ -3,6 +3,7 @@ var child_process = require('child_process');
 var fs = require("fs");
 var WebSocketServer = require('ws');
 var psTree = require('ps-tree');
+var model = require('../model/model.js');
 
 var controller = {
     atf_process: null,
@@ -137,19 +138,30 @@ controller.newUser = function(req, res) {
 controller.register = function(req, res){
     console.log('----------Register GET controller with data: ', req.body);
 
+    console.log(req.session);
 
+    var db = req.db;
+    var users = [];
 
-    req.db.users.find({user: "defaultUser"}, function(err, doc){
-        if (!err) {
-            console.log("ERR----------Can not find default user! ", doc);
-            res.render('config', doc);
+    var collection = db.collection("users");
+
+    // Fetch the users list
+    collection.find({userName: "defaultUser"}).toArray(function(err, docs) {
+        if (err) {
+            console.log("ERR----------Can not find default user config! ", err);
+        } else {
+
+            res.locals.session.user = docs[0];
+            res.render('config', {status: "register", session: res.locals.session.user, configIndex: 0});
         }
-    })
+    });
 
 };
 
 controller.addConfig = function (req, res) {
-
+    console.log(req.session)
+    res.locals.session.user.config.push(model.defaultConfig);
+    res.redirect("back");
 };
 
 controller.login = function(req, res){
@@ -179,65 +191,35 @@ controller.saveConfiguration = function(req, res) {
 
     console.log("----------Save Configuration enter...................");
 
-    console.log("----------User Name " + req.session.userName);
+    console.log("----------User Name " + req.body.userName);
 
-    req.db.get('usercollection').insert(req.body);
+    //req.db.collection("users").find({userName: req.body.userName}).toArray(function(err, docs){
+    //    if (err) {
+    //        console.log("ERR----------Can not make request to database", err);
+    //    } else if (docs.length == 0) {
+    //
+    //    }
+    //});
 
-   /* req.app.locals.mainConfig[req.session.userName] = req.body;
-
-    console.log("----------MainConfig is...........");
-    console.log(req.app.locals.mainConfig);
-
-    // SYNC method to write configuration data to FS
-    var result = fs.writeFileSync(
-        "/tmp/config.json",
-        JSON.stringify( req.app.locals.mainConfig ),
-        "utf8"
-    );
-
-    if (result) {
-        console.log("----------ERROR: File was not writed to FS...................");
-    } else {
-        console.log("----------File writed to FS...................");
-    }
-
-    // SYNC method
-    var data = fs.readFileSync('/tmp/config.json', 'utf8');
-
-    // Added verification for saved configuration on file system with data from filled form of config.jade view
-    // Verification is comparison of read data from FS and converted data object to string
-    if (JSON.stringify( req.app.locals.mainConfig ) === data) {
-
-        console.log(req.app.locals.mainConfig);
-        console.log("----------Data saved successfully...................");
-        // Go to next configuration view 'test_suite'
-        console.log("----------Test suite rendered...................");
-    } else {
-
-        console.log(data);
-        console.log(JSON.stringify( req.app.locals.mainConfig ));
-
-        console.log("----------Data wasn't saved successfully...................");
-        // Go to start page
-        console.log("----------Index rendered...................");
-    }
-
-    fs.readFile(__dirname + "/../../atf_bin" + "/modules/config.lua", 'utf8',
-        function(err, data) {
-            if (err) {
-                console.log("----------Failed to read ATF config file. " + err);
-                return;
-            }
-            var updatedData = '';
-            if (-1 === data.indexOf('SDLStoragePath')) {
-                updatedData = data.replace(/local config = \{ \}/,
-                    "local config = { }\nconfig.SDLStoragePath = \"" + req.app.locals.mainConfig.SDLStoragePath+"\"");
-            } else {
-                updatedData = data.replace(/config\.SDLStoragePath.*!/,
-                    "config.SDLStoragePath = \"" + req.app.locals.mainConfig.SDLStoragePath+"\"");
-            }
-            fs.writeFileSync(__dirname + "/../../atf_bin" + "/modules/config.lua", updatedData, 'utf8');
-    });*/
+    req.db.collection("users").insert({
+        userName: req.body.userName,
+        userEmail: req.body.email,
+        userPassword: req.body.password,
+        config:[{
+            file_path: req.body.file_path,
+            hb_timeout: req.body.hb_timeout,
+            testRecord_path: req.body.testRecord_path,
+            MOB_connection_str: req.body.MOB_connection_str,
+            HMI_connection_str: req.body.HMI_connection_str,
+            PerfLog_connection_str: req.body.PerfLog_connection_str,
+            client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
+            launch_time: req.body.launch_time,
+            terminal_name: req.body.terminal_name,
+            SDLStoragePath: req.body.SDLStoragePath
+        }]
+    }, function(err, docs){
+        console.log(err, docs);
+    });
 
     res.redirect("back");
 };

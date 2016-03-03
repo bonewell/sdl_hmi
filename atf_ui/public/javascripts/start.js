@@ -42,3 +42,7 @@ $('#Register').click(function(){
         }
     );
 });
+
+selectUser = function(self){
+    $("#userNameInput").val(self.name);
+};

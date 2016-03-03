@@ -3,7 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var expressSession = require('express-session');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var multer  = require('multer');
 
@@ -29,7 +29,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(expressSession({secret:'somesecrettokenhere'}));
+app.use(session({secret:'somesecrettokenhere'}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(multer({
     dest: '/tmp/uploads/',
