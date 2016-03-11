@@ -18,43 +18,58 @@ block content
 
             -if (reg && configIndex == 0)
                 p User name
-                input(name='userName', placeholder="User name")
+                .input-group(id="userName")
+                    input(name='userName', class="form-control", placeholder="User name")
+                    .input-group-addon
+                        span.text status
+                        .glyphicon.glyphicon-refresh.hidden
 
                 p User email
-                input(name='email', placeholder="User email")
+                .input-group
+                    input(name='email', class="form-control", placeholder="User email")
 
                 p User password
-                input(name='password', type="password", placeholder="User password")
+                .input-group
+                    input(name='password', class="form-control", type="password", placeholder="User password")
 
             p heartBeat timeout
-            input(name='hb_timeout', value='#{session.config[configIndex].hb_timeout}')
+            .input-group
+                input(name='hb_timeout', class="form-control", value='#{session.config[configIndex].hb_timeout}')
 
             p testRecord folder
-            input(name='testRecord_path', type='text', value='#{session.config[configIndex].testRecord_path}')
+            .input-group
+                input(name='testRecord_path', class="form-control", value='#{session.config[configIndex].testRecord_path}')
 
             p Mobile connection string
-            input(name='MOB_connection_str', value='#{session.config[configIndex].MOB_connection_str}')
+            .input-group
+                input(name='MOB_connection_str', class="form-control", value='#{session.config[configIndex].MOB_connection_str}')
 
             p HMI connection string
-            input(name='HMI_connection_str', value='#{session.config[configIndex].HMI_connection_str}')
+            .input-group
+                input(name='HMI_connection_str', class="form-control", value='#{session.config[configIndex].HMI_connection_str}')
 
             p PerfLog connection string
-            input(name='PerfLog_connection_str', value='#{session.config[configIndex].PerfLog_connection_str}')
+            .input-group
+                input(name='PerfLog_connection_str', class="form-control", value='#{session.config[configIndex].PerfLog_connection_str}')
 
             p Time for launch SDLProc
-            input(name='launch_time', value='#{session.config[configIndex].launch_time}')
+            .input-group
+                input(name='launch_time', class="form-control", value='#{session.config[configIndex].launch_time}')
 
             p Client PerfLog connection string
-            input(name='client_PerfLog_connection_str', value='#{session.config[configIndex].client_PerfLog_connection_str}')
+            .input-group
+                input(name='client_PerfLog_connection_str', class="form-control", value='#{session.config[configIndex].client_PerfLog_connection_str}')
 
             p terminal CMD
-            input(name='terminal_name', value='#{session.config[configIndex].terminal_name}')
+            .input-group
+                input(name='terminal_name', class="form-control", value='#{session.config[configIndex].terminal_name}')
 
             p SDLStoragePath
-            input(name="SDLStoragePath", value='#{session.config[configIndex].SDLStoragePath}')
+            .input-group
+                input(name="SDLStoragePath", class="form-control", value='#{session.config[configIndex].SDLStoragePath}')
 
             p
-            input(type='submit')
-            input(type='reset')
+            input.btn.btn-success(type='submit')
+            input.btn.btn-warning(type='reset')
 
-    a(class='button', href='http://localhost:3000') Back
+    a(class='btn btn-default', href='http://localhost:3000') Back

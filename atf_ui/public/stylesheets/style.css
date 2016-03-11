@@ -16,6 +16,11 @@ a {
     /*display: none !important;*/
 }
 
+#notify{
+    position: absolute;
+    top: 20px;
+}
+
 form{
     padding: 10px;
 }
@@ -115,8 +120,35 @@ form{
     text-align: center;
 }
 
-#main_configuration_container input {
+#main_configuration_container .input-group {
     width: 45%;
+    margin: 0 auto;
+}
+
+#main_configuration_container .glyphicon-refresh {
+    -webkit-transition: -webkit-transform .8s ease-in-out;
+    transition: transform .8s ease-in-out;
+}
+
+#main_configuration_container .glyphicon-refresh:hover {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+
+.rotate360{
+    -webkit-animation-name: rotate;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 #footer{

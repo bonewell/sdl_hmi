@@ -47,6 +47,13 @@ router.post('/login', function(req, res, next) {
 });
 
 /* POST main configuration page form submit handler. */
+router.post('/ajax', function(req, res, next) {
+
+    console.log("----------isUserExist POST enter...................");
+    controller.ajax(req, res);
+});
+
+/* POST main configuration page form submit handler. */
 router.get('/register', function(req, res, next) {
 
     console.log("----------Register GET enter...................");

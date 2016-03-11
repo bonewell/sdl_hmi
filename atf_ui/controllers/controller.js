@@ -164,6 +164,34 @@ controller.addConfig = function (req, res) {
     res.redirect("back");
 };
 
+controller.ajax = function(req, res){
+    console.log('----------ajax POST controller with data: ', req.body);
+
+    switch (req.body.objectData) {
+        case "isUserExist": {
+
+            console.log(req.db);
+
+            req.db.collection("users").find({userName: req.body.data}).toArray(function(err, docs){
+                if (err) {
+                    res.status(404).send("Data base internal error;", err);
+                } else {
+                    if (docs.length > 0) {
+                        res.status(500).send("User name already registered! Please try again ;)");
+                    } else {
+                        res.status(200).send("Correct name ;)");
+                    }
+                }
+            });
+            break;
+        }
+        default :{
+                res.send("Unknown Request");
+            }
+    }
+
+};
+
 controller.login = function(req, res){
     console.log('----------Login POST controller with data: ', req.body);
     req.db.get('usercollection').find(
@@ -193,35 +221,38 @@ controller.saveConfiguration = function(req, res) {
 
     console.log("----------User Name " + req.body.userName);
 
-    //req.db.collection("users").find({userName: req.body.userName}).toArray(function(err, docs){
-    //    if (err) {
-    //        console.log("ERR----------Can not make request to database", err);
-    //    } else if (docs.length == 0) {
-    //
-    //    }
-    //});
+    req.db.collection("users").find({userName: req.body.userName}).toArray(function(err, docs){
 
-    req.db.collection("users").insert({
-        userName: req.body.userName,
-        userEmail: req.body.email,
-        userPassword: req.body.password,
-        config:[{
-            file_path: req.body.file_path,
-            hb_timeout: req.body.hb_timeout,
-            testRecord_path: req.body.testRecord_path,
-            MOB_connection_str: req.body.MOB_connection_str,
-            HMI_connection_str: req.body.HMI_connection_str,
-            PerfLog_connection_str: req.body.PerfLog_connection_str,
-            client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
-            launch_time: req.body.launch_time,
-            terminal_name: req.body.terminal_name,
-            SDLStoragePath: req.body.SDLStoragePath
-        }]
-    }, function(err, docs){
-        console.log(err, docs);
+        if (err) {
+
+            console.log("ERR----------Can not make request to database", err);
+        } else if (docs.length == 0) {
+
+            req.db.collection("users").insert({
+                userName: req.body.userName,
+                userEmail: req.body.email,
+                userPassword: req.body.password,
+                config:[{
+                    file_path: req.body.file_path,
+                    hb_timeout: req.body.hb_timeout,
+                    testRecord_path: req.body.testRecord_path,
+                    MOB_connection_str: req.body.MOB_connection_str,
+                    HMI_connection_str: req.body.HMI_connection_str,
+                    PerfLog_connection_str: req.body.PerfLog_connection_str,
+                    client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
+                    launch_time: req.body.launch_time,
+                    terminal_name: req.body.terminal_name,
+                    SDLStoragePath: req.body.SDLStoragePath
+                }]
+            }, function(err, docs){
+                console.log(err, docs);
+            });
+
+            res.redirect("back");
+        } else {
+            res.send("Same user exist");
+        }
     });
-
-    res.redirect("back");
 };
 
 /**

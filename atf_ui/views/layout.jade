@@ -1,6 +1,7 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 
 block body
+
   link(rel="stylesheet",href="stylesheets/style.css")
   link(rel="stylesheet",href="stylesheets/spectrum.css")
   .header
@@ -11,6 +12,7 @@ block body
   .container
     .col-lg-6
       block content
+  #notify
 block scripts
   script(src="/javascripts/jquery-1.11.2.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
