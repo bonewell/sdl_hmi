@@ -19,7 +19,8 @@ router.get('/', function(req, res, next) {
 
 /* GET main configuration page. */
 router.get('/config', function(req, res, next) {
-    res.render('config', { title: 'ATF Configuration' });
+    console.log("----------Config GET enter...................");
+    controller.config(req, res);
 });
 
 /* GET test suite configuration page. */
@@ -34,8 +35,8 @@ router.post('/test_suite_config', function(req, res, next) {
 
 /* POST main configuration page form submit handler. */
 router.post('/save', function(req, res, next) {
+    console.log("----------Save Configuration POST enter...................");
 
-    console.log("----------Save Configuration enter...................");
     controller.saveConfiguration(req, res);
 });
 
@@ -51,6 +52,13 @@ router.post('/ajax', function(req, res, next) {
 
     console.log("----------isUserExist POST enter...................");
     controller.ajax(req, res);
+});
+
+/* GET main configuration page form submit handler. */
+router.get('/selectConfig/:index', function(req, res, next) {
+
+    console.log("----------selectConfig GET enter...................");
+    controller.selectConfig(req, res);
 });
 
 /* POST main configuration page form submit handler. */

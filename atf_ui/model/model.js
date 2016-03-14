@@ -9,6 +9,7 @@ var MongoClient = require('mongodb').MongoClient;
  * You must change data here and delete database to new params take effect
  * */
 model.defaultConfig = {
+    index: 0,
     file_path: 'default',
     hb_timeout: 'default',
     testRecord_path: 'default',

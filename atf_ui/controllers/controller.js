@@ -11,7 +11,8 @@ var controller = {
     atf_path: __dirname + "/../../atf_bin/",
     log_error: "ERROR: ",
     log_warn: "WARNING: ",
-    log_debug: "DEBUG: "
+    log_debug: "DEBUG: ",
+    configIndex: 0
 };
 
 var uploadPath = '/tmp/uploads/';
@@ -135,10 +136,27 @@ controller.newUser = function(req, res) {
     }
 };
 
-controller.register = function(req, res){
-    console.log('----------Register GET controller with data: ', req.body);
+controller.config = function(req, res){
+    console.log('----------Config CONTROLLER with data: ', req.body);
 
-    console.log(req.session);
+    if (req.session.user.userName) {
+        res.render('config', {status: "edit", session: req.session, configIndex: controller.configIndex});
+    } else {
+        res.redirect("back");
+    }
+};
+
+controller.selectConfig = function(req, res){
+    console.log('----------selectConfig CONTROLLER with data: ', req.params);
+
+    if (req.session.user.config.length >= req.params.index && req.params.index >= 0) {
+        controller.configIndex = req.params.index;
+    }
+    res.redirect("back");
+};
+
+controller.register = function(req, res){
+    console.log('----------Register CONTROLLER with data: ', req.body);
 
     var db = req.db;
     var users = [];
@@ -151,21 +169,32 @@ controller.register = function(req, res){
             console.log("ERR----------Can not find default user config! ", err);
         } else {
 
-            res.locals.session.user = docs[0];
-            res.render('config', {status: "register", session: res.locals.session.user, configIndex: 0});
+            res.render('config', {status: "register", session: {user: docs[0]}, configIndex: 0});
         }
     });
 
 };
 
 controller.addConfig = function (req, res) {
-    console.log(req.session)
+
+    console.log('----------addConfig CONTROLLER with data: ', req.body);
+
+    var index = res.locals.session.user.config.length;
+
     res.locals.session.user.config.push(model.defaultConfig);
-    res.redirect("back");
+
+    res.locals.session.user.config[index].index = index;
+
+    console.log(res.locals.session.user);
+
+    req.db.collection("users").update({userName: res.locals.session.user.userName}, {$set: {config: res.locals.session.user.config}}, function(err, docs){
+        console.log(err, docs);
+        res.redirect("back");
+    });
 };
 
 controller.ajax = function(req, res){
-    console.log('----------ajax POST controller with data: ', req.body);
+    console.log('----------ajax CONTROLLER with data: ', req.body);
 
     switch (req.body.objectData) {
         case "isUserExist": {
@@ -193,20 +222,18 @@ controller.ajax = function(req, res){
 };
 
 controller.login = function(req, res){
-    console.log('----------Login POST controller with data: ', req.body);
-    req.db.get('usercollection').find(
+    console.log('----------Login CONTROLLER with data: ', req.body);
+    req.db.collection("users").find(
         {
             "userName":req.body.userName,
-            "password":req.body.password
-        },
-        {},
-        function(e, docs){
+            "userPassword":req.body.password
+        }).toArray(function(err, docs){
             if (docs.length === 1) {
+                controller.configIndex = 0;
                 req.session.user = docs[0];
                 res.redirect("back");
             }
-        }
-    );
+        });
 };
 
 /**
@@ -217,40 +244,71 @@ controller.login = function(req, res){
  */
 controller.saveConfiguration = function(req, res) {
 
-    console.log("----------Save Configuration enter...................");
+    console.log("----------Save Configuration CONTROLLER enter...................");
 
-    console.log("----------User Name " + req.body.userName);
+    var name = req.body.userName ? req.body.userName : req.session.user.userName;
 
-    req.db.collection("users").find({userName: req.body.userName}).toArray(function(err, docs){
+    req.db.collection("users").find({userName: name}).toArray(function(err, docs){
+
+        var newConfig = {
+            index: controller.configIndex,
+            file_path: req.body.file_path,
+            hb_timeout: req.body.hb_timeout,
+            testRecord_path: req.body.testRecord_path,
+            MOB_connection_str: req.body.MOB_connection_str,
+            HMI_connection_str: req.body.HMI_connection_str,
+            PerfLog_connection_str: req.body.PerfLog_connection_str,
+            client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
+            launch_time: req.body.launch_time,
+            terminal_name: req.body.terminal_name,
+            SDLStoragePath: req.body.SDLStoragePath
+        };
+
+        console.log(newConfig);
 
         if (err) {
-
             console.log("ERR----------Can not make request to database", err);
         } else if (docs.length == 0) {
 
+            // if no user found then create new user record
             req.db.collection("users").insert({
-                userName: req.body.userName,
+                userName: name,
                 userEmail: req.body.email,
                 userPassword: req.body.password,
-                config:[{
-                    file_path: req.body.file_path,
-                    hb_timeout: req.body.hb_timeout,
-                    testRecord_path: req.body.testRecord_path,
-                    MOB_connection_str: req.body.MOB_connection_str,
-                    HMI_connection_str: req.body.HMI_connection_str,
-                    PerfLog_connection_str: req.body.PerfLog_connection_str,
-                    client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
-                    launch_time: req.body.launch_time,
-                    terminal_name: req.body.terminal_name,
-                    SDLStoragePath: req.body.SDLStoragePath
-                }]
+                config:[newConfig]
             }, function(err, docs){
-                console.log(err, docs);
+
+                if (!err) {
+                    console.log("----------Created new user successfuly");
+
+                    res.redirect("/");
+                }
             });
 
-            res.redirect("back");
         } else {
-            res.send("Same user exist");
+            console.log("----------Trying update user : config " + controller.configIndex);
+
+            //else update user config data
+            req.db.collection("users").update({
+                userName: name,
+                config: {
+                    $elemMatch: {
+                        "index" : parseInt(controller.configIndex)
+                    }
+                }
+            },{
+                $set:{
+                    'config.$':newConfig
+                }
+            }, function(err, docs){
+
+                if (!err) {
+                    console.log("----------Update existing user complete");
+                    res.locals.session.user.config[controller.configIndex] = newConfig;
+
+                    res.redirect("/config");
+                }
+            });
         }
     });
 };

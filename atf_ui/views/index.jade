@@ -11,14 +11,11 @@ block content
                     span.caret
                 ul.dropdown-menu
                     each user, i in users
-                        -if(user.userName == "defaultUser")
-                            li.disabled
-                                a #{user.userName}
-                        -else
+                        -if(user.userName != "defaultUser")
                             li
                                 a(onclick="selectUser(this)", name="#{user.userName}") #{user.userName}
 
-            input.form-control(id="userNameInput",type='text', aria-label='...')
+            input.form-control(id='userNameInput', name='userName' ,type='text', aria-label='...')
 
         .input-group.input-group-lg
             span.input-group-addon User password
