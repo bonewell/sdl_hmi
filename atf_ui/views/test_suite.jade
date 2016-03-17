@@ -6,12 +6,14 @@ block content
             div(class="innerContainer")
                 p(class="header") Upload test cases
                 form(action="/upload", method="post", enctype="multipart/form-data", class="uploadForm")
-                    input(type="file", name="file_upload", multiple)
+                    span.btn.btn-default.btn-file Search
+                        input(type="file", name="file_upload", multiple)
                     p Additional test-data upload (icons, etc)
-                    input(type="file", name="icon_file_upload", multiple)
-                    input(type='submit', name="upload", value="upload")
+                    span.btn.btn-default.btn-file Search
+                        input.btn.btn-default(type="file", name="icon_file_upload", multiple)
+                    input.btn.btn-default(type='submit', name="upload", value="upload")
 
-                #test_suite_add(class="button") Add test suite
+                #test_suite_add.btn.btn-default Add test suite
 
         div(class="functional_block right")
             div(class="innerContainer")
@@ -19,15 +21,15 @@ block content
                 div(id='list_of_suits', class="container")
 
                 div(class="button_container")
-                    #start_atf(type="button", class="button") Start ATF
-                    #stop_atf(type="button", class="button", disabled="disabled") Stop ATF
-                    #clean_sdl(type="button", class="button", disabled="disabled") Stop SDL
+                    #start_atf.btn.btn-default(type="button") Start ATF
+                    #stop_atf.btn.btn-default(type="button", disabled="disabled") Stop ATF
+                    #clean_sdl.btn.btn-default(type="button", disabled="disabled") Stop SDL
 
-                #test_suite_list_area(class='container')
+                #test_suite_list_area.container
                     p Test suite list
                     select(id='test_suite_list', class='test_suite_list')
 
-                    #update_list(class='button update_list') Update
+                    #update_list.btn.btn-default(class='update_list') Update
 
                     textarea(id='description', class='description', rows=7, cols=1, readonly='readonly')
 
@@ -40,28 +42,26 @@ block content
         label(class='label') SDL Log
         textarea(id='sdl_log', class='SDL_log', rows=7, cols=1, readonly='readonly')
 
-    a(class='button', href='http://localhost:3000') Back
-    div(id='colorScheme', class='button') Change Color
+    a.btn.btn-default(href='http://localhost:3000') Back
+    #colorScheme.btn.btn-default Change Color
 
     #footer
         div(class='footer-box') SDL file name:
-            p(class='footer_param') #{config.file_path}
+            p(class='footer_param') #{session.user.config[configIndex].file_path}
         div(class='footer-box') heartBeat timeout:
-            p(class='footer_param') #{config.hb_timeout}
+            p(class='footer_param') #{session.user.config[configIndex].hb_timeout}
         div(class='footer-box') testRecord folder:
-            p(class='footer_param') #{config.testRecord_path}
+            p(class='footer_param') #{session.user.config[configIndex].testRecord_path}
         div(class='footer-box') Mobile connection string:
-            p(class='footer_param') #{config.MOB_connection_str}
+            p(class='footer_param') #{session.user.config[configIndex].MOB_connection_str}
         div(class='footer-box') HMI connection string:
-            p(class='footer_param') #{config.HMI_connection_str}
+            p(class='footer_param') #{session.user.config[configIndex].HMI_connection_str}
         div(class='footer-box') PerfLog connection string:
-            p(class='footer_param') #{config.PerfLog_connection_str}
+            p(class='footer_param') #{session.user.config[configIndex].PerfLog_connection_str}
         div(class='footer-box') Client PerfLog connection string:
-            p(class='footer_param') #{config.client_PerfLog_connection_str}
+            p(class='footer_param') #{session.user.config[configIndex].client_PerfLog_connection_str}
         div(class='footer-box') Time for launch SDLProc:
-            p(class='footer_param') #{config.launch_time}
+            p(class='footer_param') #{session.user.config[configIndex].launch_time}
         div(class='footer-box') terminal CMD:
-            p(class='footer_param') #{config.terminal_name}
+            p(class='footer_param') #{session.user.config[configIndex].terminal_name}
 
-    include modals/add_test_suit
-    script(src="/javascripts/test_suite.js")

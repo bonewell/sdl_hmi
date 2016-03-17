@@ -20,58 +20,15 @@ request = function(req, callback, err, data) {
     }).done(callback).fail(err);
 };
 
-notiify = function(type, message) {
-
-    var notification = document.createElement('div');
-
-    $(notification).addClass("alert");
-    $(notification).addClass("notify");
-
-    switch (type) {
-        case "err": {
-            $(notification).addClass("alert-danger");
-            break;
-        }
-        case "warn": {
-            $(notification).addClass("alert-warning");
-            break;
-        }
-        case "success": {
-            $(notification).addClass("alert-success");
-            break;
-        }
-        case "info": {
-            $(notification).addClass("alert-info");
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-
-    $(notification).text(message);
-
-    $("#notify").append(notification);
-
-    $(notification).fadeIn(100);
-
-    setTimeout(function(){
-        $(notification).fadeOut(3000); // Fade effect hiding during 3 seconds
-        setTimeout(function(){$(notification).remove();}, 3100);
-    },
-    2000); //Notification appear time
-
-};
-
 $('#enter').click(function(){
 
     request(
         'login',
         function(data){
-            if (data === 'new user') {
-                $('#config').removeClass('disabled');
-                $('#test_suite').removeClass('disabled');
-            }
+            //if (data === 'new user') {
+            //    $('#config').removeClass('disabled');
+            //    $('#test_suite').removeClass('disabled');
+            //}
         },
         null,
         $('#sing_in').val()
@@ -167,3 +124,7 @@ $('#password').find("input").on('input',function(data){
     $(result).text(strengthCheck(password, marker));
 
 });
+//
+//$( document ).ready(function() {
+//
+//});

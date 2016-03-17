@@ -10,10 +10,14 @@ router.get('/', function(req, res, next) {
 
     var collection = db.collection("users");
 
-    // Fetch the users list
-    collection.find({}).toArray(function(err, docs) {
-        console.log(docs);
-        res.render('index', { users: docs });
+    var error = req.session.errMSG;
+
+    req.session.errMSG = null;
+
+    // Fetch the users names list
+    collection.find({}, { "userName": 1, _id: 0 }).toArray(function(err, docs) {
+        req.session.errMSG = null;
+        res.render('index', { users: docs, errorMessage: error });
     });
 });
 
@@ -50,7 +54,7 @@ router.post('/login', function(req, res, next) {
 /* POST main configuration page form submit handler. */
 router.post('/ajax', function(req, res, next) {
 
-    console.log("----------isUserExist POST enter...................");
+    console.log("----------AJAX POST enter...................");
     controller.ajax(req, res);
 });
 

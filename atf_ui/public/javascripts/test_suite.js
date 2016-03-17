@@ -4,26 +4,10 @@
 
 var dialog = document.getElementById('overlay');
 
-/**
- * Method to send request to server
- * @param req - request method
- * @param callback
- */
-request = function(req, callback, data) {
-    $.ajax({
-        type: 'POST',
-        data: JSON.stringify({
-            "objectData": req,
-            "data": data
-        }),
-        contentType: 'application/json',
-        url: 'http://localhost:3000/test_suite_config',
-        success: callback
-    });
-};
-
 updateTestSuiteDescription = function(value){
-    request('test_suite_description', function(res){
+    request(
+        'test_suite_description',
+        function(res){
 
             var result = res[0] + '\n';
 
@@ -32,6 +16,7 @@ updateTestSuiteDescription = function(value){
             }
             $('#description').val(result);
         },
+        null,
         value
     );
 };
@@ -41,28 +26,26 @@ updateTestSuiteList = function(value){
     $('#test_suite_list').empty();
     $('#list_of_suits').empty();
 
-    request('test_suite_list', function(res){
-
-        for (var i = 0; i < res.length; i++) {
-            $('#test_suite_list')
-                .append($("<option></option>")
-                    .attr("value", res[i])
-                    .text(res[i]));
-            $('#list_of_suits')
-                .append($("<input/>")
-                    .attr({
-                        type: "checkbox",
-                        value: res[i],
-                        checked: true}))
-                .append(res[i])
-                .append($("<br/>"));
+    request(
+        'test_suite_list',
+        function(res){
+            for (var i = 0; i < res.length; i++) {
+                $('#test_suite_list')
+                    .append($("<option></option>")
+                        .attr("value", res[i])
+                        .text(res[i]));
+                $('#list_of_suits')
+                    .append($("<input/>")
+                        .attr({
+                            type: "checkbox",
+                            value: res[i],
+                            checked: true}))
+                    .append(res[i])
+                    .append($("<br/>"));
+            }
         }
-    });
+    );
 };
-
-$( document ).ready(function() {
-    updateTestSuiteList();
-});
 
 /**
  * Test suite list select changes handler
@@ -90,9 +73,11 @@ $('#start_atf').click(function() {
             console.log(this.value);
         }
     });
-    request('start_atf', function(res){
-        $('#stop_atf').removeAttr('disabled');
-        $('#start_atf').attr('disabled', 'disabled');
+    request(
+        'start_atf',
+        function(res){
+            $('#stop_atf').removeAttr('disabled');
+            $('#start_atf').attr('disabled', 'disabled');
 
             var socketSDL = new WebSocket("ws://localhost:8081");
 
@@ -150,24 +135,32 @@ $('#start_atf').click(function() {
                 $("#atf_log").append("Error " + error.message);
                 $('#atf_log').scrollTop($('#atf_log')[0].scrollHeight - $('#atf_log').height());
             };
-    },
-    {
-        "test_suits": test_suits
-    });
+        },
+        null,
+        {
+            "test_suits": test_suits
+        }
+    );
 });
 
 $('#stop_atf').click(function() {
-    request('stop_atf', function(res){
-        $('#stop_atf').attr('disabled', 'disabled');
-        $('#start_atf').removeAttr('disabled');
-        $('#clean_sdl').removeAttr('disabled');
-    });
+    request(
+        'stop_atf',
+        function(res){
+            $('#stop_atf').attr('disabled', 'disabled');
+            $('#start_atf').removeAttr('disabled');
+            $('#clean_sdl').removeAttr('disabled');
+        }
+    );
 });
 
 $('#clean_sdl').click(function() {
-    request('stop_sdl', function(res) {
-        $('#clean_sdl').attr('disabled', 'disabled');
-    });
+    request(
+        'stop_sdl',
+        function(res) {
+            $('#clean_sdl').attr('disabled', 'disabled');
+        }
+    );
 });
 
 /**
@@ -178,18 +171,21 @@ $('#clean_sdl').click(function() {
 $('#test_suite_add').click(function() {
     dialog.showModal();
 
-    request('test_cases_list', function(res){
-        for (var i = 0; i < res.length; i++) {
-            $('#list_of_tests')
-                .append($("<input/>")
-                    .attr({
-                        type: "checkbox",
-                        value: res[i],
-                        checked: true}))
-                .append(res[i])
-                .append($("<br/>"));
+    request(
+        'test_cases_list',
+        function(res){
+            for (var i = 0; i < res.length; i++) {
+                $('#list_of_tests')
+                    .append($("<input/>")
+                        .attr({
+                            type: "checkbox",
+                            value: res[i],
+                            checked: true}))
+                    .append(res[i])
+                    .append($("<br/>"));
+            }
         }
-    });
+    );
 });
 
 function finishAddSuite(success) {
@@ -227,6 +223,7 @@ $('#add_test_suit_btn').click(function() {
     request(
         'add_test_suit',
         finishAddSuite(true),
+        null,
         {
             "folder_name": folder,
             "test_scripts": test_scripts

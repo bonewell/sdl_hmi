@@ -105,36 +105,36 @@ controller.copyAdditionalFiles = function() {
         });
     });
 };
-
-controller.newUser = function(req, res) {
-    switch (req.body.objectData) {
-        case 'login' :
-        {
-            console.log('----------Received request login................');
-            console.log('----------User Name is................' + req.body.data);
-            console.log('----------MainConfig is................');
-            console.log(req.app.locals.mainConfig);
-
-            req.session.userName = req.body.data;
-
-            if (req.app.locals.mainConfig === null) {
-                req.app.locals.mainConfig = {};
-                req.app.locals.mainConfig[req.body.data] = {};
-            }
-
-            console.log('----------MainConfig is................');
-            console.log(req.app.locals.mainConfig);
-
-            res.status(201).send('new user');
-            break;
-        }
-        default:
-        {
-            console.log('----------Undefined route: ' + req.body.objectData);
-            res.status(404).end();
-        }
-    }
-};
+//
+//controller.newUser = function(req, res) {
+//    switch (req.body.objectData) {
+//        case 'login' :
+//        {
+//            console.log('----------Received request login................');
+//            console.log('----------User Name is................' + req.body.data);
+//            console.log('----------MainConfig is................');
+//            console.log(req.app.locals.mainConfig);
+//
+//            req.session.userName = req.body.data;
+//
+//            if (req.app.locals.mainConfig === null) {
+//                req.app.locals.mainConfig = {};
+//                req.app.locals.mainConfig[req.body.data] = {};
+//            }
+//
+//            console.log('----------MainConfig is................');
+//            console.log(req.app.locals.mainConfig);
+//
+//            res.status(201).send('new user');
+//            break;
+//        }
+//        default:
+//        {
+//            console.log('----------Undefined route: ' + req.body.objectData);
+//            res.status(404).end();
+//        }
+//    }
+//};
 
 controller.config = function(req, res){
     console.log('----------Config CONTROLLER with data: ', req.body);
@@ -188,18 +188,36 @@ controller.addConfig = function (req, res) {
     console.log(res.locals.session.user);
 
     req.db.collection("users").update({userName: res.locals.session.user.userName}, {$set: {config: res.locals.session.user.config}}, function(err, docs){
-        console.log(err, docs);
-        res.redirect("back");
+
+        if (!err) {
+
+            console.log('----------Configuration added successfuly');
+            res.redirect("back");
+        } else {
+
+            console.log("ERR----------Configuration add error ", err);
+            res.redirect("back");
+        }
     });
 };
 
+/**
+ * AJAX requests handler
+ * @param req
+ * @param res
+ */
 controller.ajax = function(req, res){
     console.log('----------ajax CONTROLLER with data: ', req.body);
 
+    var fs = require("fs");
+    var results = [];
+    var path = '';
+    var list;
+    var filePath;
+    var currentTestSuite;
+
     switch (req.body.objectData) {
         case "isUserExist": {
-
-            console.log(req.db);
 
             req.db.collection("users").find({userName: req.body.data}).toArray(function(err, docs){
                 if (err) {
@@ -214,157 +232,6 @@ controller.ajax = function(req, res){
             });
             break;
         }
-        default :{
-                res.send("Unknown Request");
-            }
-    }
-
-};
-
-controller.login = function(req, res){
-    console.log('----------Login CONTROLLER with data: ', req.body);
-    req.db.collection("users").find(
-        {
-            "userName":req.body.userName,
-            "userPassword":req.body.password
-        }).toArray(function(err, docs){
-            if (docs.length === 1) {
-                controller.configIndex = 0;
-                req.session.user = docs[0];
-                res.redirect("back");
-            }
-        });
-};
-
-/**
- * Method to save configuration data from config.jade view
- * to /tmp/config.json
- * @param req
- * @param res
- */
-controller.saveConfiguration = function(req, res) {
-
-    console.log("----------Save Configuration CONTROLLER enter...................");
-
-    var name = req.body.userName ? req.body.userName : req.session.user.userName;
-
-    req.db.collection("users").find({userName: name}).toArray(function(err, docs){
-
-        var newConfig = {
-            index: controller.configIndex,
-            file_path: req.body.file_path,
-            hb_timeout: req.body.hb_timeout,
-            testRecord_path: req.body.testRecord_path,
-            MOB_connection_str: req.body.MOB_connection_str,
-            HMI_connection_str: req.body.HMI_connection_str,
-            PerfLog_connection_str: req.body.PerfLog_connection_str,
-            client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
-            launch_time: req.body.launch_time,
-            terminal_name: req.body.terminal_name,
-            SDLStoragePath: req.body.SDLStoragePath
-        };
-
-        console.log(newConfig);
-
-        if (err) {
-            console.log("ERR----------Can not make request to database", err);
-        } else if (docs.length == 0) {
-
-            // if no user found then create new user record
-            req.db.collection("users").insert({
-                userName: name,
-                userEmail: req.body.email,
-                userPassword: req.body.password,
-                config:[newConfig]
-            }, function(err, docs){
-
-                if (!err) {
-                    console.log("----------Created new user successfuly");
-
-                    res.redirect("/");
-                }
-            });
-
-        } else {
-            console.log("----------Trying update user : config " + controller.configIndex);
-
-            //else update user config data
-            req.db.collection("users").update({
-                userName: name,
-                config: {
-                    $elemMatch: {
-                        "index" : parseInt(controller.configIndex)
-                    }
-                }
-            },{
-                $set:{
-                    'config.$':newConfig
-                }
-            }, function(err, docs){
-
-                if (!err) {
-                    console.log("----------Update existing user complete");
-                    res.locals.session.user.config[controller.configIndex] = newConfig;
-
-                    res.redirect("/config");
-                }
-            });
-        }
-    });
-};
-
-/**
- * Method to load configuration view test_suite.jade
- *
- * @param req
- * @param res
- */
-controller.testSuiteRun = function(req, res) {
-
-    res.render('test_suite', {
-        title: 'Test suite',
-        config: req.app.locals.mainConfig[req.session.userName]
-    });
-};
-
-function logAndSendError(response, log_string, error) {
-    console.log(log_string + error);
-    //response.status(500).end();
-}
-
-function killTreeProcesses (pid, signal, callback) {
-    signal   = signal || 'SIGHUP';
-    callback = callback || function () {};
-    psTree(pid, function (err, children) {
-        [pid].concat(
-            children.map(function (p) {
-                return p.PID;
-            })
-        ).forEach(function (tpid) {
-            try { process.kill(tpid, signal) }
-            catch (ex) { }
-        });
-        callback();
-    });
-};
-
-
-/**
- * UI AJAX post requests handler
- * @param req
- * @param res
- */
-controller.test_suite_config = function(req, res) {
-    var fs = require("fs");
-    var results = [];
-    var path = '';
-    var list;
-    var filePath;
-    var currentTestSuite;
-
-    console.log(req.body.objectData, "request received................");
-
-    switch (req.body.objectData) {
         case 'test_cases_list' : {
             console.log('----------Received request test_cases_list................');
 
@@ -515,11 +382,12 @@ controller.test_suite_config = function(req, res) {
             path = "/tmp/testsuits/" + req.body.data.folder_name + "/";
             console.log('----------path ' + path);
             fs.mkdirSync(path, function(err) {
-                    if (err && err.code != 'EEXIST') {
-                        logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
-                        res.status(201).send();
-                        return;
-                    }});
+                if (err && err.code != 'EEXIST') {
+                    logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
+                    res.status(201).send();
+                    return;
+                }
+            });
 
             for(var i = 0; i < req.body.data.test_scripts.length; i++){
 
@@ -533,6 +401,142 @@ controller.test_suite_config = function(req, res) {
             res.status(404).end();
         }
     }
+};
+
+controller.login = function(req, res){
+    console.log('----------Login CONTROLLER with data: ', req.body);
+    req.db.collection("users").find(
+        {
+            "userName":req.body.userName,
+            "userPassword":req.body.password
+        }
+    ).toArray(function(err, docs){
+        if (docs.length === 1) {
+            controller.configIndex = 0;
+            req.session.user = docs[0];
+            res.redirect("back");
+        } else {
+            req.session.errMSG = "User password incorrect! :(";
+            res.redirect("back");
+        }
+    });
+};
+
+/**
+ * Method to save configuration data from config.jade view
+ * to /tmp/config.json
+ * @param req
+ * @param res
+ */
+controller.saveConfiguration = function(req, res) {
+
+    console.log("----------Save Configuration CONTROLLER enter...................");
+
+    var name = req.body.userName ? req.body.userName : req.session.user.userName;
+
+    req.db.collection("users").find({userName: name}).toArray(function(err, docs){
+
+        var newConfig = {
+            index: controller.configIndex,
+            file_path: req.body.file_path,
+            hb_timeout: req.body.hb_timeout,
+            testRecord_path: req.body.testRecord_path,
+            MOB_connection_str: req.body.MOB_connection_str,
+            HMI_connection_str: req.body.HMI_connection_str,
+            PerfLog_connection_str: req.body.PerfLog_connection_str,
+            client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
+            launch_time: req.body.launch_time,
+            terminal_name: req.body.terminal_name,
+            SDLStoragePath: req.body.SDLStoragePath
+        };
+
+        console.log(newConfig);
+
+        if (err) {
+            console.log("ERR----------Can not make request to database", err);
+        } else if (docs.length == 0) {
+
+            // if no user found then create new user record
+            req.db.collection("users").insert({
+                userName: name,
+                userEmail: req.body.email,
+                userPassword: req.body.password,
+                config:[newConfig]
+            }, function(err, docs){
+
+                if (!err) {
+                    fs.mkdirSync(testSuitePath.concat(name), function(err) {
+                        if (err && err.code != 'EEXIST') {
+                            logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
+                            res.status(201).send();
+                            return;
+                        }
+                    });
+
+                    console.log("----------Created new user successfuly");
+
+                    res.redirect("/");
+                }
+            });
+
+        } else {
+            console.log("----------Trying update user : config " + controller.configIndex);
+
+            //else update user config data
+            req.db.collection("users").update({
+                userName: name,
+                config: {
+                    $elemMatch: {
+                        "index" : parseInt(controller.configIndex)
+                    }
+                }
+            },{
+                $set:{
+                    'config.$':newConfig
+                }
+            }, function(err, docs){
+
+                if (!err) {
+                    console.log("----------Update existing user complete");
+                    res.locals.session.user.config[controller.configIndex] = newConfig;
+
+                    res.redirect("/config");
+                }
+            });
+        }
+    });
+};
+
+/**
+ * Method to load configuration view test_suite.jade
+ *
+ * @param req
+ * @param res
+ */
+controller.testSuiteRun = function(req, res) {
+
+    res.render('test_suite', {configIndex: controller.configIndex});
+};
+
+function logAndSendError(response, log_string, error) {
+    console.log(log_string + error);
+    //response.status(500).end();
+}
+
+function killTreeProcesses (pid, signal, callback) {
+    signal   = signal || 'SIGHUP';
+    callback = callback || function () {};
+    psTree(pid, function (err, children) {
+        [pid].concat(
+            children.map(function (p) {
+                return p.PID;
+            })
+        ).forEach(function (tpid) {
+            try { process.kill(tpid, signal) }
+            catch (ex) { }
+        });
+        callback();
+    });
 };
 
 module.exports = controller;

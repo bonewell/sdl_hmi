@@ -2,36 +2,43 @@ extends layout
 
 block content
 
-    form(action='/login',method='post')
+    include ./modals/notify
 
-        .input-group
-            .input-group-btn
-                button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                    | User name
-                    span.caret
-                ul.dropdown-menu
-                    each user, i in users
-                        -if(user.userName != "defaultUser")
-                            li
-                                a(onclick="selectUser(this)", name="#{user.userName}") #{user.userName}
+    .col-lg-6
+        form(action='/login',method='post')
 
-            input.form-control(id='userNameInput', name='userName' ,type='text', aria-label='...')
+            .input-group
+                .input-group-btn
+                    button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                        | User name
+                        span.caret
+                    ul.dropdown-menu
+                        each user, i in users
+                            -if(user.userName != "defaultUser")
+                                li
+                                    a(onclick="selectUser(this)", name="#{user.userName}") #{user.userName}
 
-        .input-group.input-group-lg
-            span.input-group-addon User password
-            input.form-control(name='password', value='', type="password", placeholder="password", aria-describedby="sizing-addon1")
+                input.form-control(id='userNameInput', name='userName' ,type='text', aria-label='...')
 
-        p
-            input.btn.btn-success(type='submit', value="Enter")
+            .input-group.input-group-lg
+                span.input-group-addon User password
+                input.form-control(name='password', value='', type="password", placeholder="password", aria-describedby="sizing-addon1")
 
-        p
-            a(id='test_suite', class='btn btn-info', href='/register') Register new user
+            p
+                input.btn.btn-success(type='submit', value="Enter")
 
-    if session.user
+            p
+                a(id='test_suite', class='btn btn-info', href='/register') Register new user
 
-        p Hi #{session.user.userName}
+        if session.user
 
-        p
-            a.btn.btn-default(id='config', href='/config') go to config
-        p
-            a.btn.btn-default(id='test_suite', href='/test_suite') go to test_suite
+            p Hi #{session.user.userName}
+
+            .list-group
+                a.list-group-item(id='config', href='/config') Go to Main config
+                    span.badge #{session.user.config.length}
+
+            .list-group
+                a.list-group-item(id='test_suite'  href='/test_suite') Go to test_suite configuration
+                    span.badge #{session.user.config.length}
+

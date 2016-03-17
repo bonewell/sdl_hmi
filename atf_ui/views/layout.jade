@@ -1,7 +1,7 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 
 block body
-
+  script(src="/javascripts/jquery-1.11.2.min.js")
   link(rel="stylesheet",href="stylesheets/style.css")
   link(rel="stylesheet",href="stylesheets/spectrum.css")
   .header
@@ -10,11 +10,10 @@ block body
       p Welcome to #{title}
       <br>
   .container
-    .col-lg-6
       block content
-  #notify
 block scripts
-  script(src="/javascripts/jquery-1.11.2.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
   script(src="/javascripts/start.js")
   script(src="/javascripts/spectrum.js")
+  include modals/add_test_suit
+  script(src="/javascripts/test_suite.js")

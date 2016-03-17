@@ -43,7 +43,7 @@ model.init = function(main_db){
                     db.createCollection('users', function (err, collection) {
 
                         if (err) {
-                            return console.log("ERR----------Can not create collection: ", err);
+                            return console.log("ERR----------Can not create collection users: ", err);
                         }
 
                         console.log("----------Users collection created successfuly! Trying to add default user");
@@ -53,22 +53,44 @@ model.init = function(main_db){
                             userEmail: "default@mail.com",
                             userPassword: "default",
                             config: [model.defaultConfig]
-                        }, function (err, doc) {
+                        }, function (err, docs) {
                             if (err) {
                                 console.log("ERR----------Can not insert default user", err);
                             } else {
-                                console.log("----------User added fuccessfuly", doc);
+                                console.log("----------User added fuccessfuly", docs);
 
-                                main_db.open(function(err, db) {
+                                main_db.open(function(err, local_db) {
                                     if (err) {
                                         console.log("ERR----------Can not open DB", err);
                                     } else {
                                         console.log("----------ATF DataBase connection established! ");
+
+                                        local_db.createCollection('tests', function (err, collection) {
+
+                                            if (err) {
+                                                return console.log("ERR----------Can not create collection tests: ", err);
+                                            }
+
+                                            console.log("----------Tests collection created successfully! Trying to add default user");
+
+                                            collection.insert({
+                                                fileName: "defaultTestCase",
+                                                userID: docs[0]._id,
+                                                testSuite: ["Suite1", "Suite2"]
+                                            }, function (err, doc) {
+                                                if (err) {
+                                                    console.log("ERR----------Can not insert default test", err);
+                                                } else {
+                                                    console.log("----------Test added successfully", doc);
+                                                }
+                                            });
+                                        });
                                     }
                                 });
                             }
                         })
                     });
+
                 } else {
                     main_db.open(function(err, db) {
                         if (err) {
