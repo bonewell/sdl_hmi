@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var controller = require('../controllers/controller.js');
+var multer  = require('multer');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -29,7 +30,16 @@ router.get('/config', function(req, res, next) {
 
 /* GET test suite configuration page. */
 router.get('/test_suite', function(req, res, next) {
-    controller.testSuiteRun(req, res);
+    console.log("----------test_suite GET enter...................");
+
+    controller.testSuite(req, res);
+});
+
+/* GET test suite configuration page. */
+router.post('/addTestSuit', function(req, res, next) {
+    console.log("----------addTestSuit GET enter...................");
+
+    controller.addTestSuit(req, res);
 });
 
 /* GET test suite configuration page. for post ajax requests from UI*/
@@ -80,12 +90,10 @@ router.get('/addConfig', function(req, res, next) {
 });
 
 /* POST main configuration page form submit handler. */
-router.post('/upload', function(req, res, next) {
+router.post('/upload', [ multer({ dest: '/tmp/uploads/'}), function(req, res, next) {
     console.log('----------TRYING TO UPLOAD................');
-    console.log(req.body);
-    console.log(req.files);
-    res.redirect("back");
-});
+    controller.upload(req, res);
+}]);
 
 /* GET main configuration page. */
 router.get('/userlist', function(req, res) {

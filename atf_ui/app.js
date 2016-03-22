@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var multer  = require('multer');
+//var multer  = require('multer');
 
 // DB mongodb
 var Db = require('mongodb').Db;
@@ -31,13 +31,46 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({secret:'somesecrettokenhere'}));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(multer({
-    dest: '/tmp/uploads/',
-    //rename to original file name
-    rename: function (fieldname, filename) {
-        return filename; //return name
-    }
-}));
+
+
+//app.post('/upload',
+//    multer({
+//    dest: '/tmp/testsuits/',
+//    rename: function (fieldname, filename) {
+//        return filename; //return name
+//    },
+//    changeDest: function(dest, req, res) {
+//        var newDestination = dest + '123';
+//
+//        return newDestination
+//    }
+//}),
+//    function(req, res) {
+//        console.log(req.body);
+//        res.redirect("back");
+//});
+
+//app.use(multer({
+//    dest: '/tmp/uploads/',
+//    //rename to original file name
+//    rename: function (fieldname, filename) {
+//        return filename; //return name
+//    }
+//}));
+
+//var storage = multer.diskStorage({
+//    destination: '/tmp/testsuits/123/',
+//    filename: function (req, file, cb) {
+//        cb(null, req.body.file_upload)
+//    }
+//});
+
+//var upload = multer({ storage: storage });
+//
+//
+//app.post('/upload', upload.single('uploadedFile'), function (req, res, next) {
+//    res.end('over');
+//});
 
 // Make our db accessible to our router
 app.use(function(req,res,next){

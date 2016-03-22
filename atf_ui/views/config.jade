@@ -1,6 +1,9 @@
 extends layout
 
 block content
+
+    include ./modals/notify
+
     ul(class="nav nav-tabs")
         if status == "edit"
             each config, i in session.user.config

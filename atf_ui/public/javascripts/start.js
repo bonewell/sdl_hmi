@@ -124,7 +124,22 @@ $('#password').find("input").on('input',function(data){
     $(result).text(strengthCheck(password, marker));
 
 });
-//
-//$( document ).ready(function() {
-//
-//});
+
+$('.testSuitListItem').on('click', function(){
+
+    console.log(this.name);
+
+    $("#testSuitInput").val(this.name);
+
+    $('#testSuiteSelectLabel').text($('#testSuitInput').val());
+    $('#updateTest').removeClass('disabled');
+    $('#addNewTestSuit').addClass('disabled');
+});
+
+$('#testSuitInput').on('click', function(){
+
+    $('#testSuiteSelectLabel').text('Choose test suite first');
+    $('#updateTest').addClass('disabled');
+    $('#addNewTestSuit').removeClass('disabled');
+    this.value = '';
+});

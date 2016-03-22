@@ -19,6 +19,7 @@ a {
 #notify{
     position: absolute;
     top: 20px;
+    z-index: 3;
 }
 
 form{

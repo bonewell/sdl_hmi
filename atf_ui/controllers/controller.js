@@ -1,9 +1,12 @@
 var express = require('express');
 var child_process = require('child_process');
-var fs = require("fs");
+const fs = require("fs");
+var path = require('path');
 var WebSocketServer = require('ws');
 var psTree = require('ps-tree');
 var model = require('../model/model.js');
+var multer  = require('multer');
+
 
 var controller = {
     atf_process: null,
@@ -12,7 +15,19 @@ var controller = {
     log_error: "ERROR: ",
     log_warn: "WARNING: ",
     log_debug: "DEBUG: ",
-    configIndex: 0
+    configIndex: 0,
+    ATFVersions: [
+        {
+            id: 0,
+            name: "2.2",
+            link: ""
+        },
+        {
+            id: 1,
+            name: "2.1",
+            link: ""
+        }
+    ]
 };
 
 var uploadPath = '/tmp/uploads/';
@@ -105,36 +120,30 @@ controller.copyAdditionalFiles = function() {
         });
     });
 };
-//
-//controller.newUser = function(req, res) {
-//    switch (req.body.objectData) {
-//        case 'login' :
-//        {
-//            console.log('----------Received request login................');
-//            console.log('----------User Name is................' + req.body.data);
-//            console.log('----------MainConfig is................');
-//            console.log(req.app.locals.mainConfig);
-//
-//            req.session.userName = req.body.data;
-//
-//            if (req.app.locals.mainConfig === null) {
-//                req.app.locals.mainConfig = {};
-//                req.app.locals.mainConfig[req.body.data] = {};
-//            }
-//
-//            console.log('----------MainConfig is................');
-//            console.log(req.app.locals.mainConfig);
-//
-//            res.status(201).send('new user');
-//            break;
-//        }
-//        default:
-//        {
-//            console.log('----------Undefined route: ' + req.body.objectData);
-//            res.status(404).end();
-//        }
-//    }
-//};
+
+controller.upload = function(req, res){
+
+    var oldFile;
+    var newFile;
+    var newPath;
+
+    for ( var file in req.files) {
+
+        newPath = testSuitePath.concat( req.session.user.userName.concat( '/' + req.body.testSuiteName + '/' ) );
+
+        console.log(newPath);
+
+        oldFile = fs.createReadStream(file.path);
+        newFile = fs.createWriteStream(newPath);
+        oldFile.on('end', function () {
+            console.log('----------Added ');
+        });
+
+        oldFile.pipe(newFile);
+    }
+
+    res.redirect("back");
+};
 
 controller.config = function(req, res){
     console.log('----------Config CONTROLLER with data: ', req.body);
@@ -191,7 +200,7 @@ controller.addConfig = function (req, res) {
 
         if (!err) {
 
-            console.log('----------Configuration added successfuly');
+            console.log('----------Configuration added successfully');
             res.redirect("back");
         } else {
 
@@ -209,7 +218,6 @@ controller.addConfig = function (req, res) {
 controller.ajax = function(req, res){
     console.log('----------ajax CONTROLLER with data: ', req.body);
 
-    var fs = require("fs");
     var results = [];
     var path = '';
     var list;
@@ -232,170 +240,151 @@ controller.ajax = function(req, res){
             });
             break;
         }
-        case 'test_cases_list' : {
-            console.log('----------Received request test_cases_list................');
-
-            results = [];
-            list = fs.readdirSync(uploadPath);
-            list.forEach(function(file) {
-                filePath = uploadPath + file;
-                var stat = fs.statSync(filePath);
-                if (!(stat && stat.isDirectory()) && require('path').extname(file) === '.lua') {
-                    results.push(file);
-                }
-            });
-
-            res.status(201).send(results);
-            break;
-        }
-        case 'test_suite_list' : {
-            console.log('----------Received request test_suits_list................');
-
-            results = [];
-            list = fs.readdirSync(testSuitePath);
-            list.forEach(function(file) {
-                filePath = testSuitePath + file;
-                var stat = fs.statSync(filePath);
-                if (stat && stat.isDirectory()) {
-                    results.push(file);
-                }
-            });
-
-            res.status(201).send(results);
-            break;
-        }
-        case 'test_suite_description' : {
-            console.log('----------Received request test_suite_description................');
-
-            if(req.body.data){
-                currentTestSuite = req.body.data;
-            } else {
-                list = fs.readdirSync(testSuitePath);
-                currentTestSuite = list[0];
-            }
-
-            path = testSuitePath + currentTestSuite;
-            list = fs.readdirSync(path);
-            results = [];
-
-            results.push("Test suite " + req.body.data);
-
-            list.forEach(function(file) {
-                filePath = path + "/" + file;
-                console.log(filePath);
-                var stat = fs.statSync(filePath);
-                if (!(stat && stat.isDirectory())) {
-                    results.push(file);
-                }
-            });
-
-            res.status(201).send(results);
-            break;
-        }
-        case 'start_atf' : {
-            console.log('----------Received request to run ATF for testsuits: ' + req.body.data.test_suits);
-            this.copyAdditionalFiles();
-
-            var test_suits = req.body.data.test_suits;
-
-            console.log(req.app.locals.mainConfig[req.session.userName]);
-
-            if (!req.app.locals.mainConfig[req.session.userName].file_path) {
-                logAndSendError(res, "Path to SDL is not set");
-                break;
-            }
-            if (!this.sdl_process) {
-                console.log("----------Start SDL.............");
-
-                var proc = child_process.exec;
-
-                this.sdl_process = proc(req.app.locals.mainConfig[req.session.userName].file_path,
-                    {'cwd': require('path').dirname(req.app.locals.mainConfig[req.session.userName].file_path)});
-
-                this.sdl_process.stdout.on('data', function (data) {
-                    controller.clients[0].sdl.send(data);
-                });
-
-                this.sdl_process.stderr.on('data', function (data) {
-                    controller.clients[0].sdl.send(data);
-                });
-
-                this.sdl_process.on('exit', function (code) {
-                    controller.clients[0].sdl.send(code);
-                });
-            }
-
-            // Silent needed to handle logs from child process
-            this.atf_process = child_process.fork(
-                __dirname + '/run_atf.js',
-                [test_suits, testSuitePath],
-                {
-                    silent:true
-                }
-            );
-
-            this.atf_process.on('message', function(m) {
-                controller.clients[0].atf.send('' + m);
-            });
-
-            this.atf_process.stdout.on('data', function (data) {
-                controller.clients[0].atf.send('' + data);
-            });
-
-            this.atf_process.stderr.on('data', function (data) {
-                controller.clients[0].atf.send('' + data);
-            });
-
-            this.atf_process.on('exit', function (code) {
-                controller.clients[0].atf.send('child process exited with code ' + code);
-            });
-
-            this.atf_process.on('close', function (code) {
-                controller.clients[0].atf.send('child process exited with code ' + code);
-                controller.atf_process = null;
-            });
-
-            res.status(201).send("Done");
-
-            break;
-        }
-        case 'stop_atf' : {
-            if (this.atf_process) {
-                killTreeProcesses(this.atf_process.pid, 'SIGHUP', function(){
-                    controller.atf_process = null;
-                    res.status(201).send();
-                });
-            }
-            break;
-        }
-        case 'stop_sdl' : {
-            if (this.sdl_process && !this.atf_process) {
-                killTreeProcesses(this.sdl_process.pid, 'SIGHUP', function(){
-                    controller.sdl_process = null;
-                    res.status(201).send();
-                });
-            }
-            break;
-        }
-        case 'add_test_suit' : {
-            console.log('----------Received request to add new test suit with scripts: ' + req.body.data.test_scripts);
-            path = "/tmp/testsuits/" + req.body.data.folder_name + "/";
-            console.log('----------path ' + path);
-            fs.mkdirSync(path, function(err) {
-                if (err && err.code != 'EEXIST') {
-                    logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
-                    res.status(201).send();
-                    return;
-                }
-            });
-
-            for(var i = 0; i < req.body.data.test_scripts.length; i++){
-
-                require('child_process').spawn('mv', [uploadPath + req.body.data.test_scripts[i], path]);
-
-            }
-            break;
-        }
+        //case 'test_cases_list' : {
+        //    console.log('----------Received request test_cases_list................');
+        //
+        //    results = [];
+        //    list = fs.readdirSync(uploadPath);
+        //    list.forEach(function(file) {
+        //        filePath = uploadPath + file;
+        //        var stat = fs.statSync(filePath);
+        //        if (!(stat && stat.isDirectory()) && require('path').extname(file) === '.lua') {
+        //            results.push(file);
+        //        }
+        //    });
+        //
+        //    res.status(201).send(results);
+        //    break;
+        //}
+        //case 'test_suite_list' : {
+        //    console.log('----------Received request test_suits_list................');
+        //
+        //    results = [];
+        //    list = fs.readdirSync(testSuitePath);
+        //    list.forEach(function(file) {
+        //        filePath = testSuitePath + file;
+        //        var stat = fs.statSync(filePath);
+        //        if (stat && stat.isDirectory()) {
+        //            results.push(file);
+        //        }
+        //    });
+        //
+        //    res.status(201).send(results);
+        //    break;
+        //}
+        //case 'test_suite_description' : {
+        //    console.log('----------Received request test_suite_description................');
+        //
+        //    if(req.body.data){
+        //        currentTestSuite = req.body.data;
+        //    } else {
+        //        list = fs.readdirSync(testSuitePath);
+        //        currentTestSuite = list[0];
+        //    }
+        //
+        //    path = testSuitePath + currentTestSuite;
+        //    list = fs.readdirSync(path);
+        //    results = [];
+        //
+        //    results.push("Test suite " + req.body.data);
+        //
+        //    list.forEach(function(file) {
+        //        filePath = path + "/" + file;
+        //        console.log(filePath);
+        //        var stat = fs.statSync(filePath);
+        //        if (!(stat && stat.isDirectory())) {
+        //            results.push(file);
+        //        }
+        //    });
+        //
+        //    res.status(201).send(results);
+        //    break;
+        //}
+        //case 'start_atf' : {
+        //    console.log('----------Received request to run ATF for testsuits: ' + req.body.data.test_suits);
+        //    this.copyAdditionalFiles();
+        //
+        //    var test_suits = req.body.data.test_suits;
+        //
+        //    console.log(req.app.locals.mainConfig[req.session.userName]);
+        //
+        //    if (!req.app.locals.mainConfig[req.session.userName].file_path) {
+        //        logAndSendError(res, "Path to SDL is not set");
+        //        break;
+        //    }
+        //    if (!this.sdl_process) {
+        //        console.log("----------Start SDL.............");
+        //
+        //        var proc = child_process.exec;
+        //
+        //        this.sdl_process = proc(req.app.locals.mainConfig[req.session.userName].file_path,
+        //            {'cwd': require('path').dirname(req.app.locals.mainConfig[req.session.userName].file_path)});
+        //
+        //        this.sdl_process.stdout.on('data', function (data) {
+        //            controller.clients[0].sdl.send(data);
+        //        });
+        //
+        //        this.sdl_process.stderr.on('data', function (data) {
+        //            controller.clients[0].sdl.send(data);
+        //        });
+        //
+        //        this.sdl_process.on('exit', function (code) {
+        //            controller.clients[0].sdl.send(code);
+        //        });
+        //    }
+        //
+        //    // Silent needed to handle logs from child process
+        //    this.atf_process = child_process.fork(
+        //        __dirname + '/run_atf.js',
+        //        [test_suits, testSuitePath],
+        //        {
+        //            silent:true
+        //        }
+        //    );
+        //
+        //    this.atf_process.on('message', function(m) {
+        //        controller.clients[0].atf.send('' + m);
+        //    });
+        //
+        //    this.atf_process.stdout.on('data', function (data) {
+        //        controller.clients[0].atf.send('' + data);
+        //    });
+        //
+        //    this.atf_process.stderr.on('data', function (data) {
+        //        controller.clients[0].atf.send('' + data);
+        //    });
+        //
+        //    this.atf_process.on('exit', function (code) {
+        //        controller.clients[0].atf.send('child process exited with code ' + code);
+        //    });
+        //
+        //    this.atf_process.on('close', function (code) {
+        //        controller.clients[0].atf.send('child process exited with code ' + code);
+        //        controller.atf_process = null;
+        //    });
+        //
+        //    res.status(201).send("Done");
+        //
+        //    break;
+        //}
+        //case 'stop_atf' : {
+        //    if (this.atf_process) {
+        //        killTreeProcesses(this.atf_process.pid, 'SIGHUP', function(){
+        //            controller.atf_process = null;
+        //            res.status(201).send();
+        //        });
+        //    }
+        //    break;
+        //}
+        //case 'stop_sdl' : {
+        //    if (this.sdl_process && !this.atf_process) {
+        //        killTreeProcesses(this.sdl_process.pid, 'SIGHUP', function(){
+        //            controller.sdl_process = null;
+        //            res.status(201).send();
+        //        });
+        //    }
+        //    break;
+        //}
         default: {
             console.log('----------Undefined route: ' + req.body.objectData);
             res.status(404).end();
@@ -420,6 +409,32 @@ controller.login = function(req, res){
             res.redirect("back");
         }
     });
+};
+
+controller.copyDir = function(src, dest) {
+    fs.mkdirSync(dest);
+    var files = fs.readdirSync(src);
+    for(var i = 0; i < files.length; i++) {
+        var current = fs.lstatSync(path.join(src, files[i]));
+        if(current.isDirectory()) {
+            controller.copyDir(path.join(src, files[i]), path.join(dest, files[i]));
+        } else if(current.isSymbolicLink()) {
+            var symlink = fs.readlinkSync(path.join(src, files[i]));
+            fs.symlinkSync(symlink, path.join(dest, files[i]));
+        } else {
+            controller.copy(path.join(src, files[i]), path.join(dest, files[i]));
+        }
+    }
+};
+
+controller.copy = function(src, dest) {
+    var oldFile = fs.createReadStream(src);
+    var newFile = fs.createWriteStream(dest);
+    oldFile.on('data', function(chunk) {
+        console.log('got %d bytes of data', chunk.length);
+    });
+
+    oldFile.pipe(newFile);
 };
 
 /**
@@ -450,11 +465,15 @@ controller.saveConfiguration = function(req, res) {
             SDLStoragePath: req.body.SDLStoragePath
         };
 
-        console.log(newConfig);
+        console.log("----------Config to be saved is: ", newConfig);
 
         if (err) {
             console.log("ERR----------Can not make request to database", err);
+            req.session.errMSG = "Can not make request to database: " + err;
+            res.redirect("/");
         } else if (docs.length == 0) {
+
+            console.log("----------Start creating new users db record!");
 
             // if no user found then create new user record
             req.db.collection("users").insert({
@@ -465,16 +484,32 @@ controller.saveConfiguration = function(req, res) {
             }, function(err, docs){
 
                 if (!err) {
-                    fs.mkdirSync(testSuitePath.concat(name), function(err) {
-                        if (err && err.code != 'EEXIST') {
-                            logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
-                            res.status(201).send();
-                            return;
+
+                    //if user record successfully added to DB then create user folder
+
+                    console.log("----------Start creating new users folder!");
+
+                    fs.mkdir(testSuitePath.concat(name), function(err) {
+                        if (err) {
+                            console.log("ERR----------Error with creation users folder: ", err);
+
+                            req.session.errMSG = "Error with creation users folder: " + err;
+                            res.redirect("/");
+                        } else {
+                            console.log("----------Created new user folder successfully");
+
+                            console.log("----------Start configure user data");
+
+                            controller.copyDir(controller.atf_path, testSuitePath.concat( name.concat( '/atf' ) ) );
+
+                            console.log("----------Finished configure user data");
+
+                            res.redirect("/");
                         }
                     });
-
-                    console.log("----------Created new user successfuly");
-
+                } else {
+                    console.log("ERR----------Error with creation users record in db: ", err);
+                    req.session.errMSG = "Error with creation users record in db: " + err;
                     res.redirect("/");
                 }
             });
@@ -482,15 +517,17 @@ controller.saveConfiguration = function(req, res) {
         } else {
             console.log("----------Trying update user : config " + controller.configIndex);
 
-            //else update user config data
+            //if user is registered then update user config data
             req.db.collection("users").update({
                 userName: name,
                 config: {
+                    // find needed array item in array of configs
                     $elemMatch: {
                         "index" : parseInt(controller.configIndex)
                     }
                 }
             },{
+                //update only one array in collection item
                 $set:{
                     'config.$':newConfig
                 }
@@ -513,9 +550,57 @@ controller.saveConfiguration = function(req, res) {
  * @param req
  * @param res
  */
-controller.testSuiteRun = function(req, res) {
+controller.testSuite = function(req, res) {
+    console.log("----------test_suite Controller enter...................");
 
-    res.render('test_suite', {configIndex: controller.configIndex});
+    req.db.collection("tests").find({userID: req.session.user._id}, { "testSuite": 1, _id: 0 }).toArray(function(err, docs){
+
+        if (err){
+
+            console.log("ERR----------Can not find records in collection tests ", err);
+            res.status(500).send(err);
+        } else {
+
+            console.log("----------Read records in collection tests successful", docs);
+            res.render('test_suite', {configIndex: controller.configIndex, suits: docs});
+        }
+
+    });
+
+};
+
+controller.addTestSuit = function(req, res) {
+    console.log("----------addTestSuit Controller enter...................");
+
+    console.log('----------Received request to add new test suit: ' + req.body.testSuit);
+    path = testSuitePath.concat(req.session.user.userName.concat("/" + req.body.testSuit));
+    console.log('----------path ' + path);
+    fs.mkdir(path, function(err) {
+        if (err) {
+            console.log("ERR---------Failed to create/read test suit directory " + path + " with error: ", err);
+            //logAndSendError(res, 'Failed to create/read test suit directory ' + req.body.data.folder_name, err);
+            res.status(500).send("Could not create directory: ", err);
+        } else {
+            console.log("---------User test suite directory created successfully");
+
+            req.db.collection("tests").insert({
+                testSuite: req.body.testSuit,
+                description: "Description",
+                userID: req.session.user._id,
+                fileName: []
+            }, function (err, doc) {
+                if (err) {
+                    console.log("ERR----------Can not insert test record to collection", err);
+                    res.status(500).send(err);
+                } else {
+                    console.log("----------Test record successfully added to db collection");
+                    res.redirect("back");
+                }
+            });
+        }
+    });
+
+
 };
 
 function logAndSendError(response, log_string, error) {

@@ -46,7 +46,7 @@ model.init = function(main_db){
                             return console.log("ERR----------Can not create collection users: ", err);
                         }
 
-                        console.log("----------Users collection created successfuly! Trying to add default user");
+                        console.log("----------Users collection created successfully! Trying to add default user");
 
                         collection.insert({
                             userName: "defaultUser",
@@ -74,9 +74,10 @@ model.init = function(main_db){
                                             console.log("----------Tests collection created successfully! Trying to add default user");
 
                                             collection.insert({
-                                                fileName: "defaultTestCase",
+                                                testSuite: "defaultTestCase",
+                                                description: "Description",
                                                 userID: docs[0]._id,
-                                                testSuite: ["Suite1", "Suite2"]
+                                                fileName: ["file1", "file2"]
                                             }, function (err, doc) {
                                                 if (err) {
                                                     console.log("ERR----------Can not insert default test", err);

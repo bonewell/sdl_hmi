@@ -1,67 +1,89 @@
 extends layout
 
 block content
-    #test_suite_configuration_container(class='main_container')
-        div(class="functional_block")
-            div(class="innerContainer")
-                p(class="header") Upload test cases
-                form(action="/upload", method="post", enctype="multipart/form-data", class="uploadForm")
-                    span.btn.btn-default.btn-file Search
-                        input(type="file", name="file_upload", multiple)
-                    p Additional test-data upload (icons, etc)
-                    span.btn.btn-default.btn-file Search
-                        input.btn.btn-default(type="file", name="icon_file_upload", multiple)
-                    input.btn.btn-default(type='submit', name="upload", value="upload")
 
-                #test_suite_add.btn.btn-default Add test suite
+    include ./modals/notify
 
-        div(class="functional_block right")
-            div(class="innerContainer")
-                label(class='label') Select test suits to run
-                div(id='list_of_suits', class="container")
+    #test_suite_configuration_container
+        .row
+            .col-xs-6
+                .thumbnail
+                    p Select test suit
+                        form(action="/addTestSuit", method="post")
+                            .input-group
+                                .input-group-btn
+                                    button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                                        | Test Suit
+                                        span.caret
+                                    ul.dropdown-menu
+                                        each suit in suits
+                                            li
+                                                a.testSuitListItem(name="#{suit.testSuite}") #{suit.testSuite}
+                                input.form-control(id='testSuitInput', name='testSuit' ,type='text', aria-label='...')
+                                span.input-group-btn
+                                    button#addNewTestSuit.btn.btn-primary(type='submit') Add New
 
-                div(class="button_container")
-                    #start_atf.btn.btn-default(type="button") Start ATF
-                    #stop_atf.btn.btn-default(type="button", disabled="disabled") Stop ATF
-                    #clean_sdl.btn.btn-default(type="button", disabled="disabled") Stop SDL
+            .col-xs-6
+                .thumbnail
+                    p Load script
+                    form(action="/upload", method="post", enctype="multipart/form-data", class="uploadForm")
+                        .list-group
+                            span.btn.btn-primary.btn-file Add *.lua scripts
+                                input.btn.btn-default(type="file", name="file_upload", multiple, accept="lua")
+                                span.badge 4
+                        .list-group
+                            span.btn.btn-primary.btn-file Browse additional test-data upload (icons, etc)
+                                input.btn.btn-default(type="file", name="icon_file_upload", multiple)
+                                span.badge 4
+                        input#updateTest.btn.btn-success.disabled(type='submit', name="upload", value="Update test suite")
+                        span#testSuiteSelectLabel.label.label-info Choose test suite first
 
-                #test_suite_list_area.container
-                    p Test suite list
-                    select(id='test_suite_list', class='test_suite_list')
+        //div(class="functional_block right")
+        //    div(class="innerContainer")
+        //        span Select test suits to run
+        //        div(id='list_of_suits', class="container")
+        //
+        //        #test_suite_list_area.container
+        //            p Test suite list
+        //            select(id='test_suite_list', class='test_suite_list')
+        //
+        //            #update_list.btn.btn-default(class='update_list') Update
+        //
+        //            textarea(id='description', class='description', rows=7, cols=1, readonly='readonly')
+    //div(class="button_container")
+    //    #start_atf.btn.btn-default(type="button") Start ATF
+    //    #stop_atf.btn.btn-default(type="button", disabled="disabled") Stop ATF
+    //    #clean_sdl.btn.btn-default(type="button", disabled="disabled") Stop SDL
 
-                    #update_list.btn.btn-default(class='update_list') Update
-
-                    textarea(id='description', class='description', rows=7, cols=1, readonly='readonly')
-
-        div(class="functional_block left bottom ")
-            div(class="innerContainer")
-
-        label(class='label') ATF Log
-        textarea(id='atf_log', class='ATF_log', rows=7, cols=1, readonly='readonly')
-
-        label(class='label') SDL Log
-        textarea(id='sdl_log', class='SDL_log', rows=7, cols=1, readonly='readonly')
-
+    //    div(class="functional_block left bottom ")
+    //        div(class="innerContainer")
+    //
+    //    label(class='label') ATF Log
+    //    textarea(id='atf_log', class='ATF_log', rows=7, cols=1, readonly='readonly')
+    //
+    //    label(class='label') SDL Log
+    //    textarea(id='sdl_log', class='SDL_log', rows=7, cols=1, readonly='readonly')
+    //
     a.btn.btn-default(href='http://localhost:3000') Back
     #colorScheme.btn.btn-default Change Color
-
-    #footer
-        div(class='footer-box') SDL file name:
-            p(class='footer_param') #{session.user.config[configIndex].file_path}
-        div(class='footer-box') heartBeat timeout:
-            p(class='footer_param') #{session.user.config[configIndex].hb_timeout}
-        div(class='footer-box') testRecord folder:
-            p(class='footer_param') #{session.user.config[configIndex].testRecord_path}
-        div(class='footer-box') Mobile connection string:
-            p(class='footer_param') #{session.user.config[configIndex].MOB_connection_str}
-        div(class='footer-box') HMI connection string:
-            p(class='footer_param') #{session.user.config[configIndex].HMI_connection_str}
-        div(class='footer-box') PerfLog connection string:
-            p(class='footer_param') #{session.user.config[configIndex].PerfLog_connection_str}
-        div(class='footer-box') Client PerfLog connection string:
-            p(class='footer_param') #{session.user.config[configIndex].client_PerfLog_connection_str}
-        div(class='footer-box') Time for launch SDLProc:
-            p(class='footer_param') #{session.user.config[configIndex].launch_time}
-        div(class='footer-box') terminal CMD:
-            p(class='footer_param') #{session.user.config[configIndex].terminal_name}
+    //
+    //#footer
+    //    div(class='footer-box') SDL file name:
+    //        p(class='footer_param') #{session.user.config[configIndex].file_path}
+    //    div(class='footer-box') heartBeat timeout:
+    //        p(class='footer_param') #{session.user.config[configIndex].hb_timeout}
+    //    div(class='footer-box') testRecord folder:
+    //        p(class='footer_param') #{session.user.config[configIndex].testRecord_path}
+    //    div(class='footer-box') Mobile connection string:
+    //        p(class='footer_param') #{session.user.config[configIndex].MOB_connection_str}
+    //    div(class='footer-box') HMI connection string:
+    //        p(class='footer_param') #{session.user.config[configIndex].HMI_connection_str}
+    //    div(class='footer-box') PerfLog connection string:
+    //        p(class='footer_param') #{session.user.config[configIndex].PerfLog_connection_str}
+    //    div(class='footer-box') Client PerfLog connection string:
+    //        p(class='footer_param') #{session.user.config[configIndex].client_PerfLog_connection_str}
+    //    div(class='footer-box') Time for launch SDLProc:
+    //        p(class='footer_param') #{session.user.config[configIndex].launch_time}
+    //    div(class='footer-box') terminal CMD:
+    //        p(class='footer_param') #{session.user.config[configIndex].terminal_name}
 
