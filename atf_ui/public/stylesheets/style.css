@@ -6,10 +6,16 @@ a {
   color: #00B7FF;
 }
 
+#editor {
+    width: 500px;
+    height: 400px;
+}
+
 .header{
-    background-color: #3C3CA9;
+    background-color: #205081;
     color: #F8FFF0;
     margin-bottom: 40px;
+    text-align: center;
 }
 
 .disabled {
@@ -18,8 +24,18 @@ a {
 
 #notify{
     position: absolute;
-    top: 20px;
+    top: -40px;
+    left: -100px;
     z-index: 3;
+}
+
+#userNameHeader{
+    overflow: scroll;
+    white-space: nowrap;
+}
+
+textarea{
+    resize: vertical;
 }
 
 form{
@@ -126,11 +142,6 @@ form{
     height: 55%;
 }
 
-#test_suite_list_area.container{
-    height: 200px;
-    width: 400px;
-    display: inline;
-}
 
 #test_suite_list_area .test_suite_list{
     width: 339px;
@@ -142,8 +153,8 @@ form{
 }
 
 #main_configuration_container .input-group {
-    width: 45%;
-    margin: 0 auto;
+    /*width: 45%;*/
+    /*margin: 0 auto;*/
 }
 
 #main_configuration_container .glyphicon-refresh {
@@ -217,11 +228,6 @@ form{
     background-color: rgba(255, 255, 255, 0.53);
 }
 
-#test_suite_list_area.container{
-    height: 200px;
-    width: 400px;
-}
-
 #test_suite_list_area .test_suite_list{
     width: 339px;
     height: 22px;
@@ -268,15 +274,6 @@ dialog {
     margin: 0;
 }
 
-#list_of_suits.container {
-    border: 1px solid #e5e5e5;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    float: top;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
 #log {
     float: top;
     margin-top: 5px;
@@ -295,12 +292,6 @@ dialog {
     display: inline-block;
     margin-top: 5px;
     margin-bottom: 5px;
-}
-
-#run_test_suits.container {
-    margin-top: 10px;
-    float: left;
-    vertical-align: bottom;
 }
 .functional_block.right {
     overflow-y: scroll;

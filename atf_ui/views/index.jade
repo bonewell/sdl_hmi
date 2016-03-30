@@ -5,35 +5,8 @@ block content
     include ./modals/notify
 
     .col-lg-6
-        form(action='/login',method='post')
-
-            .input-group
-                .input-group-btn
-                    button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                        | User name
-                        span.caret
-                    ul.dropdown-menu
-                        each user, i in users
-                            -if(user.userName != "defaultUser")
-                                li
-                                    a(onclick="selectUser(this)", name="#{user.userName}") #{user.userName}
-
-                input.form-control(id='userNameInput', name='userName' ,type='text', aria-label='...')
-
-            .input-group.input-group-lg
-                span.input-group-addon User password
-                input.form-control(name='password', value='', type="password", placeholder="password", aria-describedby="sizing-addon1")
-
-            p
-                input.btn.btn-success(type='submit', value="Enter")
-
-            p
-                a(id='test_suite', class='btn btn-info', href='/register') Register new user
 
         if session.user
-
-            p Hi #{session.user.userName}
-
             .list-group
                 a.list-group-item(id='config', href='/config') Go to Main config
                     span.badge #{session.user.config.length}
@@ -41,4 +14,32 @@ block content
             .list-group
                 a.list-group-item(id='test_suite'  href='/test_suite') Go to test_suite configuration
                     span.badge #{session.user.config.length}
+        else
+
+            form(action='/login',method='post')
+
+                .input-group
+                    .input-group-btn
+                        button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                            | User name
+                            span.caret
+                        ul.dropdown-menu
+                            each user, i in users
+                                -if(user.userName != "defaultUser")
+                                    li
+                                        a(onclick="selectUser(this)", name="#{user.userName}") #{user.userName}
+
+                    input.form-control(id='userNameInput', name='userName' ,type='text', aria-label='...')
+
+                .input-group.input-group-lg
+                    span.input-group-addon User password
+                    input.form-control(name='password', value='', type="password", placeholder="password", aria-describedby="sizing-addon1")
+
+                p
+                    input.btn.btn-success(type='submit', value="Enter")
+
+                p
+                    a(id='test_suite', class='btn btn-info', href='/register') Register new user
+
+
 

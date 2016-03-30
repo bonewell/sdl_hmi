@@ -5,7 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-//var multer  = require('multer');
+var multer  = require('multer');
+var upload = multer({
+    dest: '/tmp/uploads/'
+});
 
 // DB mongodb
 var Db = require('mongodb').Db;
@@ -23,7 +26,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
+//TO DO uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -32,45 +35,11 @@ app.use(cookieParser());
 app.use(session({secret:'somesecrettokenhere'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-//app.post('/upload',
-//    multer({
-//    dest: '/tmp/testsuits/',
-//    rename: function (fieldname, filename) {
-//        return filename; //return name
-//    },
-//    changeDest: function(dest, req, res) {
-//        var newDestination = dest + '123';
-//
-//        return newDestination
-//    }
-//}),
-//    function(req, res) {
-//        console.log(req.body);
-//        res.redirect("back");
-//});
-
-//app.use(multer({
-//    dest: '/tmp/uploads/',
-//    //rename to original file name
-//    rename: function (fieldname, filename) {
-//        return filename; //return name
-//    }
-//}));
-
-//var storage = multer.diskStorage({
-//    destination: '/tmp/testsuits/123/',
-//    filename: function (req, file, cb) {
-//        cb(null, req.body.file_upload)
-//    }
-//});
-
-//var upload = multer({ storage: storage });
-//
-//
-//app.post('/upload', upload.single('uploadedFile'), function (req, res, next) {
-//    res.end('over');
-//});
+app.use(upload.fields([
+    { name: 'lua_upload' },
+    { name: 'other_upload' },
+    { name: 'modules_upload' }
+]));
 
 // Make our db accessible to our router
 app.use(function(req,res,next){

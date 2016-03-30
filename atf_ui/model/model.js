@@ -10,16 +10,7 @@ var MongoClient = require('mongodb').MongoClient;
  * */
 model.defaultConfig = {
     index: 0,
-    file_path: 'default',
-    hb_timeout: 'default',
-    testRecord_path: 'default',
-    MOB_connection_str: 'default',
-    HMI_connection_str: 'default',
-    PerfLog_connection_str: 'default',
-    client_PerfLog_connection_str: 'default',
-    launch_time: 'default',
-    terminal_name: 'default',
-    SDLStoragePath: 'default'
+    repo: 0
 };
 
 model.init = function(main_db){
@@ -77,7 +68,7 @@ model.init = function(main_db){
                                                 testSuite: "defaultTestCase",
                                                 description: "Description",
                                                 userID: docs[0]._id,
-                                                fileName: ["file1", "file2"]
+                                                fileNames: ["file1", "file2"]
                                             }, function (err, doc) {
                                                 if (err) {
                                                     console.log("ERR----------Can not insert default test", err);

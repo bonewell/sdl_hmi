@@ -125,21 +125,122 @@ $('#password').find("input").on('input',function(data){
 
 });
 
-$('.testSuitListItem').on('click', function(){
+$('.uploadTestSuitListItem').on('click', function(){
 
-    console.log(this.name);
+    $('#uploadTestSuiteSelectLabel').text(this.name);
+    $('#uploadTestSuiteSelectLabel').addClass('label-info');
+    $('#uploadTestSuiteSelectLabel').removeClass('label-danger');
+    $('#uploadTestSuiteSelectInput').val(this.name);
 
-    $("#testSuitInput").val(this.name);
+    $('#uploadForm').find('input, span').removeAttr('disabled', 'disabled').removeClass('disabled');
+});
 
-    $('#testSuiteSelectLabel').text($('#testSuitInput').val());
-    $('#updateTest').removeClass('disabled');
-    $('#addNewTestSuit').addClass('disabled');
+$('#addNewTestSuit').on('click', function(){
+    //request(
+    //    'addTestSuit',
+    //    function(data){
+    //        notiify("success", "User name available");
+    //    },
+    //    function(data){
+    //        notiify("warn", data.responseText);
+    //    },
+    //    {
+    //        "testSuit": $('#testSuitInput').val(),
+    //        "testSuiteDescription": $('#testSuiteDescription').val()
+    //    }
+    //);
+});
+
+$('#editTestSuit').on('click', function(){
+    $('#newTestSuiteForm').attr('action', '/editTestSuit');
+    $('#addNewTestSuit').submit();
+});
+
+$('.editTestSuitListItem').on('click', function(){
+
+    $('#testSuitInput').val(this.name);
+    $('#testSuiteDescription').val(suitsData[$(this).attr('index')].description);
+    $('#editTestSuit').removeAttr('disabled', 'disabled').removeClass('disabled');
+
+    $('#addNewTestSuit').attr('disabled', 'disabled').addClass('disabled');
+
+    $('#fileList').html('');
+
+    if (suitsData[$(this).attr('index')].fileNames.length) {
+
+        var suit = suitsData[$(this).attr('index')];
+
+        for (var file in suit.fileNames) {
+            console.log(suit.fileNames[file]);
+            $('#fileList').append(
+                '<a href="#" class="input-group">' +
+                    '<span class="form-control" filename="LuxoftInterCA.crt">' + suit.fileNames[file] + '</span>' +
+                    '<span class="input-group-btn">' +
+                        '<button class="btn btn-warning deleteFileExecute" onclick="deleteFileExecute(' +
+                'this, \'' + suit.testSuite + '\', \'' + suit.fileNames[file] + '\'' +
+                ')" type="button">Delete!</button>' +
+                    '</span>'+
+                '</a>');
+
+        }
+    } else {
+        $('#fileList').html('<a href="#" class="list-group-item">No files added :(</a>');
+    }
+
+
 });
 
 $('#testSuitInput').on('click', function(){
+    $(this).val('');
+    $('#fileList').html('<a href="#" class="list-group-item">No files added :(</a>');
+    $('#editTestSuit').attr('disabled', 'disabled').addClass('disabled');
+    $('#addNewTestSuit').removeAttr('disabled', 'disabled').removeClass('disabled');
+});
 
-    $('#testSuiteSelectLabel').text('Choose test suite first');
-    $('#updateTest').addClass('disabled');
-    $('#addNewTestSuit').removeClass('disabled');
-    this.value = '';
+deleteFileExecute = function(element, suit, fileName){
+    request(
+        'deleteFile',
+        function(data){
+            notiify("success", data);
+            $(element).parent().parent().remove();
+
+            var fileItemIndex = null;
+
+            for (var i in suitsData){
+                if (suitsData[i].testSuite === suit) {
+                    fileItemIndex = suitsData[i].fileNames.indexOf(fileName);
+                    suitsData[i].fileNames.splice(fileItemIndex, 1);
+                    if (suitsData[i].fileNames.length === 0) {
+
+                        $('#fileList').html('<a href="#" class="list-group-item">No files added :(</a>');
+                    }
+                }
+            }
+        },
+        function(data){
+            notiify("warn", data.responseText);
+        },
+        {
+            "suit": suit,
+            "fileName": fileName
+        }
+    );
+};
+
+$('input').on('keypress', function(e){
+    console.log(e.charCode);
+    console.log(String.fromCharCode(e.charCode));
+    if (e.charCode == 47 || e.charCode == 92 || e.charCode == 39 || e.charCode == 34) {
+        e.preventDefault();
+    }
+
+});
+
+//config.jade prevent DropDown list automatic close
+$('.testSuitDropDownList input, .testSuitDropDownList li,  .testSuitDropDownList ul').click(function(e) {
+    e.stopPropagation();
+});
+
+$('#saveButton').on('click', function(){
+    console.log(editor.getSession().getValue());
 });
