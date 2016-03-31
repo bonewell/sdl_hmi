@@ -137,139 +137,132 @@ controller.copyAdditionalFiles = function() {
 
 controller.upload = function(req, res){
 
-    var oldFile;
-    var newFile;
-    var newLuaFilePath = testSuitePath.concat( req.session.user.userName.concat( '/' + req.body.testSuiteName + '/' ) );
-    var newOtherFilePath = testSuitePath.concat( req.session.user.userName.concat( '/atf/files/' ) );
-    var newModulesFilePath = testSuitePath.concat( req.session.user.userName.concat( '/atf/user_modules/' ) );
-    var luaFiles = req.files.lua_upload;
-    var otherFiles = req.files.other_upload;
-    var modules_upload = req.files.modules_upload;
-    var luaFileNames = [];
-
-
-    console.log("----------body", req.body);
-    console.log("----------newLuaFilePath", newLuaFilePath);
-    console.log("----------newOtherFilePath", newOtherFilePath);
-    console.log("----------luaFiles", luaFiles);
-    console.log("----------otherFiles", otherFiles);
-    console.log("----------modules_upload", modules_upload);
-    console.log("----------");
-
-
-    for (var i in luaFiles) {
-
-        var fullFilePath = newLuaFilePath.concat(luaFiles[i].originalname);
-
-        try
+    req.db.collection("tests").findOne(
         {
-            fs.accessSync(fullFilePath);
-        }
-        catch (err)
-        {
-            oldFile = fs.createReadStream(luaFiles[i].path);
-            newFile = fs.createWriteStream(fullFilePath);
+            testSuite: req.body.testSuiteName,
+            userID: req.session.user._id
+        },
+        function (err, doc) {
+            if (!err && doc) {
 
-            oldFile.pipe(newFile);
+                var oldFile;
+                var newFile;
+                var newLuaFilePath = testSuitePath.concat(req.session.user._id.concat('/' + doc._id + '/'));
+                var newOtherFilePath = testSuitePath.concat(req.session.user._id.concat('/atf/files/'));
+                var newModulesFilePath = testSuitePath.concat(req.session.user._id.concat('/atf/user_modules/'));
+                var luaFiles = req.files.lua_upload;
+                var otherFiles = req.files.other_upload;
+                var modules_upload = req.files.modules_upload;
+                var luaFileNames = [];
 
-            console.log("----------added new file", fullFilePath);
+                console.log("----------body", req.body);
+                console.log("----------newLuaFilePath", newLuaFilePath);
+                console.log("----------newOtherFilePath", newOtherFilePath);
+                console.log("----------luaFiles", luaFiles);
+                console.log("----------otherFiles", otherFiles);
+                console.log("----------modules_upload", modules_upload);
+                console.log("----------");
 
-            luaFileNames.push(luaFiles[i].originalname);
-            continue;
-        }
 
-        console.log("----------File exists", fullFilePath);
-    }
+                for (var i in luaFiles) {
 
-    for (var i in otherFiles) {
+                    var fullFilePath = newLuaFilePath.concat(luaFiles[i].originalname);
 
-        oldFile = fs.createReadStream(otherFiles[i].path);
-        newFile = fs.createWriteStream(newOtherFilePath.concat(otherFiles[i].originalname));
-
-        oldFile.pipe(newFile);
-    }
-
-    for (var i in modules_upload) {
-        oldFile = fs.createReadStream(modules_upload[i].path);
-        newFile = fs.createWriteStream(newModulesFilePath.concat(modules_upload[i].originalname));
-
-        oldFile.pipe(newFile);
-    }
-
-    console.log("----------Test folder updated successfully ");
-
-    console.log("----------luaFileNames", luaFileNames);
-
-    if (luaFileNames.length) {
-
-        req.db.collection("tests").find(
-            {
-                testSuite: req.body.testSuiteName,
-                userID: req.session.user._id
-            }
-        ).toArray(function (err, docs) {
-            if (!err && docs.length === 1) {
-
-                req.db.collection("tests").update(
-                    {
-                        testSuite: req.body.testSuiteName,
-                        userID: req.session.user._id
-                    }, {
-                        $set: {
-                            fileNames: luaFileNames.concat(docs[0].fileNames)
-                        }
-                    }, function (err, doc) {
-                        if (err) {
-                            console.log("ERR----------Can not update test record of 'tests' collection", err);
-                        } else {
-                            console.log("----------Test updated successfully", doc);
-                        }
+                    try {
+                        fs.accessSync(fullFilePath);
                     }
-                );
+                    catch (err) {
+                        oldFile = fs.createReadStream(luaFiles[i].path);
+                        newFile = fs.createWriteStream(fullFilePath);
 
-                req.session.successMSG = "Files Uploaded successfully :)";
-                res.redirect("back");
+                        oldFile.pipe(newFile);
+
+                        console.log("----------added new file", fullFilePath);
+
+                        luaFileNames.push(luaFiles[i].originalname);
+                        continue;
+                    }
+
+                    console.log("----------File exists", fullFilePath);
+                }
+
+                for (var i in otherFiles) {
+
+                    oldFile = fs.createReadStream(otherFiles[i].path);
+                    newFile = fs.createWriteStream(newOtherFilePath.concat(otherFiles[i].originalname));
+
+                    oldFile.pipe(newFile);
+                }
+
+                for (var i in modules_upload) {
+                    oldFile = fs.createReadStream(modules_upload[i].path);
+                    newFile = fs.createWriteStream(newModulesFilePath.concat(modules_upload[i].originalname));
+
+                    oldFile.pipe(newFile);
+                }
+
+                console.log("----------Test folder updated successfully ");
+
+                console.log("----------luaFileNames", luaFileNames);
+                console.log("----------old files", doc.fileNames);
+
+                if (luaFileNames.length) {
+
+                    req.db.collection("tests").update(
+                        {
+                            testSuite: req.body.testSuiteName,
+                            userID: req.session.user._id
+                        }, {
+                            $set: {
+                                fileNames: luaFileNames.concat(doc.fileNames)
+                            }
+                        }, function (err) {
+                            if (err) {
+                                console.log("ERR----------Can not update test record of 'tests' collection", err);
+                            } else {
+                                console.log("----------Test updated successfully");
+                            }
+                        }
+                    );
+
+                    req.session.successMSG = "Files Uploaded successfully :)";
+                    res.redirect("back");
+                } else {
+
+                    req.session.errMSG = "Files were not uploaded successfully :(";
+                    res.redirect("back");
+                }
             } else {
-
-                req.session.errMSG = "Files were not uploaded successfully :(";
+                req.session.errMSG = "Create test suite first! :)";
                 res.redirect("back");
             }
-        });
-    } else {
-        req.session.errMSG = "Files already exists, delete them first :)";
-        res.redirect("back");
-    }
+        }
+    );
 };
 
 controller.config = function(req, res){
     console.log('----------Config CONTROLLER with data: ', req.body);
 
-    fs.readFile('/tmp/testsuits/atf/modules/config.lua', 'utf8', function(err, buffer){
+    if (req.session.user.userName) {
 
-        console.log(JSON.stringify(buffer));
+        // Fetch the users test suits list
+        req.db.collection("tests").find({userID: req.session.user._id}).toArray(function(err, docs) {
+            if (err) {
+                console.log("ERR----------Can not user configuration data from database! ", err);
+            } else {
 
-        if (req.session.user.userName) {
+                res.render('config', {
+                    testSuits: docs,
+                    session: req.session,
+                    configIndex: controller.configIndex,
+                    repoList: controller.sdlRepo
+                });
+            }
+        });
 
-            // Fetch the users test suits list
-            req.db.collection("tests").find({userID: req.session.user._id}).toArray(function(err, docs) {
-                if (err) {
-                    console.log("ERR----------Can not user configuration data from database! ", err);
-                } else {
-                    res.render('config', {
-                        status: "edit",
-                        testSuits: docs,
-                        session: req.session,
-                        configIndex: controller.configIndex,
-                        configData: buffer,
-                        repoList: controller.sdlRepo
-                    });
-                }
-            });
-
-        } else {
-            res.redirect("back");
-        }
-    });
+    } else {
+        res.redirect("back");
+    }
 };
 
 controller.selectConfig = function(req, res){
@@ -281,49 +274,47 @@ controller.selectConfig = function(req, res){
     res.redirect("back");
 };
 
-controller.register = function(req, res){
+controller.signUp = function(req, res){
     console.log('----------Register CONTROLLER with data: ', req.body);
 
-    var db = req.db;
-    var users = [];
-
-    var collection = db.collection("users");
-
-    // Fetch the users list
-    collection.find({userName: "defaultUser"}).toArray(function(err, docs) {
-        if (err) {
-            console.log("ERR----------Can not find default user config! ", err);
-        } else {
-
-            res.render('config', {status: "register", session: {user: docs[0]}, configIndex: 0});
-        }
-    });
-
+    res.render('registerForm');
 };
 
 controller.addConfig = function (req, res) {
 
     console.log('----------addConfig CONTROLLER with data: ', req.body);
 
-    var index = res.locals.session.user.config.length;
+    fs.readFile(testSuitePath.concat('atf/modules/config.lua'), 'utf8', function(err, buffer) {
 
-    res.locals.session.user.config.push(model.defaultConfig);
+        if (err) {
 
-    res.locals.session.user.config[index].index = index;
-
-    console.log(res.locals.session.user);
-
-    req.db.collection("users").update({userName: res.locals.session.user.userName}, {$set: {config: res.locals.session.user.config}}, function(err, docs){
-
-        if (!err) {
-
-            console.log('----------Configuration added successfully');
+            console.log("ERR----------Can not read data from config lua file ", err);
             res.redirect("back");
-        } else {
-
-            console.log("ERR----------Configuration add error ", err);
-            res.redirect("back");
+            return;
         }
+
+        var index = res.locals.session.user.config.length;
+
+        res.locals.session.user.config.push(model.defaultConfig);
+
+        res.locals.session.user.config[index].index = index;
+
+        res.locals.session.user.config[index].configJSON = buffer;
+
+        console.log(res.locals.session.user);
+
+        req.db.collection("users").update({userName: res.locals.session.user.userName}, {$set: {config: res.locals.session.user.config}}, function (err, docs) {
+
+            if (!err) {
+
+                console.log('----------Configuration added successfully');
+                res.redirect("back");
+            } else {
+
+                console.log("ERR----------Configuration add error ", err);
+                res.redirect("back");
+            }
+        });
     });
 };
 
@@ -630,6 +621,77 @@ controller.copy = function(src, dest) {
     oldFile.pipe(newFile);
 };
 
+
+/**
+ * Method to save configuration data from config.jade view
+ * to /tmp/config.json
+ * @param req
+ * @param res
+ */
+controller.register = function(req, res) {
+
+    console.log("----------register Configuration CONTROLLER enter...................");
+
+    console.log("----------Boody:", req.body);
+
+    req.db.collection("users").findOne({userName: req.body.userName}, function(err, doc){
+
+        if (err) {
+            console.log("ERR----------Can not make request to database", err);
+            req.session.errMSG = "Can not make request to database: " + err;
+            res.redirect("/");
+        } else if (!doc) {
+
+            console.log("----------Start creating new users db record!");
+
+            // if no user found then create new user record
+            req.db.collection("users").insert({
+                userName: req.body.userName,
+                userEmail: req.body.email,
+                userPassword: req.body.password,
+                config:[model.defaultConfig]
+            }, function(err, docs){
+
+                if (err) {
+
+                    console.log("ERR----------Error with creation users record in db: ", err);
+                    req.session.errMSG = "Error with creation users record in db: " + err;
+                    res.redirect("/");
+                } else {
+
+                    //if user record successfully added to DB then create user folder
+
+                    console.log("----------Start creating new users folder!");
+
+                    var userDir = testSuitePath.concat(docs[0]._id);
+
+                    fs.mkdir(userDir, function(err) {
+                        if (err) {
+
+                            console.log("ERR----------Error with creation users folder: ", err);
+                            req.session.errMSG = "Error with creation users folder: " + err;
+                            res.redirect("/");
+                        } else {
+
+                            console.log("----------Created new user folder successfully");
+                            console.log("----------Start configure user data");
+                            controller.copyDir(controller.atf_path, userDir.concat( '/atf' ));
+                            console.log("----------Finished configure user data");
+                            res.redirect("/");
+                        }
+                    });
+                }
+            });
+
+        } else {
+            console.log("ERR----------User name invalid");
+            res.session.errMSG = "User name invalid";
+
+            res.redirect("back");
+        }
+    });
+};
+
 /**
  * Method to save configuration data from config.jade view
  * to /tmp/config.json
@@ -640,22 +702,22 @@ controller.saveConfiguration = function(req, res) {
 
     console.log("----------Save Configuration CONTROLLER enter...................");
 
-    var name = req.body.userName ? req.body.userName : req.session.user.userName;
+    console.log("----------Boody:", req.body);
 
-    req.db.collection("users").find({userName: name}).toArray(function(err, docs){
+    var name = req.session.user.userName;
+
+    req.db.collection("users").findOne({userName: name}, function(err, doc){
+
+        var tests = req.body.tests ? req.body.tests : [];
 
         var newConfig = {
             index: controller.configIndex,
-            file_path: req.body.file_path,
-            hb_timeout: req.body.hb_timeout,
-            testRecord_path: req.body.testRecord_path,
-            MOB_connection_str: req.body.MOB_connection_str,
-            HMI_connection_str: req.body.HMI_connection_str,
-            PerfLog_connection_str: req.body.PerfLog_connection_str,
-            client_PerfLog_connection_str: req.body.client_PerfLog_connection_str,
-            launch_time: req.body.launch_time,
-            terminal_name: req.body.terminal_name,
-            SDLStoragePath: req.body.SDLStoragePath
+            description: req.body.description,
+            repo: req.body.repo,
+            branch: req.body.branch,
+            commit: req.body.commit,
+            tests: tests,
+            configJSON: req.body.editor
         };
 
         console.log("----------Config to be saved is: ", newConfig);
@@ -664,7 +726,7 @@ controller.saveConfiguration = function(req, res) {
             console.log("ERR----------Can not make request to database", err);
             req.session.errMSG = "Can not make request to database: " + err;
             res.redirect("/");
-        } else if (docs.length == 0) {
+        } else if (!doc) {
 
             console.log("----------Start creating new users db record!");
 
@@ -828,33 +890,38 @@ controller.addTestSuit = function(req, res) {
         } else if (docs.length === 0) {
 
             console.log('----------Received request to add new test suit: ' + req.body.testSuit);
-            path = testSuitePath.concat(req.session.user.userName.concat("/" + req.body.testSuit));
-            console.log('----------path ' + path);
-            fs.mkdir(path, function(err) {
+
+            req.db.collection("tests").insert({
+                testSuite: req.body.testSuit,
+                description: req.body.testSuiteDescription,
+                userID: req.session.user._id,
+                fileNames: []
+            }, function (err, docs) {
                 if (err) {
-                    console.log("ERR---------Failed to create/read test suit directory " + path + " with error: ", err);
-                    req.session.errMSG = "ERR---------Failed to create/read test suit directory " + path + " with error: " + err;
+                    console.log("ERR----------Can not insert test record to collection", err);
+                    req.session.errMSG = "ERR----------Can not insert test record to collection" + err;
                     res.redirect("back");
                 } else {
-                    console.log("---------User test suite directory created successfully");
+                    console.log("----------Test record successfully added to db collection");
 
-                    req.db.collection("tests").insert({
-                        testSuite: req.body.testSuit,
-                        description: req.body.testSuiteDescription,
-                        userID: req.session.user._id,
-                        fileNames: []
-                    }, function (err, doc) {
+                    path = testSuitePath.concat(req.session.user._id.concat("/" + docs[0]._id));
+                    console.log('----------path ' + path);
+                    fs.mkdir(path, function(err) {
                         if (err) {
-                            console.log("ERR----------Can not insert test record to collection", err);
-                            req.session.errMSG = "ERR----------Can not insert test record to collection" + err;
+                            console.log("ERR---------Failed to create/read test suit directory " + path + " with error: ", err);
+                            req.session.errMSG = "ERR---------Failed to create/read test suit directory " + path + " with error: " + err;
                             res.redirect("back");
                         } else {
-                            console.log("----------Test record successfully added to db collection");
+                            console.log("---------User test suite directory created successfully");
+
                             res.redirect("back");
                         }
                     });
                 }
             });
+
+
+
         } else {
             console.log("ERR----------You must use unique name for test suits! :(");
             req.session.errMSG = "You must use unique name for test suits! :(";

@@ -242,5 +242,5 @@ $('.testSuitDropDownList input, .testSuitDropDownList li,  .testSuitDropDownList
 });
 
 $('#saveButton').on('click', function(){
-    console.log(editor.getSession().getValue());
+    $('#textArea').text(editor.getSession().getValue());
 });

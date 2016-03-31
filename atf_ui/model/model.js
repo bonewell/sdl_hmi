@@ -10,7 +10,13 @@ var MongoClient = require('mongodb').MongoClient;
  * */
 model.defaultConfig = {
     index: 0,
-    repo: 0
+    description: '',
+    repo: 0,
+    branch: '',
+    commit: '',
+    tests: [],
+    configJSON: '',
+    status: 'stasis'
 };
 
 model.init = function(main_db){

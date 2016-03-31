@@ -37,8 +37,29 @@ router.get('/', function(req, res, next) {
 
 /* GET main configuration page. */
 router.get('/config', isAuthenticated, function(req, res, next) {
-    console.log("----------Config GET enter...................");
+    console.log("----------config GET enter...................");
     controller.config(req, res);
+});
+
+/* POST main configuration page form submit handler. */
+router.get('/signUp', function(req, res, next) {
+
+    console.log("----------signUp GET enter...................");
+    controller.signUp(req, res);
+});
+
+/* POST main configuration page form submit handler. */
+router.post('/register', function(req, res, next) {
+
+    console.log("----------register GET enter...................");
+    controller.register(req, res);
+});
+
+/* POST main configuration page form submit handler. */
+router.post('/save', function(req, res, next) {
+    console.log("----------save Configuration POST enter...................");
+
+    controller.saveConfiguration(req, res);
 });
 
 /* GET test suite configuration page. */
@@ -46,6 +67,12 @@ router.get('/test_suite', isAuthenticated, function(req, res, next) {
     console.log("----------test_suite GET enter...................");
 
     controller.testSuite(req, res);
+});
+
+/* POST main configuration page form submit handler. */
+router.post('/upload', isAuthenticated, function(req, res, next) {
+    console.log('----------TRYING TO UPLOAD................');
+    controller.upload(req, res);
 });
 
 /* GET test suite configuration page. */
@@ -65,13 +92,6 @@ router.post('/editTestSuit', isAuthenticated, function(req, res, next) {
 /* GET test suite configuration page. for post ajax requests from UI*/
 router.post('/test_suite_config', isAuthenticated, function(req, res, next) {
     controller.test_suite_config(req, res);
-});
-
-/* POST main configuration page form submit handler. */
-router.post('/save', function(req, res, next) {
-    console.log("----------Save Configuration POST enter...................");
-
-    controller.saveConfiguration(req, res);
 });
 
 /* POST main configuration page form submit handler. */
@@ -104,23 +124,10 @@ router.get('/selectConfig/:index', isAuthenticated, function(req, res, next) {
 });
 
 /* POST main configuration page form submit handler. */
-router.get('/register', function(req, res, next) {
-
-    console.log("----------Register GET enter...................");
-    controller.register(req, res);
-});
-
-/* POST main configuration page form submit handler. */
 router.get('/addConfig', isAuthenticated, function(req, res, next) {
 
     console.log("----------addConfig GET enter...................");
     controller.addConfig(req, res);
-});
-
-/* POST main configuration page form submit handler. */
-router.post('/upload', isAuthenticated, function(req, res, next) {
-        console.log('----------TRYING TO UPLOAD................');
-        controller.upload(req, res);
 });
 
 /* GET main configuration page. */
