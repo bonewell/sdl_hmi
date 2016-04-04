@@ -10,23 +10,36 @@ block content
         .panel-body
             .col-xs-10.col-xs-offset-1
                 #main_configuration_container
-                    form(action='/register',method='post')
+                    form#registerForm(action='/register',method='post',data-toggle="validator", role="form")
 
-                        p User name
-                        .input-group(id="userName")
-                            input(name='userName', class="form-control", placeholder="User name")
-                            .input-group-addon
-                                span.text status
-                                .glyphicon.glyphicon-refresh.hidden
+                        .form-group(id="userName")
+                            label.control-label User name
+                            .input-group
+                                input(name='userName' class="form-control", pattern="^[_A-z0-9]{1,16}$", data-minlength="1", maxlength="16", placeholder="User name", required, data-remote="/isUserExist")
+                                .input-group-addon
+                                    span.text status
+                                    .glyphicon.glyphicon-refresh.hidden
+                            .help-block.with-errors
 
-                        p User email
-                        .input-group
-                            input(name='email', class="form-control", placeholder="User email")
 
-                        p User password
-                        .input-group(id="password")
-                            input(name='password', class="form-control", type="password", placeholder="User password")
-                            .input-group-addon
-                                span.text status
+                        .form-group
+                            label.control-label User email
+                            input(name='email', class="form-control", placeholder="User email", type="email", required)
+                            .help-block.with-errors
+
+                        label.control-label(for="passwordInput") User password
+                        .form-group(id="password")
+                            .form-group.col-sm-6
+                                .input-group
+                                    input.form-control(name='password', id='passwordInput', data-minlength="6", type="password", placeholder="User password", required)
+                                    span.text.input-group-addon
+                                        | Enter
+                                .help-block
+                                    | Minimum of 6 characters
+
+                            .form-group.col-sm-6
+                                input.form-control(name='confirm_password', id='confirm_password', type="password", data-match="#passwordInput", data-match-error="Whoops, these don't match", placeholder="Confirm", required)
+                                .help-block.with-errors
+                                    | Minimum of 6 characters
                         p
                         input.btn.btn-success(type='submit', value='Register')

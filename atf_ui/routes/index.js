@@ -110,10 +110,17 @@ router.get('/logOut', isAuthenticated, function(req, res, next) {
 });
 
 /* POST main configuration page form submit handler. */
-router.post('/ajax', isAuthenticated, function(req, res, next) {
+router.post('/ajax', function(req, res, next) {
 
     console.log("----------AJAX POST enter...................");
     controller.ajax(req, res);
+});
+
+/* POST main configuration page form submit handler. */
+router.get('/isUserExist', function(req, res, next) {
+
+    console.log("----------isUserExist GET enter...................");
+    controller.isUserExist(req, res);
 });
 
 /* GET main configuration page form submit handler. */

@@ -47,37 +47,6 @@ selectUser = function(self){
     $("#userNameInput").val(self.name);
 };
 
-$('#userName').find("input").focusout(function(){
-
-    var text = $('#userName').find('span.text');
-    var icon = $('#userName').find('.glyphicon-refresh');
-
-    $(text).addClass('hidden');
-    $(icon).removeClass('hidden');
-    $(icon).addClass('rotate360');
-    request(
-        'isUserExist',
-        function(data){
-            notiify("success", "User name available");
-            $(icon).addClass('hidden');
-            $(icon).removeClass('rotate360');
-            $(text).removeClass('hidden');
-            $(text).css("color", "green");
-            $(text).text("good");
-        },
-        function(data){
-
-            notiify("warn", data.responseText);
-            $(icon).addClass('hidden');
-            $(icon).removeClass('rotate360');
-            $(text).removeClass('hidden');
-            $(text).css("color", "red");
-            $(text).text("error");
-        },
-        $("#userName").find("input").val()
-    );
-});
-
 strengthCheck = function(password, marker){
 
 
@@ -227,20 +196,11 @@ deleteFileExecute = function(element, suit, fileName){
     );
 };
 
-$('input').on('keypress', function(e){
-    console.log(e.charCode);
-    console.log(String.fromCharCode(e.charCode));
-    if (e.charCode == 47 || e.charCode == 92 || e.charCode == 39 || e.charCode == 34) {
-        e.preventDefault();
-    }
-
-});
-
 //config.jade prevent DropDown list automatic close
-$('.testSuitDropDownList input, .testSuitDropDownList li,  .testSuitDropDownList ul').click(function(e) {
+$('.testSuitDropDownList input, .testSuitDropDownList li,  testSuitDropDownList ul').click(function(e) {
     e.stopPropagation();
 });
 
 $('#saveButton').on('click', function(){
-    $('#textArea').text(editor.getSession().getValue());
+    console.log(editor.getSession().getValue());
 });

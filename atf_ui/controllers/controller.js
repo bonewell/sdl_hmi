@@ -6,7 +6,7 @@ var WebSocketServer = require('ws');
 var psTree = require('ps-tree');
 var model = require('../model/model.js');
 var multer  = require('multer');
-
+var Git = require("nodegit");
 
 var controller = {
     atf_process: null,
@@ -29,16 +29,20 @@ var controller = {
         }
     ],
     sdlRepo: [
-        "https://github.com/smartdevicelink/sdl_atf.git",
-        "https://github.com/LuxoftSDL/sdl_core.git",
-        "https://github.com/LuxoftSDL/sdl_core_winport.git",
-        "https://github.com/CustomSDL/sdl_core.git",
-        "https://github.com/CustomSDL/sdl_panasonic.git"
+        {
+            url: "https://github.com/smartdevicelink/sdl_core.git",//genivi
+            status: 0
+        },
+        {
+            url: "https://github.com/CustomSDL/sdl_panasonic.git",//pasa
+            status: 0
+        }
     ]
 };
 
 var uploadPath = '/tmp/uploads/';
 var testSuitePath = '/tmp/testsuits/';
+var gitPath = '/tmp/git/';
 
 controller.init = function(){
 
@@ -64,13 +68,39 @@ controller.init = function(){
     } catch(e) {
         if ( e.code != 'EEXIST' ) throw e;
     }
+    try {
+        fs.mkdirSync(gitPath);
+    } catch(e) {
+        if ( e.code != 'EEXIST' ) throw e;
+    }
+    try {
+        fs.mkdirSync(gitPath.concat("genivi"));
+    } catch(e) {
+        if ( e.code != 'EEXIST' ) throw e;
+    }
+    try {
+        fs.mkdirSync(gitPath.concat("pasa"));
+    } catch(e) {
+        if ( e.code != 'EEXIST' ) throw e;
+    }
 
+    //Create genvi repo
+    Git.Clone(controller.sdlRepo[0].url, gitPath.concat("genivi")).then(function(repository) {
+        console.log("----------Genivi repo created");
+        controller.sdlRepo[0].status = 1;
+    });
 
-// подключенные клиенты
+    //Create genvi repo
+    Git.Clone(controller.sdlRepo[1].url, gitPath.concat("pasa")).then(function(repository) {
+        console.log("----------Panasonic repo created");
+        controller.sdlRepo[0].status = 1;
+    });
+
+    // connected clients
     controller.clients = {};
     controller.clients[0] = {};
 
-// WebSocket-сервер на порту 8081
+    // WebSocket-server with port 8081
     var SDLLogServer = new WebSocketServer.Server({
         port: 8081
     });
@@ -277,7 +307,11 @@ controller.selectConfig = function(req, res){
 controller.signUp = function(req, res){
     console.log('----------Register CONTROLLER with data: ', req.body);
 
-    res.render('registerForm');
+    var error = req.session.errMSG;
+
+    req.session.errMSG = null;
+
+    res.render('registerForm', { errorMessage: error });
 };
 
 controller.addConfig = function (req, res) {
@@ -301,7 +335,7 @@ controller.addConfig = function (req, res) {
 
         res.locals.session.user.config[index].configJSON = buffer;
 
-        console.log(res.locals.session.user);
+        console.log(res.locals.session.user.config[index]);
 
         req.db.collection("users").update({userName: res.locals.session.user.userName}, {$set: {config: res.locals.session.user.config}}, function (err, docs) {
 
@@ -323,6 +357,29 @@ controller.addConfig = function (req, res) {
  * @param req
  * @param res
  */
+controller.isUserExist = function(req, res){
+
+    console.log("----------isUserExist user check: ", req.query);
+
+    req.db.collection("users").find({userName: req.query.userName}).toArray(function(err, docs){
+        if (err) {
+            res.status(403).send("Data base internal error;", err);
+        } else {
+            if (docs.length > 0) {
+                res.writeHead(400, 'User with the same name already registered.');
+                res.send();
+            } else {
+                res.status(200).send("Correct name ;)");
+            }
+        }
+    });
+};
+
+/**
+ * AJAX requests handler
+ * @param req
+ * @param res
+ */
 controller.ajax = function(req, res){
     console.log('----------ajax CONTROLLER with data: ', req.body);
 
@@ -333,21 +390,6 @@ controller.ajax = function(req, res){
     var currentTestSuite;
 
     switch (req.body.objectData) {
-        case "isUserExist": {
-
-            req.db.collection("users").find({userName: req.body.data}).toArray(function(err, docs){
-                if (err) {
-                    res.status(404).send("Data base internal error;", err);
-                } else {
-                    if (docs.length > 0) {
-                        res.status(500).send("User name already registered! Please try again ;)");
-                    } else {
-                        res.status(200).send("Correct name ;)");
-                    }
-                }
-            });
-            break;
-        }
         case "deleteFile": {
 
             req.db.collection("tests").find({userID: req.session.user._id, testSuite: req.body.data.suit}).toArray(
@@ -649,7 +691,9 @@ controller.register = function(req, res) {
                 userName: req.body.userName,
                 userEmail: req.body.email,
                 userPassword: req.body.password,
-                config:[model.defaultConfig]
+                config:[model.defaultConfig],
+                pasa: true,
+                genivi: false
             }, function(err, docs){
 
                 if (err) {
@@ -685,7 +729,7 @@ controller.register = function(req, res) {
 
         } else {
             console.log("ERR----------User name invalid");
-            res.session.errMSG = "User name invalid";
+            req.session.errMSG = "User name invalid";
 
             res.redirect("back");
         }

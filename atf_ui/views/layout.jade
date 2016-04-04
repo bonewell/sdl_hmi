@@ -2,32 +2,55 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 
 block body
     script(src="/javascripts/jquery-1.11.2.min.js")
+    script(src="/javascripts/lib/validator.min.js")
     link(rel="stylesheet",href="stylesheets/style.css")
-    link(rel="stylesheet",href="stylesheets/spectrum.css")
 
     script.
         var page = window;
 
-    .header
-        .row
-            .col-xs-1
-                //if (page == "/")
-                a.btn.btn-info(href='/') Back
-            .col-xs-6.col-xs-offset-2
-                h2
-                    p Automated Test Environment
-
+    nav.navbar.navbar-default
+        .container-fluid
+            // Brand and toggle get grouped for better mobile display
+            .navbar-header
+                button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar-collapse', aria-expanded='false')
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a.navbar-brand(href='/') ATE
+            // Collect the nav links, forms, and other content for toggling
             if session.user
-                #userNameHeader.col-xs-1.col-xs-offset-1
-                    h5
-                        p Hi #{session.user.userName}
-                .col-xs-1
-                    a.btn.btn-warning(href='/logOut') LogOut
+                #navbar-collapse.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li
+                            a(href='/config')
+                                | Config
+                                span.sr-only (current)
+                        li
+                            a(href='/test_suite')
+                                | Test suite
+                    ul.nav.navbar-nav.navbar-left
+                            if session.user.genivi
+                                span.label.label-success Genivi
+                            else
+                                span.label.label-warning Genivi
+                                    span.glyphicon.glyphicon-refresh.rotate360
+
+                            if session.user.pasa
+                                span.label.label-success Panasonic
+                            else
+                                span.label.label-warning Panasonic
+                                    span.glyphicon.glyphicon-refresh.rotate360
+                    ul.nav.navbar-nav.navbar-right
+                        li
+                            a Hi #{session.user.userName}
+                        li
+                            a(href='/logOut') LogOut
+
     .col-xs-8.col-xs-offset-2
-      block content
+        block content
 block scripts
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
     script(src="/javascripts/start.js")
-    script(src="/javascripts/spectrum.js")
     include modals/add_test_suit
     script(src="/javascripts/test_suite.js")

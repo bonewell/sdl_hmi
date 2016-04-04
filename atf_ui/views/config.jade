@@ -6,32 +6,37 @@ block content
 
     .panel.panel-default
         .panel-heading
-            .dropdown
-                button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
-                    | Manage test configuration
-                    span.caret
+            .col-md-1
+                .dropdown
+                    button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
+                        | Manage test configuration
+                        span.caret
 
-                ul.dropdown-menu
-                    -each config, i in session.user.config
-                        if (configIndex == i)
-                            li.active
-                                a(href="/selectConfig/#{i}") Config#{i+1}
-                        else
-                            li
-                                a(href="/selectConfig/#{i}") Config#{i + 1}
-                    li.divider(role="separator")
-                    li(role="presentation")
-                        a(href="/addConfig") Add config
+                    ul.dropdown-menu
+                        -each config, i in session.user.config
+                            if (configIndex == i)
+                                li.active
+                                    a(href="/selectConfig/#{i}") Config#{i+1}
+                            else
+                                li
+                                    a(href="/selectConfig/#{i}") Config#{i + 1}
+                        li.divider(role="separator")
+                        li(role="presentation")
+                            a(href="/addConfig") Add config
 
-            p.label-info
-                | #{session.user.config[configIndex].status}
+            .col-md-offset-11
+                input#start.btn.btn-danger(type='submit', value='Start')
+
+            h4
+                .label.label-info.label-lg
+                    | #{session.user.config[configIndex].status}
         .panel-body
             .col-xs-10.col-xs-offset-1
                 #main_configuration_container
-                    form(action='/save',method='post')
+                    form(action='/save',method='post',data-toggle="validator", role="form")
                         p Config description
                         .input-group.col-xs-12
-                            textarea(name='description', class="form-control")
+                            textarea(name='description', class="form-control", required, pattern="^[_A-z0-9]{1,360}$",)
                                 |#{session.user.config[configIndex].description}
 
                         a.input-group.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseRepo', aria-expanded='false', aria-controls='collapseExample')
@@ -40,23 +45,23 @@ block content
                             .well
                                 div.list-group(data-toggle="buttons")
                                     -each repo, i in repoList
-
                                         -if (session.user.config[configIndex].repo == i)
                                             label.btn.btn-primary.active
                                                 input(type='radio', id='repo#{i}', name='repo', autocomplete='off', checked='', value='#{i}')
-                                                |  #{repo}
+                                                |  #{repo.url}
                                         -else
                                             label.btn.btn-primary
                                                 input(type='radio', id='repo#{i}', name='repo', autocomplete='off' value='#{i}')
-                                                |  #{repo}
+                                                |  #{repo.url}
 
                         p Branch name
                         .input-group
-                            input(name='branch', class="form-control", value='#{session.user.config[configIndex].branch}')
+                            input(name='branch', class="form-control", value='#{session.user.config[configIndex].branch}', required, pattern="^[_A-Fa-f0-9]{40,40}$")
+                            .help-block.with-errors
 
                         p Commit name
                         .input-group
-                            input(name='commit', class="form-control", value='#{session.user.config[configIndex].commit}')
+                            input(name='commit', class="form-control", value='#{session.user.config[configIndex].commit}', required, pattern="^[_A-Fa-f0-9]{40,40}$")
 
                         a.input-group.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseTestSuit', aria-expanded='false', aria-controls='collapseExample')
                             | Select test suit
@@ -88,5 +93,4 @@ block content
                                 textarea#textArea.hidden(name="editor")
 
                         p
-                        input#saveButton.btn.btn-success(type='submit', value='Save configuration')
-                input#start.btn.btn-warning(type='submit', value='Start')
+                        input#saveButton.btn.btn-success.center-block(type='submit', value='Save configuration')
