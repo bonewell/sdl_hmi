@@ -237,39 +237,6 @@ form{
     float: right;
 }
 
-dialog {
-    border: none;
-    background: transparent;
-}
-
-.modal-dialog{
-    width: 600px;
-}
-
-.modal-content{
-    border-radius: 6px;
-    background-color: #fff;
-    border: 1px solid rgba(0,0,0,.2);
-    box-shadow: 0 3px 9px rgba(0,0,0,.5);
-}
-
-.modal-header{
-    height: 15px;
-    padding: 15px;
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.modal-body {
-    position: relative;
-    padding: 15px;
-}
-
-.modal-footer {
-    padding: 15px;
-    text-align: right;
-    border-top: 1px solid #e5e5e5;
-}
-
 .modal-title {
     margin: 0;
 }

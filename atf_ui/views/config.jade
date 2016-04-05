@@ -38,9 +38,10 @@ block content
                         .input-group.col-xs-12
                             textarea(name='description', class="form-control", required, pattern="^[_A-z0-9]{1,360}$",)
                                 |#{session.user.config[configIndex].description}
+                            .help-block.with-errors
 
                         a.input-group.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseRepo', aria-expanded='false', aria-controls='collapseExample')
-                            | Select test suit
+                            | Select project
                         #collapseRepo.collapse
                             .well
                                 div.list-group(data-toggle="buttons")
@@ -56,7 +57,7 @@ block content
 
                         p Branch name
                         .input-group
-                            input(name='branch', class="form-control", value='#{session.user.config[configIndex].branch}', required, pattern="^[_A-Fa-f0-9]{40,40}$")
+                            input(name='branch', class="form-control", value='#{session.user.config[configIndex].branch}', required, pattern="^[_A-z0-9]{1,80}$")
                             .help-block.with-errors
 
                         p Commit name

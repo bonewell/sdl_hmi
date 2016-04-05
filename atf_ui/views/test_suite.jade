@@ -9,7 +9,7 @@ block content
 
     #test_suite_configuration_container
         .row
-            .col-md-6
+            .col-md-8.col-md-offset-2
                 .thumbnail
                     form#newTestSuiteForm(action="/addTestSuit", method="post", data-toggle="validator", role="form")
                         .row
@@ -25,47 +25,49 @@ block content
                                             li
                                                 a.editTestSuitListItem(name="#{suit.testSuite}", index=i) #{suit.testSuite}
                         .input-group
-                            input#testSuitInput.form-control(name='testSuit' ,type='text', aria-label='...', required)
+                            input#testSuitInput.form-control(name='testSuit' ,type='text', aria-label='...', required, pattern="^[_A-z0-9]{1,32}$")
                             span.input-group-addon Name
+                            .help-block.with-errors
 
                         .input-group
-                            textarea#testSuiteDescription.form-control.vresize(name="testSuiteDescription", required)
+                            textarea#testSuiteDescription.form-control.vresize(name="testSuiteDescription", required, pattern="^[_A-z0-9]{1,380}$")
                             span.input-group-addon Description
 
                         .input-group.col-md-12
-                            .col-md-6
+                            .col-md-4
                                 button#addNewTestSuit.btn.btn-success.center-block(type='submit') Create
-                            .col-md-6
+                            .col-md-4
                                 button#editTestSuit.btn.btn-warning.center-block(type='submit') Edit
+                            .col-md-4
+                                button#uploadTestSuit.btn.btn-primary.disabled.center-block(type='button', data-toggle='modal', data-target='#modal')
+                                    | Upload
                     //.thumbnail
                     #fileListEdit.list-group
                         a.list-group-item.active Files list
                         #fileList
-            .col-md-6
-                .thumbnail
-                    p Upload script data
-                    h3
-                        span#uploadTestSuiteSelectLabel.label.label-danger.label-lg Choose test suite first
 
-                    form#uploadForm.uploadForm(action="/upload", method="post", enctype="multipart/form-data")
-                        .list-group
-                            .btn-group
-                                button.btn.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                                    | Test Suit
-                                    span.badge #{suits.length}
-                                    span.caret
-                                ul.dropdown-menu
-                                    each suit, i in suits
-                                        li
-                                            a.uploadTestSuitListItem(name="#{suit.testSuite}", index=i) #{suit.testSuite}
-                        .list-group
-                            span.btn.btn-primary.btn-file.disabled Add *.lua scripts
-                                input.btn.btn-default(type="file", name="lua_upload", multiple, disabled, accept=".lua")
-                        .list-group
-                            span.btn.btn-primary.btn-file.disabled Add additional files (icons, etc)
-                                input.btn.btn-default(type="file", name="other_upload", disabled, multiple)
-                        .list-group
-                            span.btn.btn-primary.btn-file.disabled Add files to user_modules
-                                input.btn.btn-default(type="file", name="modules_upload", disabled, multiple)
-                        input#uploadUpdateTest.btn.btn-success.disabled.center-block(type='submit', name="upload", value="Update test suite")
-                        input#uploadTestSuiteSelectInput.hidden(name='testSuiteName')
+            #modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel')
+                .modal-dialog(role='document')
+                    .modal-content
+                        .modal-header
+                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                span(aria-hidden='true') ×
+                            h4#modalLabel.modal-title Modal title
+                        .modal-body
+                            p Upload script data
+
+                            form#uploadForm.uploadForm(action="/upload", method="post", enctype="multipart/form-data")
+
+                                .list-group
+                                    span.btn.btn-primary.btn-file Add *.lua scripts
+                                        input.btn.btn-default(type="file", name="lua_upload", multiple, accept=".lua")
+                                .list-group
+                                    span.btn.btn-primary.btn-file Add additional files (icons, etc)
+                                        input.btn.btn-default(type="file", name="other_upload", multiple)
+                                .list-group
+                                    span.btn.btn-primary.btn-file Add files to user_modules
+                                        input.btn.btn-default(type="file", name="modules_upload", multiple)
+                                input#uploadTestSuiteSelectInput.hidden(name='testSuiteName')
+                        .modal-footer
+                            button.btn.btn-default(type='button', data-dismiss='modal') Close
+                            input#uploadUpdateTest.btn.btn-success(type='submit', name="upload", value="Update test suite")
