@@ -8,6 +8,6 @@ Ony for Ubuntu Linux (plutform support will be expanded)
 	3. npm install
 	4. node bin/www
 	
-	Required nodejs version ~5.x
+Required nodejs version ~5.x
 	
-	if error occurs use comand "npm ls" and resolve dependencies issues
+if error occurs use comand "npm ls" and resolve dependencies issues
