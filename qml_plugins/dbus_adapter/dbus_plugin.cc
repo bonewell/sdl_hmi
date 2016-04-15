@@ -57,6 +57,7 @@
 #  include <QtQml/QQmlContext>
 #  include <QtQml/QQmlListReference>
 #  include <QtQml/QQmlEngine>
+#  include "protocol/interfaces/buttons.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -69,9 +70,16 @@ void DbusPlugin::registerTypes(const char *uri) {
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
 #endif  // ENABLE_LOG
 
+
   // @uri sdl.core.api
   qmlRegisterType<HmiProxy>(uri, 1, 0, "HMIAdapter");
   qmlRegisterType<SdlProxy>(uri, 1, 0, "SDLAdapter");
+#if QT_5
+  register_optional();
+  register_struct<ButtonCapabilities>();
+  register_struct<PresetBankCapabilities>();
+  qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
+#endif  // QT_5
 
   RegisterDbusMetatypes();
   qDBusRegisterMetaType<OptionalArgument<int> >();
@@ -85,7 +93,7 @@ void DbusPlugin::registerTypes(const char *uri) {
 
   HmiProxy::api_adaptors_.Init(this);
 
-  QDBusConnection::sessionBus().registerObject("/", this);
+//  QDBusConnection::sessionBus().registerObject("/", this);
   QDBusConnection::sessionBus().registerService("com.ford.sdl.hmi");
 
   dbusController_ = new DBusController();

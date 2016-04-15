@@ -99,6 +99,16 @@ set(SOURCES
   moc_request_to_sdl.cpp
   hmi_requests.cc
   moc_hmi_requests.cpp
+# new solution
+  core/abstractadapter.cpp
+  core/courier.cpp
+  core/optional.cpp
+  core/slave.cpp
+  core/moc_watcher.cpp
+  core/dbus/dbusconnector.cpp
+  core/dbus/dbuswatcher.cpp
+  protocol/interfaces/buttons.cpp
+# end new solution
 )
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -120,6 +130,7 @@ elseif (${qt_version} MATCHES "5.1.0")
   qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h moc_request_to_sdl.cpp)
   qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h moc_qml_dbus.cpp)
   qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.h moc_sdl_proxy.cpp)
+  qt5_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/core/watcher.h core/moc_watcher.cpp)
   qt5_use_modules(${target} Core DBus Qml)
   set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
   set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
