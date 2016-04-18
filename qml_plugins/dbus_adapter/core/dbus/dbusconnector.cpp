@@ -8,7 +8,10 @@
 
 DBus::DBus(QObject *item) : item_(item), interface_(0)
 {
-    QDBusConnection::sessionBus().registerObject("/", item_);
+}
+
+void DBus::init() {
+    QDBusConnection::sessionBus().registerObject("/new", item_);
 }
 
 void DBus::connect(const QString &service, const QString &interface)

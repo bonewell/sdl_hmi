@@ -34,6 +34,7 @@ set(target QmlLog4cxx)
 set(destination com/ford/sdl/hmi/log4cxx)
 set(install_destination bin/plugins/${destination})
 set(library_name ${CMAKE_SHARED_LIBRARY_PREFIX}${target}${CMAKE_SHARED_LIBRARY_SUFFIX})
+set(3RD_PARTY_INSTALL_PREFIX_ARCH /usr/)
 
 set(CMAKE_AUTOMOC ON)
 set(SOURCES log4cxx_plugin.cc)

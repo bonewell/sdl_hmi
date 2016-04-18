@@ -9,6 +9,7 @@ AbstractAdapter::AbstractAdapter(QObject *parent) :
 
 void AbstractAdapter::init()
 {
+    impl_.init();
     if (isConnected()) {
         impl_.connect(serviceName(), interfaceName());
     }

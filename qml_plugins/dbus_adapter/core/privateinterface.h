@@ -9,6 +9,7 @@ class PrivateInterface
 {
 public:
     virtual ~PrivateInterface() {}
+    virtual void init() = 0;
     virtual void connect(const QString& service, const QString& interface) = 0;
     virtual void subscribe(const QString &name, QObject *adapter,
                            const QString &signature) = 0;

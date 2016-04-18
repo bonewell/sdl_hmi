@@ -17,6 +17,7 @@ class DBus : public PrivateInterface
 {
 public:
     DBus(QObject* item);
+    virtual void init();
     virtual void connect(const QString& service, const QString& interface);
     virtual void subscribe(const QString &name, QObject *adapter,
                            const QString &signature);

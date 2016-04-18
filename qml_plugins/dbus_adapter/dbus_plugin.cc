@@ -93,7 +93,7 @@ void DbusPlugin::registerTypes(const char *uri) {
 
   HmiProxy::api_adaptors_.Init(this);
 
-//  QDBusConnection::sessionBus().registerObject("/", this);
+  QDBusConnection::sessionBus().registerObject("/", this);
   QDBusConnection::sessionBus().registerService("com.ford.sdl.hmi");
 
   dbusController_ = new DBusController();

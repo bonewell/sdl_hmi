@@ -291,28 +291,12 @@ Rectangle {
         HardwareButtonsView { id: hardwarePanel }
     }
 
-//    Buttons {
-//        id: sdlButtons
-//        objectName: "Buttons_new"
-
-//        onOnButtonSubscription: {
-//            console.log("name = ", JSON.stringify(name));
-//            console.log("isSubscribed = ", JSON.stringify(isSubscribed));
-//            console.log("appID = ", JSON.stringify(appId));
-//        }
-
-//        function getCapabilities() {
-//            console.log("Message Received - {method: 'Buttons.GetCapabilities'}")
-//            replyGetCapabilities(settingsContainer.buttonCapabilities,
-//                                 { onScreenPresetsAvailable: true });
-//        }
-//    }
+    HmiApi.Buttons {
+        id: sdlButtons
+//        object: parent
+    }
 
     HMIAdapter {
-        HmiApi.ButtonsProxy {
-            id: sdlButtons
-            objectName: "Buttons"
-        }
         HmiApi.BasicCommunicationProxy {
             id: sdlBasicCommunication
             objectName: "BasicCommunication"

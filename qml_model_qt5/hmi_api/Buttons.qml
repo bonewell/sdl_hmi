@@ -32,17 +32,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 
-Item
+Buttons
 {
-    function getCapabilities() {
+    onOnButtonSubscription: {
+        console.log("name = ", JSON.stringify(name));
+        console.log("isSubscribed = ", JSON.stringify(isSubscribed));
+        console.log("appID = ", JSON.stringify(appId));
+    }
+
+    function getCapabilities(handle) {
         console.log("Message Received - {method: 'Buttons.GetCapabilities'}")
-        return {
-            capabilities: settingsContainer.buttonCapabilities,
-            presetBankCapabilities: {
-                onScreenPresetsAvailable: true
-            }
-        }
+        replyGetCapabilities(handle, settingsContainer.buttonCapabilities,
+                             { onScreenPresetsAvailable: true });
     }
 }

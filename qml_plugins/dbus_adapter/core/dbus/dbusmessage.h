@@ -2,6 +2,7 @@
 #define DBUSMESSAGE_H
 
 #include <QtDBus/QDBusMessage>
-typedef QDBusMessage Message;
+
+#define Message QDBusMessage
 
 #endif // DBUSMESSAGE_H
