@@ -34,7 +34,6 @@
 
 import QtQuick 2.0
 import "Common.js" as Common
-import "Async.js" as Async
 import "../models/Internal.js" as Internal
 
 Item {

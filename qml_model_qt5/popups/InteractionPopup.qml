@@ -36,7 +36,6 @@ import QtQuick 2.0
 import "../controls"
 import "../hmi_api/Common.js" as Common
 import "../models/Constants.js" as Constants
-import "../hmi_api/Async.js" as Async
 import "../models/Internal.js" as Internal
 
 ContextPopup {

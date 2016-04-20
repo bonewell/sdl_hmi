@@ -32,17 +32,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
-Item {
-    function isReady() {
+
+VR
+{
+    function isReady(handle) {
         console.log("Message Received - {method: 'VR.IsReady'}")
-        return {
-            available: dataContainer.hmiVRAvailable
-        }
+        replyIsReady(handle, dataContainer.hmiVRAvailable)
     }
 
-    function addCommand(cmdID, vrCommands, type, grammarID, appID) {
+    function addCommand(handle, cmdID, vrCommands, type, grammarID, appID) {
         var vrCommandsLog = "";
         if (vrCommands) {
             for (var i = 0; i < vrCommands.length; i++) {
@@ -76,10 +76,11 @@ Item {
                                                });
             }
         }
+        replyAddCommand(handle);
         console.log("exit")
     }
 
-    function deleteCommand(cmdID, appID) {
+    function deleteCommand(handle, cmdID, type, grammarID, appID) {
         console.log("Message Received - {method: 'VR.DeleteCommand', params:{ " +
                     "appID: " + appID + ", " +
                     "cmdID: " + cmdID +
@@ -92,43 +93,42 @@ Item {
             }
             ++i;
         }
+        replyDeleteCommand(handle);
         console.log("exit")
     }
 
-    function getLanguage() {
+    function getLanguage(handle) {
         console.log("Message Received - {method: 'VR.GetLanguage'}")
-        return {
-            language: dataContainer.hmiTTSVRLanguage
-        }
+        replyGetLanguage(handle, dataContainer.hmiTTSVRLanguage)
     }
 
-    function getSupportedLanguages() {
+    function getSupportedLanguages(handle) {
         console.log("Message Received - {method: 'VR.GetSupportedLanguages'}")
-        return {
-            languages: settingsContainer.sdlLanguagesList
-        }
+        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList)
     }
 
-    function getCapabilities() {
+    function getCapabilities(handle) {
         console.log("Message Received - {method: 'UI.GetCapabilities'}")
-        return {
-            vrCapabilities: [ Common.VrCapabilities.VR_TEXT ]
-        }
+        replyGetCapabilities(handle, [ Common.VrCapabilities.VR_TEXT ])
     }
 
-    function changeRegistration(language, appID) {
+    function changeRegistration(handle, vrSynonyms, language, appID) {
         console.debug("enter");
         console.log("Message Received - {method: 'VR.ChangeRegistration', params:{ " +
                     "language: " + language + ", " +
                     "appID: " + appID +
                     "}}")
         dataContainer.changeRegistrationTTSVR(language, appID);
+        replyChangeRegistration(handle);
         console.debug("exit");
     }
+
     function ttsChunksToString(ttsChunks){
         return ttsChunks.map(function(str) { return str.text }).join('\n')
     }
-    function performInteraction(helpPrompt, initialPrompt, timeoutPrompt, timeout, grammarID) {
+
+    function performInteraction(handle, helpPrompt, initialPrompt, timeoutPrompt,
+        timeout, grammarID, appID) {
         console.debug("enter");
         var helpttsChunksLog = "",
             initialttsChunkLog = "",
@@ -165,6 +165,7 @@ Item {
                                     ttsChunksToString(timeoutPrompt),
                                     timeout)
         interactionPopup.grammarID = grammarID
+        replyPerformInteraction(handle);
         console.debug("exit");
     }
 }

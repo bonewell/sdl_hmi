@@ -32,7 +32,6 @@
 
 import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
-import "Async.js" as Async
 
 TTS
 {

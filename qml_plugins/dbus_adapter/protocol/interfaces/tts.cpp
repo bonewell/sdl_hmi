@@ -41,7 +41,7 @@ void TTSAdapter::GetLanguage(const Message &message)
 
 void TTSAdapter::SetGlobalProperties(const Optional<QList<TTSChunk> > &helpPrompt,
     const Optional<QList<TTSChunk> > &timeoutPrompt, int appID,
-    const QDBusMessage &message)
+    const Message &message)
 {
     invoke("SetGlobalProperties", message).in(helpPrompt).in(timeoutPrompt).in(appID).run();
 }

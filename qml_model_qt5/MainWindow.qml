@@ -300,15 +300,15 @@ Rectangle {
         id: sdlTTS
         object: main
     }
+    HmiApi.VR {
+        id: sdlVR
+        object: main
+    }
 
     HMIAdapter {
         HmiApi.BasicCommunicationProxy {
             id: sdlBasicCommunication
             objectName: "BasicCommunication"
-        }
-        HmiApi.VRProxy {
-            id: sdlVR
-            objectName: "VR"
         }
         HmiApi.NavigationProxy {
             id: sdlNavigation

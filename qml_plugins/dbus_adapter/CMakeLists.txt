@@ -109,6 +109,7 @@ set(SOURCES
   core/dbus/dbuswatcher.cpp
   protocol/interfaces/buttons.cpp
   protocol/interfaces/tts.cpp
+  protocol/interfaces/vr.cpp
 # end new solution
 )
 include_directories(
