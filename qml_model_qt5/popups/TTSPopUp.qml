@@ -102,7 +102,7 @@ PopUp {
         text.text = '';
         timer.stop();
         hide();
-        DBus.sendReply(async, {});
+        sdlTTS.replySpeak(async);
         async = null;
         console.debug("Exit");
     }

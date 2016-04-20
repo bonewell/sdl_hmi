@@ -40,14 +40,12 @@ TTS
         return ttsChunks.map(function(str) { return str.text }).join('\n')
     }
 
-    function isReady() {
+    function isReady(handle) {
         console.log("Message Received - {method: 'TTS.IsReady'}")
-        return {
-            available: dataContainer.hmiTTSAvailable
-        }
+        replyIsReady(handle, dataContainer.hmiTTSAvailable)
     }
 
-    function speak(ttsChunks, appID) {
+    function speak(handle, ttsChunks, appID, speakType, playTone) {
         // appID unused
         console.debug('enter:', ttsChunks, appID);
         var ttsChunksLog = "";
@@ -67,47 +65,43 @@ TTS
         }
         var message = ttsChunksToString(ttsChunks);
         ttsPopUp.activate(message);
-        ttsPopUp.async = new Async.AsyncCall();
+        ttsPopUp.async = handle;
         console.debug('exit');
-        return ttsPopUp.async;
     }
 
-    function stopSpeaking() {
+    function stopSpeaking(handle) {
         console.debug("enter");
         console.log("Message Received - {method: 'TTS.StopSpeaking'}")
         ttsPopUp.deactivate();
+        replyStopSpeaking(handle);
         console.debug("exit");
     }
 
-    function getLanguage() {
+    function getLanguage(handle) {
         console.log("Message Received - {method: 'TTS.GetLanguage'}")
-        return {
-            language: dataContainer.hmiTTSVRLanguage
-        }
+        replyGetLanguage(dataContainer.hmiTTSVRLanguage)
     }
 
-    function getSupportedLanguages() {
+    function getSupportedLanguages(handle) {
         console.log("Message Received - {method: 'TTS.GetSupportedLanguages'}")
-        return {
-            languages: settingsContainer.sdlLanguagesList
-        }
+        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList)
     }
 
-    function getCapabilities() {
+    function getCapabilities(handle) {
         console.log("Message Received - {method: 'TTS.GetCapabilities'}")
-        return {
-            speechCapabilities: [
+        replyGetCapabilities(handle,
+            [
                 Common.SpeechCapabilities.SC_TEXT,
                 Common.SpeechCapabilities.PRE_RECORDED
             ],
-            prerecordedSpeechCapabilities: [
+            [
                 Common.PrerecordedSpeech.HELP_JINGLE,
                 Common.PrerecordedSpeech.INITIAL_JINGLE,
                 Common.PrerecordedSpeech.LISTEN_JINGLE,
                 Common.PrerecordedSpeech.POSITIVE_JINGLE,
                 Common.PrerecordedSpeech.NEGATIVE_JINGLE
             ]
-        }
+        )
     }
 
     function performInteraction(helpPrompt, initialPrompt, timeoutPrompt, timeout) {
@@ -147,17 +141,18 @@ TTS
         console.debug("exit");
     }
 
-    function changeRegistration(language, appID) {
+    function changeRegistration(handle, language, appID) {
         console.debug("enter:", language, appID);
         console.log("Message Received - {method: 'TTS.ChangeRegistration', params:{ " +
                     "language: " + language + ", " +
                     "appID: " + appID +
                     "}}")
         dataContainer.changeRegistrationTTSVR(language, appID);
+        replyChangeRegistration(handle);
         console.debug("exit");
     }
 
-    function setGlobalProperties(helpPrompt, timeoutPrompt, appID) {
+    function setGlobalProperties(handle, helpPrompt, timeoutPrompt, appID) {
         var helpPromptLog = "",
             timeoutPromptLog = "";
         if (helpPrompt) {
@@ -198,6 +193,7 @@ TTS
                                                    helpPrompt: newHelpPropmt,
                                                    timeoutPrompt: newTimeoutPrompt
                                                })
+        replySetGlobalProperties(handle);
         console.debug("exit")
     }
 }

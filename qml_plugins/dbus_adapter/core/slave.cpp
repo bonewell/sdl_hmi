@@ -18,7 +18,8 @@ void Slave::run()
 {
     impl_.setDelayedReply(request_);
     if (!invoke()) {
-        error("Error.NoMethod", "No method");
+        QString text = QString("No method ").append(name().c_str());
+        error("Error.NoMethod", text);
     }
 }
 
