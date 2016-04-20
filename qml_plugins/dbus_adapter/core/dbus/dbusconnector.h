@@ -16,7 +16,7 @@ typedef QDBusAbstractAdaptor Adaptor;
 class DBus : public PrivateInterface
 {
 public:
-    DBus(QObject* item);
+    DBus(QObject* item, QObject* object);
     virtual void init();
     virtual void connect(const QString& service, const QString& interface);
     virtual void subscribe(const QString &name, QObject *adapter,
@@ -30,6 +30,7 @@ private:
     QString service_name_;
     QString interface_name_;
     QObject *item_;
+    QObject *object_;
     QDBusInterface *interface_;
 };
 typedef DBus PrivateAdapter;

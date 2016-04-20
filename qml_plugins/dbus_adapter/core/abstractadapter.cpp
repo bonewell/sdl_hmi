@@ -2,8 +2,8 @@
 
 #include <QMetaMethod>
 
-AbstractAdapter::AbstractAdapter(QObject *parent) :
-    Adaptor(parent), impl_(parent), meta_(), msgs_()
+AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
+    Adaptor(object), impl_(item, object), meta_(), msgs_()
 {
 }
 

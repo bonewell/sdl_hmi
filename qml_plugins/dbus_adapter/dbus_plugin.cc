@@ -58,6 +58,7 @@
 #  include <QtQml/QQmlListReference>
 #  include <QtQml/QQmlEngine>
 #  include "protocol/interfaces/buttons.h"
+#  include "protocol/interfaces/tts.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -79,6 +80,7 @@ void DbusPlugin::registerTypes(const char *uri) {
   register_struct<ButtonCapabilities>();
   register_struct<PresetBankCapabilities>();
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
+  qmlRegisterType<TTS>(uri, 1, 0, "TTS");
 #endif  // QT_5
 
   RegisterDbusMetatypes();

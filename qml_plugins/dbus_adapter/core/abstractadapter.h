@@ -15,9 +15,9 @@
 
 #define REGISTER_ADAPTER(Adapter, Item) \
 public: \
-    explicit Adapter(Item *parent) : \
-        AbstractAdapter(reinterpret_cast<QObject*>(parent)), \
-        qml(parent) {} \
+    Adapter(Item *item, QObject *object) : \
+        AbstractAdapter(reinterpret_cast<QObject*>(item), object), \
+        qml(item) {} \
 private: \
     Item *qml;
 
@@ -31,7 +31,11 @@ private: \
     Q_INTERFACES(QQmlParserStatus) \
 public: \
     explicit Item(QObject *parent = 0) \
-          : AbstractItem(parent), adapter(new Adapter(this)) {} \
+          : AbstractItem(parent), adapter(0) {} \
+    virtual void componentComplete() { \
+        adapter = new Adapter(this, object_); \
+        adapter->init(); \
+    } \
 private: \
     AbstractAdapter* getAdapter() { return adapter; } \
     Adapter *adapter;
@@ -41,7 +45,7 @@ class AbstractAdapter : public Adaptor
     Q_OBJECT
 
 public:
-    explicit AbstractAdapter(QObject *parent);
+    AbstractAdapter(QObject *item, QObject *object);
     void init();
     void sendError(int handle, const QString& error, const QString& text);
 
@@ -69,18 +73,17 @@ class AbstractItem : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
+    Q_PROPERTY(QObject* object MEMBER object_)
 public:
-    explicit AbstractItem(QObject *parent=0) : QObject(parent) {}
+    explicit AbstractItem(QObject *parent=0) : QObject(parent), object_(0) {}
     virtual ~AbstractItem() {}
-    virtual void componentComplete() {
-        getAdapter()->init();
-    }
     virtual void classBegin() {}
     Q_INVOKABLE void sendError(int handle, const QString& code, const QString& text) {
         getAdapter()->sendError(handle, code, text);
     }
 protected:
     virtual AbstractAdapter* getAdapter() = 0;
+    QObject *object_;
 };
 
 #endif // LADY_H

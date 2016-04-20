@@ -3,15 +3,17 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusPendingCall>
 #include <QtDBus/QDBusPendingReply>
+#include <QtQuick/QQuickItem>
 
 #include "core/dbus/dbuswatcher.h"
 
-DBus::DBus(QObject *item) : item_(item), interface_(0)
+DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
+    interface_(0)
 {
 }
 
 void DBus::init() {
-    QDBusConnection::sessionBus().registerObject("/new", item_);
+    QDBusConnection::sessionBus().registerObject("/new", object_);
 }
 
 void DBus::connect(const QString &service, const QString &interface)

@@ -30,11 +30,12 @@
   * POSSIBILITY OF SUCH DAMAGE.
   */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
 import "Async.js" as Async
 
-Item {
+TTS
+{
     function ttsChunksToString(ttsChunks){
         return ttsChunks.map(function(str) { return str.text }).join('\n')
     }

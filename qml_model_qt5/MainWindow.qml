@@ -47,6 +47,7 @@ import "./models/Constants.js" as Constants
 import "models/Internal.js" as Internal
 
 Rectangle {
+    id: main
     width: 1280
     height: 768
     property string startQml: "./views/ApplicationListView.qml"
@@ -293,7 +294,11 @@ Rectangle {
 
     HmiApi.Buttons {
         id: sdlButtons
-//        object: parent
+        object: main
+    }
+    HmiApi.TTS {
+        id: sdlTTS
+        object: main
     }
 
     HMIAdapter {
@@ -304,10 +309,6 @@ Rectangle {
         HmiApi.VRProxy {
             id: sdlVR
             objectName: "VR"
-        }
-        HmiApi.TTSProxy {
-            id: sdlTTS
-            objectName: "TTS"
         }
         HmiApi.NavigationProxy {
             id: sdlNavigation
