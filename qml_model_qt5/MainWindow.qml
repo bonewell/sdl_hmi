@@ -308,12 +308,12 @@ Rectangle {
         id: sdlNavigation
         object: main
     }
+    HmiApi.BasicCommunication {
+        id: sdlBasicCommunication
+        object: main
+    }
 
     HMIAdapter {
-        HmiApi.BasicCommunicationProxy {
-            id: sdlBasicCommunication
-            objectName: "BasicCommunication"
-        }
         HmiApi.VehicleInfoProxy {
             id: sdlVehicleInfo
             objectName: "VehicleInfo"
@@ -331,72 +331,6 @@ Rectangle {
 
     SDLAdapter {
         id: sdlProxy
-
-        onOnResumeAudioSource: {
-
-        }
-
-        onOnFileRemoved: {
-
-        }
-
-        onOnAppRegistered: {
-            console.debug("enter onAppRegistered")
-            var appTypeToAdd = 0
-            if (application.appType !== undefined) {
-                for (var index in application.appType) {
-                    if (application.appType[index] > 31) {
-                        return { __retCode: Common.Result.GENERIC_ERROR, __message: "Apptype value > 31" }
-                    }
-                    appTypeToAdd |= 1 << application.appType[index]
-                }
-            }
-
-            dataContainer.addApplication(
-            {
-                appName: application.appName,
-                ngnMediaScreenAppName: application.ngnMediaScreenAppName,
-                icon: application.icon,
-                deviceName: application.deviceName,
-                appId: application.appID,
-                hmiDisplayLanguageDesired: application.hmiDisplayLanguageDesired,
-                isMediaApplication: application.isMediaApplication,
-                appType: appTypeToAdd,
-                hmiUIText: { },
-                mediaClock: {
-                    "updateMode": Internal.MediaClockUpdateMode.MCU_COUNTUP,
-                    "runningMode": Internal.MediaClockRunningMode.MCR_STOPPED,
-                    "startTime": -1,
-                    "endTime": -1,
-                    "startTimeForProgress": -1
-                }
-             });
-            console.debug("exit onAppRegistered")
-        }
-
-        onOnAppUnregistered: {
-            console.debug("enter onAppUnregistered")
-            if ((dataContainer.currentApplication.appId === appID)) {
-                if (dataContainer.applicationContext) {
-                    contentLoader.go("views/ApplicationListView.qml");
-                }
-                if (contentLoader.viewTransitionStack.filter(function(x) { return x.applicationContext })) {
-                    contentLoader.reset();
-                }
-                dataContainer.currentApplication.reset()
-            }
-            dataContainer.removeApplication(appID);
-            console.debug("exit onAppUnregistered")
-        }
-
-        onOnSDLClose: {
-
-        }
-
-        onOnPutFile: {
-            console.log("OnPutFile: ", offset, length, fileSize, FileName,
-                        syncFileName, fileType, persistentFile);
-        }
 
         onOnRecordStart: {
 

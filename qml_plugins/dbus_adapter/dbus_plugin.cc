@@ -61,6 +61,7 @@
 #  include "protocol/interfaces/tts.h"
 #  include "protocol/interfaces/vr.h"
 #  include "protocol/interfaces/navigation.h"
+#  include "protocol/interfaces/basiccommunication.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -92,6 +93,7 @@ void DbusPlugin::registerTypes(const char *uri) {
   qmlRegisterType<TTS>(uri, 1, 0, "TTS");
   qmlRegisterType<VR>(uri, 1, 0, "VR");
   qmlRegisterType<Navigation>(uri, 1, 0, "Navigation");
+  qmlRegisterType<BasicCommunication>(uri, 1, 0, "BasicCommunication");
 #endif  // QT_5
 
   RegisterDbusMetatypes();
