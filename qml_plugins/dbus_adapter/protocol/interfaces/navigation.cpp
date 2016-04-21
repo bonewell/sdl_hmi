@@ -1,0 +1,166 @@
+#include "navigation.h"
+
+void NavigationAdapter::OnAudioDataStreaming(bool available)
+{
+    emit qml->onAudioDataStreaming(available);
+}
+
+void NavigationAdapter::OnVideoDataStreaming(bool available)
+{
+    emit qml->onVideoDataStreaming(available);
+}
+
+void NavigationAdapter::IsReady(const Message &message)
+{
+    invoke("IsReady", message).run();
+}
+
+void NavigationAdapter::SendLocation(int appID, double longitudeDegrees,
+    double latitudeDegrees, const Optional<QString> &locationName,
+    const Optional<QString> &locationDescription,
+    const Optional<QStringList> &addressLines,
+    const Optional<QString> &phoneNumber, const Optional<Image> &locationImage,
+    const Message &message)
+{
+    invoke("SendLocation", message).in(appID).in(longitudeDegrees).in(latitudeDegrees)
+        .in(locationName).in(locationDescription).in(addressLines).in(phoneNumber)
+            .in(locationImage).run();
+}
+
+void NavigationAdapter::ShowConstantTBT(const QList<TextFieldStruct> &navigationTexts,
+    const Optional<Image> &turnIcon, const Optional<Image> &nextTurnIcon,
+    double distanceToManeuver, double distanceToManeuverScale,
+    const Optional<bool> &maneuverComplete, const Optional<QList<SoftButton> > &softButtons,
+    int appID, const Message &message)
+{
+    invoke("ShowConstantTBT", message).in(navigationTexts).in(turnIcon).in(nextTurnIcon)
+        .in(distanceToManeuver).in(distanceToManeuverScale).in(maneuverComplete)
+            .in(softButtons).in(appID).run();
+}
+
+void NavigationAdapter::AlertManeuver(const Optional<QList<SoftButton> > &softButtons,
+    int appID, const Message &message)
+{
+    invoke("AlertManeuver", message).in(softButtons).in(appID).run();
+}
+
+void NavigationAdapter::UpdateTurnList(const Optional<QList<Turn> > &turnList,
+    const Optional<QList<SoftButton> > &softButtons, int appID, const Message &message)
+{
+    invoke("UpdateTurnList", message).in(turnList).in(softButtons).in(appID).run();
+}
+
+void NavigationAdapter::StartStream(const QString &url, int appID, const Message &message)
+{
+    invoke("StartStream", message).in(url).in(appID).run();
+}
+
+void NavigationAdapter::StopStream(int appID, const Message &message)
+{
+    invoke("StopStream", message).in(appID).run();
+}
+
+void NavigationAdapter::StartAudioStream(const QString &url, int appID, const Message &message)
+{
+    invoke("StartAudioStream", message).in(url).in(appID).run();
+}
+
+void NavigationAdapter::StopAudioStream(int appID, const Message &message)
+{
+    invoke("StopAudioStream", message).in(appID).run();
+}
+
+void NavigationAdapter::ReplyIsReady(int handle, bool available)
+{
+    reply(handle).out(available).send();
+}
+
+void NavigationAdapter::ReplySendLocation(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyShowConstantTBT(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyAlertManeuver(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyUpdateTurnList(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyStartStream(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyStopStream(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyStartAudioStream(int handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyStopAudioStream(int handle)
+{
+    reply(handle).send();
+}
+
+void Navigation::replyIsReady(int handle, bool available)
+{
+    adapter->ReplyIsReady(handle, available);
+}
+
+void Navigation::replySendLocation(int handle)
+{
+    adapter->ReplySendLocation(handle);
+}
+
+void Navigation::replyShowConstantTBT(int handle)
+{
+    adapter->ReplyShowConstantTBT(handle);
+}
+
+void Navigation::replyAlertManeuver(int handle)
+{
+    adapter->ReplyAlertManeuver(handle);
+}
+
+void Navigation::replyUpdateTurnList(int handle)
+{
+    adapter->ReplyUpdateTurnList(handle);
+}
+
+void Navigation::replyStartStream(int handle)
+{
+    adapter->ReplyStartStream(handle);
+}
+
+void Navigation::replyStopStream(int handle)
+{
+    adapter->ReplyStopStream(handle);
+}
+
+void Navigation::replyStartAudioStream(int handle)
+{
+    adapter->ReplyStartAudioStream(handle);
+}
+
+void Navigation::replyStopAudioStream(int handle)
+{
+    adapter->ReplyStopAudioStream(handle);
+}
+
+void Navigation::OnTBTClientState(int state)
+{
+    emit adapter->OnTBTClientState(state);
+}

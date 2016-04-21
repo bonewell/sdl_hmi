@@ -60,6 +60,7 @@
 #  include "protocol/interfaces/buttons.h"
 #  include "protocol/interfaces/tts.h"
 #  include "protocol/interfaces/vr.h"
+#  include "protocol/interfaces/navigation.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -78,12 +79,19 @@ void DbusPlugin::registerTypes(const char *uri) {
   qmlRegisterType<SdlProxy>(uri, 1, 0, "SDLAdapter");
 #if QT_5
   register_optional();
+
   register_struct<ButtonCapabilities>();
   register_struct<PresetBankCapabilities>();
   register_struct<TTSChunk>();
+  register_struct<Image>();
+  register_struct<TextFieldStruct>();
+  register_struct<SoftButton>();
+  register_struct<Turn>();
+
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
   qmlRegisterType<TTS>(uri, 1, 0, "TTS");
   qmlRegisterType<VR>(uri, 1, 0, "VR");
+  qmlRegisterType<Navigation>(uri, 1, 0, "Navigation");
 #endif  // QT_5
 
   RegisterDbusMetatypes();

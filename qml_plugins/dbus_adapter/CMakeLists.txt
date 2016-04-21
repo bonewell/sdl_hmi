@@ -110,6 +110,7 @@ set(SOURCES
   protocol/interfaces/buttons.cpp
   protocol/interfaces/tts.cpp
   protocol/interfaces/vr.cpp
+  protocol/interfaces/navigation.cpp
 # end new solution
 )
 include_directories(

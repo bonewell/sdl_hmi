@@ -32,20 +32,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
 
-Item {
-    function isReady () {
-        console.log("Message Received - {method: 'Navigation.IsReady'}")
-        return {
-            available: dataContainer.hmiNavigationAvailable
-        }
+Navigation
+{
+    onOnAudioDataStreaming: {
+        console.log("Message Received - {signal: 'Navigation.OnAudioDataStreaming'}")
+        console.log("Available =", available);
     }
 
-    function showConstantTBT(navigationTexts, turnIcon, nextTurnIcon, distanceToManeuver,
-                             distanceToManeuverScale, maneuverComplete,
-                             softButtons, appID) {
+    onOnVideoDataStreaming: {
+        console.log("Message Received - {signal: 'Navigation.OnVideoDataStreaming'}")
+        console.log("Available =", available);
+    }
+
+    function isReady(handle) {
+        console.log("Message Received - {method: 'Navigation.IsReady'}")
+        replyIsReady(handle, dataContainer.hmiNavigationAvailable)
+    }
+
+    function sendLocation(handle, appID, longitudeDegrees, latitudeDegrees, locationName,
+        locationDescription, addressLines, phoneNumber, locationImage) {
+        console.log("Message Received - {method: 'Navigation.SendLocation'}")
+        replySendLocation(handle);
+    }
+
+    function showConstantTBT(handle, navigationTexts, turnIcon, nextTurnIcon,
+        distanceToManeuver, distanceToManeuverScale, maneuverComplete,
+        softButtons, appID) {
         console.debug("enter")
         var navigationTextsLog = "",
             softButtonsLog = "",
@@ -94,12 +109,14 @@ Item {
         if (distanceToManeuver !== undefined) {
             dataToUpdate.distanceToManeuver = distanceToManeuver
         } else {
-            DBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "distanceToManeuver absence"} )
+            // TODO: find solution for these cases
+//            DBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "distanceToManeuver absence"} )
         }
         if (distanceToManeuverScale !== undefined) {
             dataToUpdate.distanceToManeuverScale = distanceToManeuverScale
         } else {
-            DBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "distanceToManeuverScale absence"} )
+            // TODO: find solution for these cases
+//            DBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "distanceToManeuverScale absence"} )
         }
         if (maneuverComplete !== undefined) {
             dataToUpdate.maneuverComplete = maneuverComplete
@@ -111,14 +128,16 @@ Item {
         if (appID !== undefined) {
             dataToUpdate.appID = appID
         } else {
-            dBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "appID absence"} )
+            // TODO: find solution for these cases
+//            Bus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "appID absence"} )
         }
 
         dataContainer.setApplicationProperties(appID, { navigationModel : dataToUpdate } )
+        replyShowConstantTBT(handle);
         contentLoader.go("./views/TurnByTurnView.qml", appID)
     }
 
-    function alertManeuver(softButtons) {
+    function alertManeuver(handle, softButtons, appID) {
         console.debug("enter")
         var softButtonsLog = "";
 
@@ -138,10 +157,12 @@ Item {
                     "}}")
 
         console.debug("exit")
-        return { __retCode: Common.Result.SUCCESS }
+        replyAlertManeuver(handle);
+        // TODO: find solution for these cases
+//        return { __retCode: Common.Result.SUCCESS }
     }
 
-    function updateTurnList(turnList, softButtons, appID) {
+    function updateTurnList(handle, turnList, softButtons, appID) {
         console.debug("enter")
         var turnListLog = "",
             softButtonsLog = "";
@@ -174,6 +195,7 @@ Item {
             softButtons.forEach(fillSoftButtons, dataContainer.getApplication(appID).turnListSoftButtons);
         }
         dataContainer.navigationModel.appId = appID;
+        replyUpdateTurnList(handle);
         console.debug("exit")
     }
 
@@ -197,32 +219,36 @@ Item {
         }
     }
 
-    function startStream(url, appID) {
+    function startStream(handle, url, appID) {
         console.debug("enter")
         player.startStream(url)
+        replyStartStream(handle)
         console.debug("exit")
     }
 
-    function stopStream(appID) {
+    function stopStream(handle, appID) {
         console.debug("enter")
         player.stop()
+        replyStopStream(handle)
         console.debug("exit")
     }
 
-    function startAudioStream(url, appID) {
+    function startAudioStream(handle, url, appID) {
         console.log("Message Received - {method: 'Navigation.StartAudioStream', params:{ " +
                     "url: '" + url + "'" +
                     "appID: " + appID +
                     "}}")
         stream.source = url;
         stream.play();
+        replyStartAudioStream(handle);
     }
 
-    function stopAudioStream(appID) {
+    function stopAudioStream(handle, appID) {
         console.log("Message Received - {method: 'Navigation.StopAudioStream', params:{ " +
                     "appID: " + appID +
                     "}}")
         stream.stop();
+        replyStopAudioStream(handle);
     }
 
     function fillSoftButtons(element, index, array) {
