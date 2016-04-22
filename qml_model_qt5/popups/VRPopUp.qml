@@ -97,7 +97,7 @@ PopUp {
             visible: visibleButtons(grammarID,type)
             onClicked: {
                 if (interactionPopup.performInteractionIsActiveNow && type === Common.VRCommandType.Choice)
-                    interactionPopup.complete(Common.Result.SUCCESS, {"choiceID": cmdID})
+                    interactionPopup.complete(Common.Result.SUCCESS, cmdID)
                 sdlVR.onCommand(cmdID, appID === 0 ? undefined : appID);
                 if (dataContainer.activeVR) {
                     vrPopUp.complete();

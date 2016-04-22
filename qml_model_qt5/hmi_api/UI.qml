@@ -32,11 +32,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
 import "../models/Internal.js" as Internal
 
-Item {
+UI
+{
+    onOnRecordStart: {
+        console.log("Message Received - {signal: 'UI.OnRecordStart'}");
+        console.log("appID =", appID);
+    }
+
     function filter (strings, fields) {
         console.debug("enter")
 // substrings for each allowed field
@@ -60,7 +66,8 @@ Item {
         return fieldSubstrings
     }
 
-    function alert (alertStrings, duration, softButtons, progressIndicator, alertType, appID) {
+    function alert(handle, alertStrings, duration, softButtons, progressIndicator,
+        alertType, appID) {
         var softButtonsLog = "",
             alertStringsLog = "";
         if (alertStrings) {
@@ -89,22 +96,23 @@ Item {
                     "}}")
         var fieldSubstrings = alertStrings
 	    .sort(function(a, b) { return a.fieldName - b.fieldName }) // sorting by fieldName
-	    .map(function(val) { return val.fieldText });              // mapping to array of strings
+        .map(function(val) { return val.fieldText });              // mapping to array of strings
 
         var tryAgainTime = alertWindow.alert(fieldSubstrings, duration, softButtons, progressIndicator, alertType, appID)
         if (tryAgainTime === undefined) {
-            alertWindow.async = new Async.AsyncCall();
-            return alertWindow.async;
+            alertWindow.async = handle;
         }
         else {
-            return {
-                "__retCode": Common.Result.REJECTED,
-                "tryAgainTime": tryAgainTime
-            }
+            // TODO: find solution for these cases
+            //return {
+            //    "__retCode": Common.Result.REJECTED,
+            //    "tryAgainTime": tryAgainTime
+            //}
         }
     }
 
-    function show (showStrings, alignment, graphic, secondaryGraphic, softButtons, customPresets, appID) {
+    function show(handle, showStrings, alignment, graphic, secondaryGraphic,
+        softButtons, customPresets, appID) {
         var softButtonsLog = "",
             showStringsLog = "",
             customPresetsLog = "",
@@ -208,10 +216,11 @@ Item {
         }
 
         dataContainer.setApplicationProperties(appID, showData);
+        replyShow(handle);
         console.debug("exit")
     }
 
-    function addCommand (cmdID, menuParams, cmdIcon, appID) {
+    function addCommand(handle, cmdID, menuParams, cmdIcon, appID) {
         var cmdIconLogs = "",
             menuParamsLogs = "";
 
@@ -228,17 +237,19 @@ Item {
                     "menuParams: " + menuParamsLogs +
                     "}}")
         dataContainer.addCommand(cmdID, menuParams, cmdIcon, appID)
+        replyAddCommand(handle);
     }
 
-    function deleteCommand (cmdID, appID) {
+    function deleteCommand(handle, cmdID, appID) {
         console.log("Message Received - {method: 'UI.DeleteCommand', params:{ " +
                     "appID: " + appID + ", " +
                     "cmdID: " + cmdID +
                     "}}")
         dataContainer.deleteCommand(cmdID, appID)
+        replyDeleteCommand(handle);
     }
 
-    function addSubMenu (menuID, menuParams, appID) {
+    function addSubMenu(handle, menuID, menuParams, appID) {
         var menuParamsLogs = "";
 
         if (menuParams) {
@@ -250,17 +261,20 @@ Item {
                     "menuParams: " + menuParamsLogs +
                     "}}")
         dataContainer.addSubMenu(menuID, menuParams, appID)
+        replyAddSubMenu(handle);
     }
 
-    function deleteSubMenu (menuID, appID) {
+    function deleteSubMenu(handle, menuID, appID) {
         console.log("Message Received - {method: 'UI.DeleteSubMenu', params:{ " +
                     "appID:" + appID + ", " +
                     "menuID: " + menuID +
                     "}}")
         dataContainer.deleteSubMenu(menuID, appID)
+        replyDeleteSubMenu(handle);
     }
 
-    function performInteraction (initialText, choiceSet, vrHelpTitle, vrHelp, timeout, interactionLayout, appID) {
+    function performInteraction(handle, initialText, choiceSet, vrHelpTitle, vrHelp,
+        timeout, interactionLayout, appID) {
         console.debug("enter")
         var choiseLog = "",
             vrHelpLog = "",
@@ -301,12 +315,12 @@ Item {
                     "timeout: " + timeout + ", " +
                     "interactionLayout: " + interactionLayout +
                     "}}")
-        var async = interactionPopup.performInteraction(initialText, choiceSet, vrHelpTitle, vrHelp, timeout, interactionLayout, appID)
+        interactionPopup.performInteraction(initialText, choiceSet, vrHelpTitle, vrHelp, timeout, interactionLayout, appID)
+        interactionPopup.async = handle;
         console.debug("exit")
-        return async
     }
 
-    function setMediaClockTimer (startTime, endTime, updateMode, appID) {
+    function setMediaClockTimer(handle, startTime, endTime, updateMode, appID) {
         var startTimeLog = "",
             endTimeLog = "";
         if (startTime) {
@@ -408,7 +422,8 @@ Item {
 
         if (sendErrorResponce) {
             console.debug("exit with result code: ", resultCode)
-            return { __retCode: resultCode }
+            // TODO: find solution for these cases
+//            return { __retCode: resultCode }
         }
 
         dataContainer.setApplicationProperties(appID, {
@@ -421,8 +436,9 @@ Item {
             }
         })
 
+        replySetMediaClockTimer(handle);
+//        return { __retCode: resultCode }
         console.debug("exit")
-        return { __retCode: resultCode }
     }
 
     function setGlobalProperties (vrHelpTitle, vrHelp, menuTitle, menuIcon, keyboardProperties, appID) {
@@ -496,36 +512,32 @@ Item {
         console.debug("exit")
     }
 
-    function isReady () {
+    function isReady(handle) {
         console.log("Message Received - {method: 'UI.IsReady'}")
-        return {
-            available: dataContainer.hmiUIAvailable
-        }
+        replyIsReady(handle, dataContainer.hmiUIAvailable)
     }
 
-    function getLanguage () {
+    function getLanguage(handle) {
         console.log("Message Received - {method: 'UI.GetLanguage'}")
-        return {
-            language: dataContainer.hmiUILanguage
-        }
+        replyGetLanguage(handle, dataContainer.hmiUILanguage)
     }
 
-    function getSupportedLanguages () {
+    function getSupportedLanguages(handle) {
         console.log("Message Received - {method: 'UI.GetSupportedLanguages'}")
-        return {
-            languages: settingsContainer.sdlLanguagesList
-        }
+        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList)
     }
 
-    function changeRegistration (language, appID) {
+    function changeRegistration(handle, appName, ngnMediaScreenAppName, language,
+        appHMIType, appID) {
         console.log("Message Received - {method: 'UI.ChangeRegistration', params:{ " +
                     "language: " + language + ", " +
                     "appID: " + appID +
                     "}}")
         dataContainer.changeRegistrationUI(language, appID)
+        replyChangeRegistration(handle);
     }
 
-    function setAppIcon (syncFileName, appID) {
+    function setAppIcon(handle, syncFileName, appID) {
         var syncFileNameLog = "";
         if (syncFileName) {
             syncFileNameLog = "{value: '" + syncFileName.value + "', imageType: " + syncFileName.imageType + "}";
@@ -536,9 +548,10 @@ Item {
                     "appID: " + appID +
                     "}}")
         dataContainer.setApplicationProperties(appID, { icon: syncFileName.value })
+        replySetAppIcon(handle);
     }
 
-    function slider (numTicks, position, sliderHeader, sliderFooter, timeout, appID) {
+    function slider(handle, numTicks, position, sliderHeader, sliderFooter, timeout, appID) {
         console.log("Message Received - {method: 'UI.Slider', params:{ " +
                     "numTicks: " + numTicks + "', " +
                     "position: " + position + "', " +
@@ -549,7 +562,8 @@ Item {
                     "}}")
         if (dataContainer.uiSlider.running) {
             console.debug("aborted")
-            return  {__retCode: Common.Result.ABORTED, sliderPosition: position}
+            // TODO: find solution for these cases
+//            return  {__retCode: Common.Result.ABORTED, sliderPosition: position}
         }
 
         dataContainer.uiSlider.appName = dataContainer.getApplication(appID).appName
@@ -561,16 +575,15 @@ Item {
 
         if (timeout !== 0) {
             sliderPopup.showSlider()
-            sliderPopup.async = new Async.AsyncCall();
+            sliderPopup.async = handle;
             console.debug("exit")
-            return sliderPopup.async;
         } else {
             console.debug("exit")
-            return { sliderPosition: position }
+            replySlider(handle, position);
         }
     }
 
-    function scrollableMessage (messageText, timeout, softButtons, appID) {
+    function scrollableMessage(handle, messageText, timeout, softButtons, appID) {
         var softButtonsLog = "",
             messageTextLog = "";
         if (softButtons) {
@@ -596,16 +609,19 @@ Item {
                     "}}")
         // TODO{ALeshin}: Also check HMILevel, when it will be available. It should be FULL otherwise - REJECTED
         if (contentLoader.item.systemContext !== Common.SystemContext.SYSCTXT_MAIN) {
-            return { __retCode: Common.Result.REJECTED, __message: "System Context isn't MAIN" }
+            // TODO: find solution for these cases
+//            return { __retCode: Common.Result.REJECTED, __message: "System Context isn't MAIN" }
         }
         if(dataContainer.scrollableMessageModel.running){
             //send error response if scrollable message already running
-            return { __retCode: Common.Result.ABORTED, __message: "ScrollableMessage already running" }
+            // TODO: find solution for these cases
+//            return { __retCode: Common.Result.ABORTED, __message: "ScrollableMessage already running" }
         }
 
         dataContainer.scrollableMessageModel.longMessageText = messageText.fieldText
         if (timeout === 0) {
-            return { __retCode: Common.Result.SUCCESS, __message: "Timeout = 0" }
+            // TODO: find solution for these cases
+//            return { __retCode: Common.Result.SUCCESS, __message: "Timeout = 0" }
         } else {
             dataContainer.scrollableMessageModel.timeout = timeout
         }
@@ -615,27 +631,24 @@ Item {
             softButtons.forEach(fillSoftButtons, dataContainer.scrollableMessageModel.softButtons);
         }
         dataContainer.scrollableMessageModel.appId = appID
-        dataContainer.scrollableMessageModel.async = new Async.AsyncCall()
+        dataContainer.scrollableMessageModel.async = handle
         contentLoader.go("./views/ScrollableMessageView.qml")
         console.debug("exit")
-        return dataContainer.scrollableMessageModel.async
     }
 
-    function getCapabilities() {
+    function getCapabilities(handle) {
         console.log("Message Received - {method: 'UI.GetCapabilities'}")
-        return {
-            "audioPassThruCapabilities": {
+        replyGetCapabilities(handle, settingsContainer.displayCapabilities,
+            {
                 "samplingRate": Common.SamplingRate.RATE_44KHZ,
                 "bitsPerSample": Common.BitsPerSample.RATE_8_BIT,
                 "audioType": Common.AudioType.PCM
             },
-            "displayCapabilities": settingsContainer.displayCapabilities,
-            "hmiZoneCapabilities": Common.HmiZoneCapabilities.FRONT,
-            "softButtonCapabilities": settingsContainer.softButtonCapabilities
-        }
+            Common.HmiZoneCapabilities.FRONT,
+            settingsContainer.softButtonCapabilities);
     }
 
-    function performAudioPassThru (appID, audioPassThruDisplayTexts, timeout) {
+    function performAudioPassThru(handle, appID, audioPassThruDisplayTexts, timeout) {
         var displayTextsLog = "";
         if (audioPassThruDisplayTexts) {
             for (var i = 0; i < audioPassThruDisplayTexts.length; i++) {
@@ -659,26 +672,28 @@ Item {
             dataContainer.uiAudioPassThru.firstLine = audioPassThruDisplayTexts[0].fieldText
             dataContainer.uiAudioPassThru.secondLine = audioPassThruDisplayTexts[1].fieldText
         }
-        performAudioPassThruPopup.async = new Async.AsyncCall();
+        performAudioPassThruPopup.async = handle;
         performAudioPassThruPopup.showAudioPassThru()
         console.debug("exit")
-        return performAudioPassThruPopup.async;
     }
 
-    function endAudioPassThru () {
+    function endAudioPassThru(handle) {
         console.debug("enter")
         console.log("Message Received - {method: 'UI.EndAudioPassThru'}")
 
         if (!dataContainer.uiAudioPassThru.running) {
             console.debug("rejected")
-            throw Common.Result.REJECTED
+            // TODO: find solution for these cases
+//            throw Common.Result.REJECTED
+            sendError(handle, Common.Result.REJECTED);
+            return;
         }
-        DBus.sendReply({__retCode: Common.Result.SUCCESS})
+        replyEndAudioPassThru(handle);
         performAudioPassThruPopup.complete(Common.Result.SUCCESS)
         console.debug("exit")
     }
 
-    function closePopUp (methodName) {
+    function closePopUp(handle, methodName) {
         console.debug("enter")
         console.log("Message Received - {method: 'UI.ClosePopUp', params:{ " +
                     "methodName: " + methodName +
@@ -686,7 +701,8 @@ Item {
         var popUpToClose
 
         if (dataContainer.activePopup.length === 0) {
-            return { __retCode: Common.Result.ABORT, __message: "No active PopUps"}
+            // TODO: find solution for these cases
+//            return { __retCode: Common.Result.ABORT, __message: "No active PopUps"}
         }
 
         if (methodName !== undefined) {
@@ -726,4 +742,15 @@ Item {
                     });
     }
 
+    function setDisplayLayout(handle, displayLayout, appID) {
+        console.log("Message Received - {method: 'UI.SetDisplayLayout'");
+        // TODO: it's stub. Need to implement
+        replySetDisplayLayout(handle);
+    }
+
+    function showCustomForm(handle, customFormID, parentFormID) {
+        console.log("Message Received - {method: 'UI.ShowCustomForm'");
+        // TODO: it's stub. Need to implement
+        replyShowCustomForm(handle, "info");
+    }
 }

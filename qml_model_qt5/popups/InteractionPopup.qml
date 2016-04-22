@@ -70,7 +70,7 @@ ContextPopup {
             text: menuName
             icon: image
             onClicked: {
-                complete(Common.Result.SUCCESS, {"choiceID": model.choiceID})
+                complete(Common.Result.SUCCESS, model.choiceID)
             }
         }
     }
@@ -122,14 +122,12 @@ ContextPopup {
             this.interactionLayout = interactionLayout
         }
         dataContainer.setApplicationProperties(appID, dataToUpdate)
-        async = new Async.AsyncCall()
         if (piPopUp.choiceSet.count !== 0) {
             activate()
         }else if (grammarID) {
                 vrActivate()
         }
         console.debug("exit")
-        return async
     }
 
     function activate () {
@@ -152,17 +150,19 @@ ContextPopup {
         console.debug("exit")
     }
 
-    function complete (reason, data) {
+    function complete (reason, choiceID, manualTextEntry) {
         console.debug("enter")
         switch (reason) {
             case Common.Result.SUCCESS:
-                DBus.sendReply(async, data)
+                sdlUI.repyPerformInteraction(async, choiceID, manualTextEntry)
                 break
             case Common.Result.ABORTED:
-                DBus.sendReply(async, { __retCode: Common.Result.ABORTED })
+                // TODO: find solution for these cases
+//                DBus.sendReply(async, { __retCode: Common.Result.ABORTED })
                 break
             case Common.Result.TIMED_OUT:
-                DBus.sendReply(async, { __retCode: Common.Result.TIMED_OUT })
+                // TODO: find solution for these cases
+//                DBus.sendReply(async, { __retCode: Common.Result.TIMED_OUT })
                 break
         }
         timer.stop()

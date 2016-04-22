@@ -248,7 +248,7 @@ Rectangle {
             hide()
             switch (reason) {
             case Common.Result.SUCCESS:
-                DBus.sendReply(async, { __retCode: Common.Result.SUCCESS, __message: "UI.Alert" })
+                sdlUI.replyAlert(async);
                 break
             // For other cases
             }

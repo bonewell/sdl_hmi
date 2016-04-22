@@ -62,6 +62,7 @@
 #  include "protocol/interfaces/vr.h"
 #  include "protocol/interfaces/navigation.h"
 #  include "protocol/interfaces/basiccommunication.h"
+#  include "protocol/interfaces/ui.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -88,12 +89,29 @@ void DbusPlugin::registerTypes(const char *uri) {
   register_struct<TextFieldStruct>();
   register_struct<SoftButton>();
   register_struct<Turn>();
+  register_struct<MenuParams>();
+  register_struct<Choice>();
+  register_struct<VrHelpItem>();
+  register_struct<TimeFormat>();
+  register_struct<KeyboardProperties>();
+  register_struct<TextField>();
+  register_struct<ImageResolution>();
+  register_struct<ImageField>();
+  register_struct<TouchEventCapabilities>();
+  register_struct<ScreenParams>();
+  register_struct<DisplayCapabilities>();
+  register_struct<AudioPassThruCapabilities>();
+  register_struct<SoftButtonCapabilities>();
+  register_struct<HMICapabilities>();
+  register_struct<TouchCoord>();
+  register_struct<TouchEvent>();
 
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
   qmlRegisterType<TTS>(uri, 1, 0, "TTS");
   qmlRegisterType<VR>(uri, 1, 0, "VR");
   qmlRegisterType<Navigation>(uri, 1, 0, "Navigation");
   qmlRegisterType<BasicCommunication>(uri, 1, 0, "BasicCommunication");
+  qmlRegisterType<UI>(uri, 1, 0, "UI");
 #endif  // QT_5
 
   RegisterDbusMetatypes();

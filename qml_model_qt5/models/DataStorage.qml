@@ -622,10 +622,7 @@ QtObject {
     }
     property VehicleInfoModel vehicleInfoModel: VehicleInfoModel { }
     property bool activeVR: false
-    property int driverDistractionState: Common.DriverDistractionState.DD_OFF
-    onDriverDistractionStateChanged: {
-        sdlUI.onDriverDistraction(driverDistractionState);
-    }
+    property int driverDistractionState
     property bool activeTTS: false
     property var activePopup: [] // Stack of names of active pop ups
     property int popups: 0

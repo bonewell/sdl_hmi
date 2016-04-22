@@ -112,6 +112,7 @@ set(SOURCES
   protocol/interfaces/vr.cpp
   protocol/interfaces/navigation.cpp
   protocol/interfaces/basiccommunication.cpp
+  protocol/interfaces/ui.cpp
 # end new solution
 )
 include_directories(

@@ -70,6 +70,10 @@ Rectangle {
                 sdlBasicCommunication.onAppDeactivated(currentApplication.appId, contentLoader.item.category)
             }
         }
+
+        onDriverDistractionStateChanged: {
+            sdlUI.onDriverDistraction(driverDistractionState);
+        }
     }
 
     Audio {
@@ -312,15 +316,15 @@ Rectangle {
         id: sdlBasicCommunication
         object: main
     }
+    HmiApi.UI {
+        id: sdlUI
+        object: main
+    }
 
     HMIAdapter {
         HmiApi.VehicleInfoProxy {
             id: sdlVehicleInfo
             objectName: "VehicleInfo"
-        }
-        HmiApi.UIProxy {
-            id: sdlUI
-            objectName: "UI"
         }
 
         HmiApi.SDLProxy {
@@ -331,10 +335,6 @@ Rectangle {
 
     SDLAdapter {
         id: sdlProxy
-
-        onOnRecordStart: {
-
-        }
 
         onOnAppPermissionChanged: {
 
@@ -357,8 +357,8 @@ Rectangle {
         dataContainer.hmiNavigationAvailable = true
         dataContainer.hmiVehicleInfoAvailable = true
         dataContainer.hmiUIAvailable = true
-
         sdlBasicCommunication.onReady()
+        dataContainer.driverDistractionState = Common.DriverDistractionState.DD_OFF
     }
 
     /*

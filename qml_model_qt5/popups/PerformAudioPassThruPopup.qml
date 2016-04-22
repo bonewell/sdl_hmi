@@ -59,15 +59,17 @@ ContextPopup {
         switch (reason) {
         case Common.Result.ABORTED:
             console.debug("exit with abort")
-            DBus.sendError(async, Common.Result.ABORTED)
+            // TODO: code of error should be string like "Error.ABORTED"
+            sdlUI.sendError(async, Common.Result.ABORTED)
             break;
         case Common.Result.SUCCESS:
             console.debug("exit with success")
-            DBus.sendReply(async, {})
+            sdlUI.replyPerformAudioPassThru(async)
             break;
         case Common.Result.RETRY:
             console.debug("exit with retry")
-            DBus.sendError(async, Common.Result.RETRY)
+            // TODO: code of error should be string like "Error.RETRY"
+            sdlUI.sendError(async, Common.Result.RETRY)
             break;
         }
         hide()
