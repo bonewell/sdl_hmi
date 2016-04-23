@@ -103,11 +103,8 @@ UI
             alertWindow.async = handle;
         }
         else {
-            // TODO: find solution for these cases
-            //return {
-            //    "__retCode": Common.Result.REJECTED,
-            //    "tryAgainTime": tryAgainTime
-            //}
+            handle.code = Common.Result.REJECTED;
+            replyAlert(handle, tryAgainTime);
         }
     }
 
@@ -422,8 +419,9 @@ UI
 
         if (sendErrorResponce) {
             console.debug("exit with result code: ", resultCode)
-            // TODO: find solution for these cases
-//            return { __retCode: resultCode }
+            handle.code = resultCode;
+            replySetMediaClockTimer(handle);
+            return;
         }
 
         dataContainer.setApplicationProperties(appID, {
@@ -436,8 +434,8 @@ UI
             }
         })
 
+        handle.code = resultCode;
         replySetMediaClockTimer(handle);
-//        return { __retCode: resultCode }
         console.debug("exit")
     }
 
@@ -562,8 +560,9 @@ UI
                     "}}")
         if (dataContainer.uiSlider.running) {
             console.debug("aborted")
-            // TODO: find solution for these cases
-//            return  {__retCode: Common.Result.ABORTED, sliderPosition: position}
+            handle.code = Common.Result.ABORTED;
+            replySlider(handle, position);
+            return;
         }
 
         dataContainer.uiSlider.appName = dataContainer.getApplication(appID).appName
@@ -609,19 +608,24 @@ UI
                     "}}")
         // TODO{ALeshin}: Also check HMILevel, when it will be available. It should be FULL otherwise - REJECTED
         if (contentLoader.item.systemContext !== Common.SystemContext.SYSCTXT_MAIN) {
-            // TODO: find solution for these cases
-//            return { __retCode: Common.Result.REJECTED, __message: "System Context isn't MAIN" }
+            handle.code = Common.Result.REJECTED;
+            handle.message = "System Context isn't MAIN";
+            replyScrollableMessage(handle);
+            return;
         }
         if(dataContainer.scrollableMessageModel.running){
             //send error response if scrollable message already running
-            // TODO: find solution for these cases
-//            return { __retCode: Common.Result.ABORTED, __message: "ScrollableMessage already running" }
+            handle.code = Common.Result.ABORTED;
+            handle.message = "ScrollableMessage already running";
+            replyScrollableMessage(handle);
+            return;
         }
 
         dataContainer.scrollableMessageModel.longMessageText = messageText.fieldText
         if (timeout === 0) {
-            // TODO: find solution for these cases
-//            return { __retCode: Common.Result.SUCCESS, __message: "Timeout = 0" }
+            handle.message = "Timeout = 0";
+            replyScrollableMessage(handle);
+            return;
         } else {
             dataContainer.scrollableMessageModel.timeout = timeout
         }
@@ -688,8 +692,8 @@ UI
             sendError(handle, Common.Result.REJECTED);
             return;
         }
-        replyEndAudioPassThru(handle);
         performAudioPassThruPopup.complete(Common.Result.SUCCESS)
+        replyEndAudioPassThru(handle);
         console.debug("exit")
     }
 
@@ -701,8 +705,10 @@ UI
         var popUpToClose
 
         if (dataContainer.activePopup.length === 0) {
-            // TODO: find solution for these cases
-//            return { __retCode: Common.Result.ABORT, __message: "No active PopUps"}
+            handle.code = Common.Result.ABORT;
+            handle.message = "No active PopUps";
+            replyClosePopUp(handle);
+            return;
         }
 
         if (methodName !== undefined) {

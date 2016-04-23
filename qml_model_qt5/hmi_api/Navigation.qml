@@ -109,14 +109,18 @@ Navigation
         if (distanceToManeuver !== undefined) {
             dataToUpdate.distanceToManeuver = distanceToManeuver
         } else {
-            // TODO: find solution for these cases
-//            DBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "distanceToManeuver absence"} )
+            handle.code = Common.Result.INVALID_DATA;
+            handle.message = "distanceToManeuver absence";
+            replyShowConstantTBT(handle);
+            return;
         }
         if (distanceToManeuverScale !== undefined) {
             dataToUpdate.distanceToManeuverScale = distanceToManeuverScale
         } else {
-            // TODO: find solution for these cases
-//            DBus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "distanceToManeuverScale absence"} )
+            handle.code = Common.Result.INVALID_DATA;
+            handle.message = "distanceToManeuverScale absence";
+            replyShowConstantTBT(handle);
+            return;
         }
         if (maneuverComplete !== undefined) {
             dataToUpdate.maneuverComplete = maneuverComplete
@@ -128,8 +132,10 @@ Navigation
         if (appID !== undefined) {
             dataToUpdate.appID = appID
         } else {
-            // TODO: find solution for these cases
-//            Bus.sendReply( {__retCode: Common.Result.INVALID_DATA, __message: "appID absence"} )
+            handle.code = Common.Result.INVALID_DATA;
+            handle.message = "appID absence";
+            replyShowConstantTBT(handle);
+            return;
         }
 
         dataContainer.setApplicationProperties(appID, { navigationModel : dataToUpdate } )
@@ -158,8 +164,6 @@ Navigation
 
         console.debug("exit")
         replyAlertManeuver(handle);
-        // TODO: find solution for these cases
-//        return { __retCode: Common.Result.SUCCESS }
     }
 
     function updateTurnList(handle, turnList, softButtons, appID) {
