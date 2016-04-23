@@ -70,92 +70,92 @@ void NavigationAdapter::StopAudioStream(int appID, const Message &message)
     invoke("StopAudioStream", message).in(appID).run();
 }
 
-void NavigationAdapter::ReplyIsReady(int handle, bool available)
+void NavigationAdapter::ReplyIsReady(const Handle& handle, bool available)
 {
     reply(handle).out(available).send();
 }
 
-void NavigationAdapter::ReplySendLocation(int handle)
+void NavigationAdapter::ReplySendLocation(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyShowConstantTBT(int handle)
+void NavigationAdapter::ReplyShowConstantTBT(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyAlertManeuver(int handle)
+void NavigationAdapter::ReplyAlertManeuver(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyUpdateTurnList(int handle)
+void NavigationAdapter::ReplyUpdateTurnList(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyStartStream(int handle)
+void NavigationAdapter::ReplyStartStream(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyStopStream(int handle)
+void NavigationAdapter::ReplyStopStream(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyStartAudioStream(int handle)
+void NavigationAdapter::ReplyStartAudioStream(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void NavigationAdapter::ReplyStopAudioStream(int handle)
+void NavigationAdapter::ReplyStopAudioStream(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void Navigation::replyIsReady(int handle, bool available)
+void Navigation::replyIsReady(const QVariantMap& handle, bool available)
 {
     adapter->ReplyIsReady(handle, available);
 }
 
-void Navigation::replySendLocation(int handle)
+void Navigation::replySendLocation(const QVariantMap& handle)
 {
     adapter->ReplySendLocation(handle);
 }
 
-void Navigation::replyShowConstantTBT(int handle)
+void Navigation::replyShowConstantTBT(const QVariantMap& handle)
 {
     adapter->ReplyShowConstantTBT(handle);
 }
 
-void Navigation::replyAlertManeuver(int handle)
+void Navigation::replyAlertManeuver(const QVariantMap& handle)
 {
     adapter->ReplyAlertManeuver(handle);
 }
 
-void Navigation::replyUpdateTurnList(int handle)
+void Navigation::replyUpdateTurnList(const QVariantMap& handle)
 {
     adapter->ReplyUpdateTurnList(handle);
 }
 
-void Navigation::replyStartStream(int handle)
+void Navigation::replyStartStream(const QVariantMap& handle)
 {
     adapter->ReplyStartStream(handle);
 }
 
-void Navigation::replyStopStream(int handle)
+void Navigation::replyStopStream(const QVariantMap& handle)
 {
     adapter->ReplyStopStream(handle);
 }
 
-void Navigation::replyStartAudioStream(int handle)
+void Navigation::replyStartAudioStream(const QVariantMap& handle)
 {
     adapter->ReplyStartAudioStream(handle);
 }
 
-void Navigation::replyStopAudioStream(int handle)
+void Navigation::replyStopAudioStream(const QVariantMap& handle)
 {
     adapter->ReplyStopAudioStream(handle);
 }

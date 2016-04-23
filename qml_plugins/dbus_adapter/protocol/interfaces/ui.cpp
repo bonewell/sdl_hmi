@@ -145,53 +145,54 @@ void UIAdapter::ClosePopUp(const Optional<QString> &methodName, const Message &m
     invoke("ClosePopUp", message).in(methodName).run();
 }
 
-void UIAdapter::ReplyAlert(int handle, const Optional<int> &tryAgainTime)
+void UIAdapter::ReplyAlert(const Handle& handle,
+                           const Optional<int> &tryAgainTime)
 {
     reply(handle).out(tryAgainTime).send();
 }
 
-void UIAdapter::ReplyShow(int handle)
+void UIAdapter::ReplyShow(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyAddCommand(int handle)
+void UIAdapter::ReplyAddCommand(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyDeleteCommand(int handle)
+void UIAdapter::ReplyDeleteCommand(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyAddSubMenu(int handle)
+void UIAdapter::ReplyAddSubMenu(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyDeleteSubMenu(int handle)
+void UIAdapter::ReplyDeleteSubMenu(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyPerformInteraction(int handle, const Optional<int> &choiceID,
-    const Optional<QString> &manualTextEntry)
+void UIAdapter::ReplyPerformInteraction(const Handle& handle,
+    const Optional<int> &choiceID, const Optional<QString> &manualTextEntry)
 {
     reply(handle).out(choiceID).out(manualTextEntry).send();
 }
 
-void UIAdapter::ReplySetMediaClockTimer(int handle)
+void UIAdapter::ReplySetMediaClockTimer(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplySetGlobalProperties(int handle)
+void UIAdapter::ReplySetGlobalProperties(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyGetCapabilities(int handle,
+void UIAdapter::ReplyGetCapabilities(const Handle& handle,
     const DisplayCapabilities &displayCapabilities,
     const AudioPassThruCapabilities &audioPassThruCapabilities,
     int hmiZoneCapabilities,
@@ -203,27 +204,28 @@ void UIAdapter::ReplyGetCapabilities(int handle,
             .out(hmiCapabilities).send();
 }
 
-void UIAdapter::ReplyChangeRegistration(int handle)
+void UIAdapter::ReplyChangeRegistration(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyGetSupportedLanguages(int handle, const QList<int> &languages)
+void UIAdapter::ReplyGetSupportedLanguages(const Handle& handle,
+                                           const QList<int> &languages)
 {
     reply(handle).out(languages).send();
 }
 
-void UIAdapter::ReplyGetLanguage(int handle, int language)
+void UIAdapter::ReplyGetLanguage(const Handle& handle, int language)
 {
     reply(handle).out(language).send();
 }
 
-void UIAdapter::ReplySetAppIcon(int handle)
+void UIAdapter::ReplySetAppIcon(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplySetDisplayLayout(int handle,
+void UIAdapter::ReplySetDisplayLayout(const Handle& handle,
     const Optional<DisplayCapabilities> &displayCapabilities,
     const Optional<QList<ButtonCapabilities> > &buttonCapabilities,
     const Optional<QList<SoftButtonCapabilities> > &softButtonCapabilities,
@@ -233,37 +235,39 @@ void UIAdapter::ReplySetDisplayLayout(int handle,
             .out(softButtonCapabilities).out(presetBankCapabilities).send();
 }
 
-void UIAdapter::ReplyShowCustomForm(int handle, const Optional<QString> &info)
+void UIAdapter::ReplyShowCustomForm(const Handle& handle,
+                                    const Optional<QString> &info)
 {
     reply(handle).out(info).send();
 }
 
-void UIAdapter::ReplySlider(int handle, const Optional<int> &sliderPosition)
+void UIAdapter::ReplySlider(const Handle& handle,
+                            const Optional<int> &sliderPosition)
 {
     reply(handle).out(sliderPosition).send();
 }
 
-void UIAdapter::ReplyScrollableMessage(int handle)
+void UIAdapter::ReplyScrollableMessage(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyPerformAudioPassThru(int handle)
+void UIAdapter::ReplyPerformAudioPassThru(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyEndAudioPassThru(int handle)
+void UIAdapter::ReplyEndAudioPassThru(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void UIAdapter::ReplyIsReady(int handle, bool available)
+void UIAdapter::ReplyIsReady(const Handle& handle, bool available)
 {
     reply(handle).out(available).send();
 }
 
-void UIAdapter::ReplyClosePopUp(int handle)
+void UIAdapter::ReplyClosePopUp(const Handle& handle)
 {
     reply(handle).send();
 }
@@ -273,53 +277,54 @@ void UIAdapter::OnRecordStart(int appID)
     emit qml->onRecordStart(appID);
 }
 
-void UI::replyAlert(int handle, const QVariant &tryAgainTime)
+void UI::replyAlert(const QVariantMap& handle, const QVariant &tryAgainTime)
 {
     adapter->ReplyAlert(handle, tryAgainTime);
 }
 
-void UI::replyShow(int handle)
+void UI::replyShow(const QVariantMap& handle)
 {
     adapter->ReplyShow(handle);
 }
 
-void UI::replyAddCommand(int handle)
+void UI::replyAddCommand(const QVariantMap& handle)
 {
     adapter->ReplyAddCommand(handle);
 }
 
-void UI::replyDeleteCommand(int handle)
+void UI::replyDeleteCommand(const QVariantMap& handle)
 {
     adapter->ReplyDeleteCommand(handle);
 }
 
-void UI::replyAddSubMenu(int handle)
+void UI::replyAddSubMenu(const QVariantMap& handle)
 {
     adapter->ReplyAddSubMenu(handle);
 }
 
-void UI::replyDeleteSubMenu(int handle)
+void UI::replyDeleteSubMenu(const QVariantMap& handle)
 {
     adapter->ReplyDeleteSubMenu(handle);
 }
 
-void UI::replyPerformInteraction(int handle, const QVariant &choiceID,
-    const QVariant &manualTextEntry)
+void UI::replyPerformInteraction(const QVariantMap& handle,
+    const QVariant &choiceID, const QVariant &manualTextEntry)
 {
     adapter->ReplyPerformInteraction(handle, choiceID, manualTextEntry);
 }
 
-void UI::replySetMediaClockTimer(int handle)
+void UI::replySetMediaClockTimer(const QVariantMap& handle)
 {
     adapter->ReplySetMediaClockTimer(handle);
 }
 
-void UI::replySetGlobalProperties(int handle)
+void UI::replySetGlobalProperties(const QVariantMap& handle)
 {
     adapter->ReplySetGlobalProperties(handle);
 }
 
-void UI::replyGetCapabilities(int handle, const QVariantMap &displayCapabilities,
+void UI::replyGetCapabilities(const QVariantMap& handle,
+    const QVariantMap &displayCapabilities,
     const QVariantMap &audioPassThruCapabilities, int hmiZoneCapabilities,
     const QVariant &softButtonCapabilities, const QVariant &hmiCapabilities)
 {
@@ -328,27 +333,29 @@ void UI::replyGetCapabilities(int handle, const QVariantMap &displayCapabilities
                                   hmiZoneCapabilities, softButtonCapabilities, hmiCapabilities);
 }
 
-void UI::replyChangeRegistration(int handle)
+void UI::replyChangeRegistration(const QVariantMap& handle)
 {
     adapter->ReplyChangeRegistration(handle);
 }
 
-void UI::replyGetSupportedLanguages(int handle, const QList<int> &languages)
+void UI::replyGetSupportedLanguages(const QVariantMap& handle,
+                                    const QList<int> &languages)
 {
     adapter->ReplyGetSupportedLanguages(handle, languages);
 }
 
-void UI::replyGetLanguage(int handle, int language)
+void UI::replyGetLanguage(const QVariantMap& handle, int language)
 {
     adapter->ReplyGetLanguage(handle, language);
 }
 
-void UI::replySetAppIcon(int handle)
+void UI::replySetAppIcon(const QVariantMap& handle)
 {
     adapter->ReplySetAppIcon(handle);
 }
 
-void UI::replySetDisplayLayout(int handle, const QVariant &displayCapabilities,
+void UI::replySetDisplayLayout(const QVariantMap& handle,
+    const QVariant &displayCapabilities,
     const QVariant &buttonCapabilities, const QVariant &softButtonCapabilities,
     const QVariant &presetBankCapabilities)
 {
@@ -356,32 +363,32 @@ void UI::replySetDisplayLayout(int handle, const QVariant &displayCapabilities,
                                    softButtonCapabilities, presetBankCapabilities);
 }
 
-void UI::replyShowCustomForm(int handle, const QVariant &info)
+void UI::replyShowCustomForm(const QVariantMap& handle, const QVariant &info)
 {
     adapter->ReplyShowCustomForm(handle, info);
 }
 
-void UI::replyScrollableMessage(int handle)
+void UI::replyScrollableMessage(const QVariantMap& handle)
 {
     adapter->ReplyScrollableMessage(handle);
 }
 
-void UI::replyPerformAudioPassThru(int handle)
+void UI::replyPerformAudioPassThru(const QVariantMap& handle)
 {
     adapter->ReplyPerformAudioPassThru(handle);
 }
 
-void UI::replyEndAudioPassThru(int handle)
+void UI::replyEndAudioPassThru(const QVariantMap& handle)
 {
     adapter->ReplyEndAudioPassThru(handle);
 }
 
-void UI::replyIsReady(int handle, bool available)
+void UI::replyIsReady(const QVariantMap& handle, bool available)
 {
     adapter->ReplyIsReady(handle, available);
 }
 
-void UI::replyClosePopUp(int handle)
+void UI::replyClosePopUp(const QVariantMap& handle)
 {
     adapter->ReplyClosePopUp(handle);
 }

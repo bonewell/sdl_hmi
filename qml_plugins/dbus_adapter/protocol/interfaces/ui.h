@@ -14,6 +14,7 @@
     "<arg direction=\"in\" name=\"alertType\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"tryAgainTime\" type=\"(bi)\" />" \
     "</method>" \
     "<method name=\"Show\">" \
@@ -25,6 +26,7 @@
     "<arg direction=\"in\" name=\"customPresets\" type=\"(bas)\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"AddCommand\">" \
     "<arg direction=\"in\" name=\"cmdID\" type=\"i\" />" \
@@ -32,22 +34,26 @@
     "<arg direction=\"in\" name=\"cmdIcon\" type=\"(b(si))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"DeleteCommand\">" \
     "<arg direction=\"in\" name=\"cmdID\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"AddSubMenu\">" \
     "<arg direction=\"in\" name=\"menuID\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"menuParams\" type=\"((bi)(bi)s)\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"DeleteSubMenu\">" \
     "<arg direction=\"in\" name=\"menuID\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"PerformInteraction\">" \
     "<arg direction=\"in\" name=\"initialText\" type=\"(b(is))\" />" \
@@ -58,6 +64,7 @@
     "<arg direction=\"in\" name=\"interactionLayout\" type=\"(bi)\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"choiceID\" type=\"(bi)\" />" \
     "<arg direction=\"out\" name=\"manualTextEntry\" type=\"(bs)\" />" \
     "</method>" \
@@ -67,6 +74,7 @@
     "<arg direction=\"in\" name=\"updateMode\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"SetGlobalProperties\">" \
     "<arg direction=\"in\" name=\"vrHelpTitle\" type=\"(bs)\" />" \
@@ -76,9 +84,11 @@
     "<arg direction=\"in\" name=\"keyboardProperties\" type=\"(b((bi)(bi)(bi)(bas)(bs)))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"GetCapabilities\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"displayCapabilities\" type=\"(ia(iiii)(ba(i(bai)(b(ii))))ai(bai)bas(b((ii)(b(bbb))))(bi))\" />" \
     "<arg direction=\"out\" name=\"audioPassThruCapabilities\" type=\"(iii)\" />" \
     "<arg direction=\"out\" name=\"hmiZoneCapabilities\" type=\"i\" />" \
@@ -92,24 +102,29 @@
     "<arg direction=\"in\" name=\"appHMIType\" type=\"(bai)\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"GetSupportedLanguages\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"languages\" type=\"ai\" />" \
     "</method>" \
     "<method name=\"GetLanguage\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"language\" type=\"i\" />" \
     "</method>" \
     "<method name=\"SetAppIcon\">" \
     "<arg direction=\"in\" name=\"syncFileName\" type=\"(si)\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"SetDisplayLayout\">" \
     "<arg direction=\"in\" name=\"displayLayout\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"displayCapabilities\" type=\"(b(ia(iiii)(ba(i(bai)(b(ii))))ai(bai)bas(b((ii)(b(bbb))))(bi)))\" />" \
     "<arg direction=\"out\" name=\"buttonCapabilities\" type=\"(ba(ibbb))\" />" \
     "<arg direction=\"out\" name=\"softButtonCapabilities\" type=\"(ba(bbbb))\" />" \
@@ -119,6 +134,7 @@
     "<arg direction=\"in\" name=\"customFormID\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"parentFormID\" type=\"(bs)\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"info\" type=\"(bs)\" />" \
     "</method>" \
     "<method name=\"Slider\">" \
@@ -129,6 +145,7 @@
     "<arg direction=\"in\" name=\"timeout\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"sliderPosition\" type=\"(bi)\" />" \
     "</method>" \
     "<method name=\"ScrollableMessage\">" \
@@ -137,6 +154,7 @@
     "<arg direction=\"in\" name=\"softButtons\" type=\"(ba(i(bs)(b(si))(bb)ii))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"PerformAudioPassThru\">" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
@@ -144,17 +162,21 @@
     "<arg direction=\"in\" name=\"maxDuration\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"muteAudio\" type=\"b\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"EndAudioPassThru\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"IsReady\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"available\" type=\"b\" />" \
     "</method>" \
     "<method name=\"ClosePopUp\">" \
     "<arg direction=\"in\" name=\"methodName\" type=\"(bs)\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<signal name=\"OnCommand\">" \
     "<arg name=\"cmdID\" type=\"i\" />" \
@@ -183,6 +205,7 @@
     "<arg name=\"methodName\" type=\"s\" />" \
     "</signal>" \
     "</interface>"
+
 class UI;
 
 class UIAdapter : public AbstractAdapter
@@ -252,37 +275,39 @@ public slots:
     void ClosePopUp(const Optional<QString>& methodName, const Message& message);
 
 public:
-    void ReplyAlert(int handle, const Optional<int>& tryAgainTime);
-    void ReplyShow(int handle);
-    void ReplyAddCommand(int handle);
-    void ReplyDeleteCommand(int handle);
-    void ReplyAddSubMenu(int handle);
-    void ReplyDeleteSubMenu(int handle);
-    void ReplyPerformInteraction(int handle, const Optional<int>& choiceID,
-        const Optional<QString>& manualTextEntry);
-    void ReplySetMediaClockTimer(int handle);
-    void ReplySetGlobalProperties(int handle);
-    void ReplyGetCapabilities(int handle, const DisplayCapabilities& displayCapabilities,
+    void ReplyAlert(const Handle& handle, const Optional<int>& tryAgainTime);
+    void ReplyShow(const Handle& handle);
+    void ReplyAddCommand(const Handle& handle);
+    void ReplyDeleteCommand(const Handle& handle);
+    void ReplyAddSubMenu(const Handle& handle);
+    void ReplyDeleteSubMenu(const Handle& handle);
+    void ReplyPerformInteraction(const Handle& handle,
+        const Optional<int>& choiceID, const Optional<QString>& manualTextEntry);
+    void ReplySetMediaClockTimer(const Handle& handle);
+    void ReplySetGlobalProperties(const Handle& handle);
+    void ReplyGetCapabilities(const Handle& handle,
+        const DisplayCapabilities& displayCapabilities,
         const AudioPassThruCapabilities& audioPassThruCapabilities,
         int hmiZoneCapabilities,
         const Optional<QList<SoftButtonCapabilities> >& softButtonCapabilities,
         const Optional<HMICapabilities>& hmiCapabilities);
-    void ReplyChangeRegistration(int handle);
-    void ReplyGetSupportedLanguages(int handle, const QList<int>& languages);
-    void ReplyGetLanguage(int handle, int language);
-    void ReplySetAppIcon(int handle);
-    void ReplySetDisplayLayout(int handle,
+    void ReplyChangeRegistration(const Handle& handle);
+    void ReplyGetSupportedLanguages(const Handle& handle,
+                                    const QList<int>& languages);
+    void ReplyGetLanguage(const Handle& handle, int language);
+    void ReplySetAppIcon(const Handle& handle);
+    void ReplySetDisplayLayout(const Handle& handle,
         const Optional<DisplayCapabilities>& displayCapabilities,
         const Optional<QList<ButtonCapabilities> >& buttonCapabilities,
         const Optional<QList<SoftButtonCapabilities> >& softButtonCapabilities,
         const Optional<PresetBankCapabilities>& presetBankCapabilities);
-    void ReplyShowCustomForm(int handle, const Optional<QString>& info);
-    void ReplySlider(int handle, const Optional<int>& sliderPosition);
-    void ReplyScrollableMessage(int handle);
-    void ReplyPerformAudioPassThru(int handle);
-    void ReplyEndAudioPassThru(int handle);
-    void ReplyIsReady(int handle, bool available);
-    void ReplyClosePopUp(int handle);
+    void ReplyShowCustomForm(const Handle& handle, const Optional<QString>& info);
+    void ReplySlider(const Handle& handle, const Optional<int>& sliderPosition);
+    void ReplyScrollableMessage(const Handle& handle);
+    void ReplyPerformAudioPassThru(const Handle& handle);
+    void ReplyEndAudioPassThru(const Handle& handle);
+    void ReplyIsReady(const Handle& handle, bool available);
+    void ReplyClosePopUp(const Handle& handle);
 
 private slots:
     void OnRecordStart(int appID);
@@ -302,38 +327,42 @@ public:
     Q_INVOKABLE void onTouchEvent(int type, const QVariantList& event);
     Q_INVOKABLE void onResetTimeout(int appID, const QString& methodName);
 
-    Q_INVOKABLE void replyAlert(int handle, const QVariant& tryAgainTime = QVariant());
-    Q_INVOKABLE void replyShow(int handle);
-    Q_INVOKABLE void replyAddCommand(int handle);
-    Q_INVOKABLE void replyDeleteCommand(int handle);
-    Q_INVOKABLE void replyAddSubMenu(int handle);
-    Q_INVOKABLE void replyDeleteSubMenu(int handle);
-    Q_INVOKABLE void replyPerformInteraction(int handle,
+    Q_INVOKABLE void replyAlert(const QVariantMap& handle,
+                                const QVariant& tryAgainTime = QVariant());
+    Q_INVOKABLE void replyShow(const QVariantMap& handle);
+    Q_INVOKABLE void replyAddCommand(const QVariantMap& handle);
+    Q_INVOKABLE void replyDeleteCommand(const QVariantMap& handle);
+    Q_INVOKABLE void replyAddSubMenu(const QVariantMap& handle);
+    Q_INVOKABLE void replyDeleteSubMenu(const QVariantMap& handle);
+    Q_INVOKABLE void replyPerformInteraction(const QVariantMap& handle,
         const QVariant& choiceID = QVariant(),
         const QVariant& manualTextEntry = QVariant());
-    Q_INVOKABLE void replySetMediaClockTimer(int handle);
-    Q_INVOKABLE void replySetGlobalProperties(int handle);
-    Q_INVOKABLE void replyGetCapabilities(int handle,
+    Q_INVOKABLE void replySetMediaClockTimer(const QVariantMap& handle);
+    Q_INVOKABLE void replySetGlobalProperties(const QVariantMap& handle);
+    Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QVariantMap& displayCapabilities,
         const QVariantMap& audioPassThruCapabilities, int hmiZoneCapabilities,
         const QVariant& softButtonCapabilities = QVariant(),
         const QVariant& hmiCapabilities = QVariant());
-    Q_INVOKABLE void replyChangeRegistration(int handle);
-    Q_INVOKABLE void replyGetSupportedLanguages(int handle, const QList<int>& languages);
-    Q_INVOKABLE void replyGetLanguage(int handle, int language);
-    Q_INVOKABLE void replySetAppIcon(int handle);
-    Q_INVOKABLE void replySetDisplayLayout(int handle,
+    Q_INVOKABLE void replyChangeRegistration(const QVariantMap& handle);
+    Q_INVOKABLE void replyGetSupportedLanguages(const QVariantMap& handle,
+                                                const QList<int>& languages);
+    Q_INVOKABLE void replyGetLanguage(const QVariantMap& handle, int language);
+    Q_INVOKABLE void replySetAppIcon(const QVariantMap& handle);
+    Q_INVOKABLE void replySetDisplayLayout(const QVariantMap& handle,
         const QVariant& displayCapabilities = QVariant(),
         const QVariant& buttonCapabilities = QVariant(),
         const QVariant& softButtonCapabilities = QVariant(),
         const QVariant& presetBankCapabilities = QVariant());
-    Q_INVOKABLE void replyShowCustomForm(int handle, const QVariant& info = QVariant());
-    Q_INVOKABLE void replySlider(int handle, const QVariant& sliderPosition = QVariant());
-    Q_INVOKABLE void replyScrollableMessage(int handle);
-    Q_INVOKABLE void replyPerformAudioPassThru(int handle);
-    Q_INVOKABLE void replyEndAudioPassThru(int handle);
-    Q_INVOKABLE void replyIsReady(int handle, bool available);
-    Q_INVOKABLE void replyClosePopUp(int handle);
+    Q_INVOKABLE void replyShowCustomForm(const QVariantMap& handle,
+                                         const QVariant& info = QVariant());
+    Q_INVOKABLE void replySlider(const QVariantMap& handle,
+                                 const QVariant& sliderPosition = QVariant());
+    Q_INVOKABLE void replyScrollableMessage(const QVariantMap& handle);
+    Q_INVOKABLE void replyPerformAudioPassThru(const QVariantMap& handle);
+    Q_INVOKABLE void replyEndAudioPassThru(const QVariantMap& handle);
+    Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
+    Q_INVOKABLE void replyClosePopUp(const QVariantMap& handle);
 
 signals:
     void onRecordStart(int appID);

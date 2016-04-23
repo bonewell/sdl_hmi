@@ -4,7 +4,7 @@
 
 #include "core/connector.h"
 
-Slave::Slave(int handle, const Message &message,
+Slave::Slave(const Handle& handle, const Message &message,
              const QMetaMethod& meta, PrivateInterface &impl)
     : handle_(handle), meta_(meta), request_(message), impl_(impl), index_(0),
       names_(meta.parameterNames()), input_(), output_()
@@ -25,6 +25,7 @@ void Slave::run()
 
 bool Slave::invoke()
 {
+    QVariantMap map = handle_;
     const int kMaxArgs = 10;
     if (input_.size() < kMaxArgs) {
         QVector<QGenericArgument> args(kMaxArgs);
@@ -35,7 +36,7 @@ bool Slave::invoke()
         }
         return QMetaObject::invokeMethod(impl_.item(), name().c_str(),
                                          Qt::DirectConnection,
-                                         Q_ARG(QVariant, QVariant(handle_)),
+                                         Q_ARG(QVariant, QVariant(map)),
                                          args[0], args[1], args[2],
                                          args[3], args[4], args[5],
                                          args[6], args[7], args[8]);
@@ -43,7 +44,7 @@ bool Slave::invoke()
     }
     return QMetaObject::invokeMethod(impl_.item(), name().c_str(),
                                      Qt::DirectConnection,
-                                     Q_ARG(QVariant, QVariant(handle_)),
+                                     Q_ARG(QVariant, QVariant(map)),
                                      Q_ARG(QVariant, QVariant(input_)));
 }
 

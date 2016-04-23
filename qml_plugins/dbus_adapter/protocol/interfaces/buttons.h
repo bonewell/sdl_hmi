@@ -8,6 +8,7 @@
   "<interface name=\"com.ford.sdl.hmi.Buttons\">" \
   "<method name=\"GetCapabilities\">" \
   "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+  "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
   "<arg direction=\"out\" name=\"capabilities\" type=\"a(ibbb)\" />" \
   "<arg direction=\"out\" name=\"presetBankCapabilities\" type=\"(b(b))\" />" \
   "</method>" \
@@ -46,7 +47,7 @@ public slots:
     void GetCapabilities(const Message& message);
 
 public:
-    void ReplyGetCapabilities(int handle,
+    void ReplyGetCapabilities(const Handle& handle,
         const QList<ButtonCapabilities>& capabilities,
         const Optional<PresetBankCapabilities>& presetBankCapabilities);
 
@@ -67,7 +68,7 @@ public:
                                    const QVariant& customButtonID = QVariant(),
                                    const QVariant& appID = QVariant());
 
-    Q_INVOKABLE void replyGetCapabilities(int handle,
+    Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QVariantList& capabilities,
         const QVariant& presetBankCapabilities = QVariant());
 

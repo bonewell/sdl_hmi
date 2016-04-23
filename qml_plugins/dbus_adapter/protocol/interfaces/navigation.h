@@ -8,6 +8,7 @@
     "<interface name=\"com.ford.sdl.hmi.Navigation\">" \
     "<method name=\"IsReady\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"available\" type=\"b\" />" \
     "</method>" \
     "<method name=\"SendLocation\">" \
@@ -20,6 +21,7 @@
     "<arg direction=\"in\" name=\"phoneNumber\" type=\"(bs)\" />" \
     "<arg direction=\"in\" name=\"locationImage\" type=\"(b(si))\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"ShowConstantTBT\">" \
     "<arg direction=\"in\" name=\"navigationTexts\" type=\"a(is)\" />" \
@@ -31,35 +33,42 @@
     "<arg direction=\"in\" name=\"softButtons\" type=\"(ba(i(bs)(b(si))(bb)ii))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"AlertManeuver\">" \
     "<arg direction=\"in\" name=\"softButtons\" type=\"(ba(i(bs)(b(si))(bb)ii))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"UpdateTurnList\">" \
     "<arg direction=\"in\" name=\"turnList\" type=\"(ba((b(is))(b(si))))\" />" \
     "<arg direction=\"in\" name=\"softButtons\" type=\"(ba(i(bs)(b(si))(bb)ii))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"StartStream\">" \
     "<arg direction=\"in\" name=\"url\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"StopStream\">" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"StartAudioStream\">" \
     "<arg direction=\"in\" name=\"url\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"StopAudioStream\">" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<signal name=\"OnTBTClientState\">" \
     "<arg name=\"state\" type=\"i\" />" \
@@ -103,15 +112,15 @@ private slots:
     void OnVideoDataStreaming(bool available);
 
 public:
-    void ReplyIsReady(int handle, bool available);
-    void ReplySendLocation(int handle);
-    void ReplyShowConstantTBT(int handle);
-    void ReplyAlertManeuver(int handle);
-    void ReplyUpdateTurnList(int handle);
-    void ReplyStartStream(int handle);
-    void ReplyStopStream(int handle);
-    void ReplyStartAudioStream(int handle);
-    void ReplyStopAudioStream(int handle);
+    void ReplyIsReady(const Handle& handle, bool available);
+    void ReplySendLocation(const Handle& handle);
+    void ReplyShowConstantTBT(const Handle& handle);
+    void ReplyAlertManeuver(const Handle& handle);
+    void ReplyUpdateTurnList(const Handle& handle);
+    void ReplyStartStream(const Handle& handle);
+    void ReplyStopStream(const Handle& handle);
+    void ReplyStartAudioStream(const Handle& handle);
+    void ReplyStopAudioStream(const Handle& handle);
 };
 
 class Navigation : public AbstractItem
@@ -122,15 +131,15 @@ class Navigation : public AbstractItem
 public:
     Q_INVOKABLE void OnTBTClientState(int state);
 
-    Q_INVOKABLE void replyIsReady(int handle, bool available);
-    Q_INVOKABLE void replySendLocation(int handle);
-    Q_INVOKABLE void replyShowConstantTBT(int handle);
-    Q_INVOKABLE void replyAlertManeuver(int handle);
-    Q_INVOKABLE void replyUpdateTurnList(int handle);
-    Q_INVOKABLE void replyStartStream(int handle);
-    Q_INVOKABLE void replyStopStream(int handle);
-    Q_INVOKABLE void replyStartAudioStream(int handle);
-    Q_INVOKABLE void replyStopAudioStream(int handle);
+    Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
+    Q_INVOKABLE void replySendLocation(const QVariantMap& handle);
+    Q_INVOKABLE void replyShowConstantTBT(const QVariantMap& handle);
+    Q_INVOKABLE void replyAlertManeuver(const QVariantMap& handle);
+    Q_INVOKABLE void replyUpdateTurnList(const QVariantMap& handle);
+    Q_INVOKABLE void replyStartStream(const QVariantMap& handle);
+    Q_INVOKABLE void replyStopStream(const QVariantMap& handle);
+    Q_INVOKABLE void replyStartAudioStream(const QVariantMap& handle);
+    Q_INVOKABLE void replyStopAudioStream(const QVariantMap& handle);
 
 signals:
     void onAudioDataStreaming(bool available);

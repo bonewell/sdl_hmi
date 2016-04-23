@@ -48,82 +48,82 @@ void VRAdapter::GetCapabilities(const Message &message)
     invoke("GetCapabilities", message).run();
 }
 
-void VRAdapter::ReplyIsReady(int handle, bool available)
+void VRAdapter::ReplyIsReady(const Handle& handle, bool available)
 {
     reply(handle).out(available).send();
 }
 
-void VRAdapter::ReplyAddCommand(int handle)
+void VRAdapter::ReplyAddCommand(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void VRAdapter::ReplyDeleteCommand(int handle)
+void VRAdapter::ReplyDeleteCommand(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void VRAdapter::ReplyPerformInteraction(int handle, const Optional<int> &choiceID)
+void VRAdapter::ReplyPerformInteraction(const Handle& handle, const Optional<int> &choiceID)
 {
     reply(handle).out(choiceID).send();
 }
 
-void VRAdapter::ReplyChangeRegistration(int handle)
+void VRAdapter::ReplyChangeRegistration(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void VRAdapter::ReplyGetSupportedLanguages(int handle, const QList<int> &languages)
+void VRAdapter::ReplyGetSupportedLanguages(const Handle& handle, const QList<int> &languages)
 {
     reply(handle).out(languages).send();
 }
 
-void VRAdapter::ReplyGetLanguage(int handle, int language)
+void VRAdapter::ReplyGetLanguage(const Handle& handle, int language)
 {
     reply(handle).out(language).send();
 }
 
-void VRAdapter::ReplyGetCapabilities(int handle, const Optional<QList<int> > &vrCapabilities)
+void VRAdapter::ReplyGetCapabilities(const Handle& handle, const Optional<QList<int> > &vrCapabilities)
 {
     reply(handle).out(vrCapabilities).send();
 }
 
-void VR::replyIsReady(int handle, bool available)
+void VR::replyIsReady(const QVariantMap& handle, bool available)
 {
     adapter->ReplyIsReady(handle, available);
 }
 
-void VR::replyAddCommand(int handle)
+void VR::replyAddCommand(const QVariantMap& handle)
 {
     adapter->ReplyAddCommand(handle);
 }
 
-void VR::replyDeleteCommand(int handle)
+void VR::replyDeleteCommand(const QVariantMap& handle)
 {
     adapter->ReplyDeleteCommand(handle);
 }
 
-void VR::replyPerformInteraction(int handle, const QVariant &choiceID)
+void VR::replyPerformInteraction(const QVariantMap& handle, const QVariant &choiceID)
 {
     adapter->ReplyPerformInteraction(handle, choiceID);
 }
 
-void VR::replyChangeRegistration(int handle)
+void VR::replyChangeRegistration(const QVariantMap& handle)
 {
     adapter->ReplyChangeRegistration(handle);
 }
 
-void VR::replyGetSupportedLanguages(int handle, const QList<int> &languages)
+void VR::replyGetSupportedLanguages(const QVariantMap& handle, const QList<int> &languages)
 {
     adapter->ReplyGetSupportedLanguages(handle, languages);
 }
 
-void VR::replyGetLanguage(int handle, int language)
+void VR::replyGetLanguage(const QVariantMap& handle, int language)
 {
     adapter->ReplyGetLanguage(handle, language);
 }
 
-void VR::replyGetCapabilities(int handle, const QVariant &vrCapabilities)
+void VR::replyGetCapabilities(const QVariantMap& handle, const QVariant &vrCapabilities)
 {
     adapter->ReplyGetCapabilities(handle, vrCapabilities);
 }

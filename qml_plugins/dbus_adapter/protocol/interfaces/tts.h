@@ -8,11 +8,13 @@
     "<interface name=\"com.ford.sdl.hmi.TTS\">" \
     "<method name=\"GetCapabilities\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"speechCapabilities\" type=\"ai\" />" \
     "<arg direction=\"out\" name=\"prerecordedSpeechCapabilities\" type=\"ai\" />" \
     "</method>" \
     "<method name=\"IsReady\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"available\" type=\"b\" />" \
     "</method>" \
     "<method name=\"Speak\">" \
@@ -20,22 +22,27 @@
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"speakType\" type=\"(bi)\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"StopSpeaking\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"ChangeRegistration\">" \
     "<arg direction=\"in\" name=\"ttsName\" type=\"(ba(si))\" />" \
     "<arg direction=\"in\" name=\"language\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"GetSupportedLanguages\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"languages\" type=\"ai\" />" \
     "</method>" \
     "<method name=\"GetLanguage\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"language\" type=\"i\" />" \
     "</method>" \
     "<method name=\"SetGlobalProperties\">" \
@@ -43,6 +50,7 @@
     "<arg direction=\"in\" name=\"timeoutPrompt\" type=\"(ba(si))\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<signal name=\"Started\" />" \
     "<signal name=\"Stopped\" />" \
@@ -85,16 +93,16 @@ public slots:
         const Message& message);
 
 public:
-    void ReplyGetCapabilities(int handle,
+    void ReplyGetCapabilities(const Handle& handle,
         const QList<int>& speechCapabilities,
         const QList<int>& prerecordedSpeechCapabilities);
-    void ReplyIsReady(int handle, bool available);
-    void ReplySpeak(int handle);
-    void ReplyStopSpeaking(int handle);
-    void ReplyChangeRegistration(int handle);
-    void ReplyGetSupportedLanguages(int handle, const QList<int>& languages);
-    void ReplyGetLanguage(int handle, int language);
-    void ReplySetGlobalProperties(int handle);
+    void ReplyIsReady(const Handle& handle, bool available);
+    void ReplySpeak(const Handle& handle);
+    void ReplyStopSpeaking(const Handle& handle);
+    void ReplyChangeRegistration(const Handle& handle);
+    void ReplyGetSupportedLanguages(const Handle& handle, const QList<int>& languages);
+    void ReplyGetLanguage(const Handle& handle, int language);
+    void ReplySetGlobalProperties(const Handle& handle);
 };
 
 class TTS : public AbstractItem
@@ -108,16 +116,16 @@ public:
     Q_INVOKABLE void onLanguageChange(int language);
     Q_INVOKABLE void onResetTimeout(int appID, const QString& methodName);
 
-    Q_INVOKABLE void replyGetCapabilities(int handle,
+    Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QList<int>& speechCapabilities,
         const QList<int>& prerecordedSpeechCapabilities);
-    Q_INVOKABLE void replyIsReady(int handle, bool available);
-    Q_INVOKABLE void replySpeak(int handle);
-    Q_INVOKABLE void replyStopSpeaking(int handle);
-    Q_INVOKABLE void replyChangeRegistration(int handle);
-    Q_INVOKABLE void replyGetSupportedLanguages(int handle, const QList<int>& languages);
-    Q_INVOKABLE void replyGetLanguage(int handle, int language);
-    Q_INVOKABLE void replySetGlobalProperties(int handle);
+    Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
+    Q_INVOKABLE void replySpeak(const QVariantMap& handle);
+    Q_INVOKABLE void replyStopSpeaking(const QVariantMap& handle);
+    Q_INVOKABLE void replyChangeRegistration(const QVariantMap& handle);
+    Q_INVOKABLE void replyGetSupportedLanguages(const QVariantMap& handle, const QList<int>& languages);
+    Q_INVOKABLE void replyGetLanguage(const QVariantMap& handle, int language);
+    Q_INVOKABLE void replySetGlobalProperties(const QVariantMap& handle);
 };
 
 #endif // TTS_H

@@ -9,6 +9,7 @@
 #include "core/slave.h"
 #include "core/courier.h"
 #include "core/connector.h"
+#include "core/handle.h"
 
 #define ADAPTER_INFO(Name, Introspection) \
     ADAPTER_INFORMATION(Name, Introspection)
@@ -47,21 +48,21 @@ class AbstractAdapter : public Adaptor
 public:
     AbstractAdapter(QObject *item, QObject *object);
     void init();
-    void sendError(int handle, const QString& error, const QString& text);
+    void sendError(Handle handle, const QString& error, const QString& text);
 
 protected:
     virtual bool isConnected() { return false; }
     virtual QString serviceName() { return ""; }
     virtual QString interfaceName() { return ""; }
     Slave& invoke(const QString& name, const Message& message);
-    Slave& reply(int handle);
+    Slave& reply(Handle handle);
     Courier& request(const QString &name, const QJSValue& callback,
                      CourierCallback func);
 
 private:
     inline void subscribe(const QMetaMethod& meta);
     inline void publish(const QMetaMethod& meta);
-    inline int handle() const;
+    inline Handle handle() const;
     inline QString createSlot(const QMetaMethod meta);
     inline QChar methodType(QMetaMethod::MethodType type) const;
     PrivateAdapter impl_;
@@ -78,7 +79,7 @@ public:
     explicit AbstractItem(QObject *parent=0) : QObject(parent), object_(0) {}
     virtual ~AbstractItem() {}
     virtual void classBegin() {}
-    Q_INVOKABLE void sendError(int handle, const QString& code, const QString& text) {
+    Q_INVOKABLE void sendError(const QVariantMap& handle, const QString& code, const QString& text) {
         getAdapter()->sendError(handle, code, text);
     }
 protected:

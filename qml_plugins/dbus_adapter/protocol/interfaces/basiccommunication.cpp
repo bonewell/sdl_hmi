@@ -52,48 +52,49 @@ void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
     invoke("GetSystemInfo", message).run();
 }
 
-void BasicCommunicationAdapter::ReplyUpdateAppList(int handle)
+void BasicCommunicationAdapter::ReplyUpdateAppList(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void BasicCommunicationAdapter::ReplyUpdateDeviceList(int handle)
+void BasicCommunicationAdapter::ReplyUpdateDeviceList(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void BasicCommunicationAdapter::ReplyAllowDeviceToConnect(int handle, bool allow)
+void BasicCommunicationAdapter::ReplyAllowDeviceToConnect(const Handle& handle,
+                                                          bool allow)
 {
     reply(handle).out(allow).send();
 }
 
-void BasicCommunicationAdapter::ReplyActivateApp(int handle)
+void BasicCommunicationAdapter::ReplyActivateApp(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void BasicCommunicationAdapter::ReplyMixingAudioSupported(int handle,
+void BasicCommunicationAdapter::ReplyMixingAudioSupported(const Handle& handle,
     bool attenuatedSupported)
 {
     reply(handle).out(attenuatedSupported).send();
 }
 
-void BasicCommunicationAdapter::ReplyDialNumber(int handle)
+void BasicCommunicationAdapter::ReplyDialNumber(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void BasicCommunicationAdapter::ReplySystemRequest(int handle)
+void BasicCommunicationAdapter::ReplySystemRequest(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void BasicCommunicationAdapter::ReplyPolicyUpdate(int handle)
+void BasicCommunicationAdapter::ReplyPolicyUpdate(const Handle& handle)
 {
     reply(handle).send();
 }
 
-void BasicCommunicationAdapter::ReplyGetSystemInfo(int handle,
+void BasicCommunicationAdapter::ReplyGetSystemInfo(const Handle& handle,
     const QString &ccpu_version, int language, const QString &wersCountryCode)
 {
     reply(handle).out(ccpu_version).out(language).out(wersCountryCode).send();
@@ -225,48 +226,50 @@ void BasicCommunication::onEventChanged(int eventName, bool isActive)
     emit adapter->OnEventChanged(eventName, isActive);
 }
 
-void BasicCommunication::replyUpdateAppList(int handle)
+void BasicCommunication::replyUpdateAppList(const QVariantMap& handle)
 {
     adapter->ReplyUpdateAppList(handle);
 }
 
-void BasicCommunication::replyUpdateDeviceList(int handle)
+void BasicCommunication::replyUpdateDeviceList(const QVariantMap& handle)
 {
     adapter->ReplyUpdateDeviceList(handle);
 }
 
-void BasicCommunication::replyAllowDeviceToConnect(int handle, bool allow)
+void BasicCommunication::replyAllowDeviceToConnect(const QVariantMap& handle,
+                                                   bool allow)
 {
     adapter->ReplyAllowDeviceToConnect(handle, allow);
 }
 
-void BasicCommunication::replyActivateApp(int handle)
+void BasicCommunication::replyActivateApp(const QVariantMap& handle)
 {
     adapter->ReplyActivateApp(handle);
 }
 
-void BasicCommunication::replyMixingAudioSupported(int handle, bool attenuatedSupported)
+void BasicCommunication::replyMixingAudioSupported(const QVariantMap& handle,
+                                                   bool attenuatedSupported)
 {
     adapter->ReplyMixingAudioSupported(handle, attenuatedSupported);
 }
 
-void BasicCommunication::replyDialNumber(int handle)
+void BasicCommunication::replyDialNumber(const QVariantMap& handle)
 {
     adapter->ReplyDialNumber(handle);
 }
 
-void BasicCommunication::replySystemRequest(int handle)
+void BasicCommunication::replySystemRequest(const QVariantMap& handle)
 {
     adapter->ReplySystemRequest(handle);
 }
 
-void BasicCommunication::replyPolicyUpdate(int handle)
+void BasicCommunication::replyPolicyUpdate(const QVariantMap& handle)
 {
     adapter->ReplyPolicyUpdate(handle);
 }
 
-void BasicCommunication::replyGetSystemInfo(int handle, const QString &ccpu_version,
-    int language, const QString &wersCountryCode)
+void BasicCommunication::replyGetSystemInfo(const QVariantMap& handle,
+    const QString &ccpu_version, int language, const QString &wersCountryCode)
 {
     adapter->ReplyGetSystemInfo(handle, ccpu_version, language, wersCountryCode);
 }

@@ -7,6 +7,7 @@
 #include <QMetaMethod>
 
 #include "core/message.h"
+#include "core/handle.h"
 
 class PrivateInterface;
 
@@ -15,7 +16,7 @@ class Slave : public QObject
     Q_OBJECT
 
 public:
-    Slave(int handle, const Message& message,
+    Slave(const Handle& handle, const Message& message,
           const QMetaMethod& meta, PrivateInterface &impl);
 
     template<typename T>
@@ -47,7 +48,7 @@ private slots:
 private:
     inline std::string name() const;
     inline bool invoke();
-    const int handle_;
+    const Handle handle_;
     const QMetaMethod meta_;
     Message request_;
     PrivateInterface& impl_;

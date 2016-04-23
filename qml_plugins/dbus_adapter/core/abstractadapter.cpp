@@ -32,16 +32,18 @@ void AbstractAdapter::publish(const QMetaMethod &meta)
 
 Slave& AbstractAdapter::invoke(const QString& name, const Message &message)
 {
-    int id = handle();
+    Handle hdl = handle();
     QMetaMethod meta = this->metaObject()->method(meta_[name]);
-    Slave* s = new Slave(id, message, meta, impl_);
-    msgs_[id] = s;
+    Slave* s = new Slave(hdl, message, meta, impl_);
+    msgs_[hdl.uid] = s;
     return *s;
 }
 
-Slave& AbstractAdapter::reply(int handle)
+Slave& AbstractAdapter::reply(Handle handle)
 {
-    return *q_check_ptr(msgs_.take(handle));
+    Slave& s = *q_check_ptr(msgs_.take(handle.uid));
+    s.out(handle.code).out(handle.message); // no effect for error
+    return s;
 }
 
 Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
@@ -50,15 +52,15 @@ Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
     return *new Courier(name, callback, func, impl_);
 }
 
-void AbstractAdapter::sendError(int handle, const QString& error, const QString& text)
+void AbstractAdapter::sendError(Handle handle, const QString& error, const QString& text)
 {
     reply(handle).error(error, text);
 }
 
-int AbstractAdapter::handle() const
+Handle AbstractAdapter::handle() const
 {
     static int i = 0;
-    return ++i;
+    return Handle(++i);
 }
 
 QChar AbstractAdapter::methodType(QMetaMethod::MethodType type) const {

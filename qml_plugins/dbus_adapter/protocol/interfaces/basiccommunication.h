@@ -9,14 +9,17 @@
     "<method name=\"UpdateAppList\">" \
     "<arg direction=\"in\" name=\"applications\" type=\"a(s(bs)(bs)(ss(bi)(bb))s(ba(si))(bas)i(bi)(bb)(bai)(bb)(bai))\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"UpdateDeviceList\">" \
     "<arg direction=\"in\" name=\"deviceList\" type=\"a(ss(bi)(bb))\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"AllowDeviceToConnect\">" \
     "<arg direction=\"in\" name=\"device\" type=\"(ss(bi)(bb))\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"allow\" type=\"b\" />" \
     "</method>" \
     "<method name=\"ActivateApp\">" \
@@ -24,30 +27,36 @@
     "<arg direction=\"in\" name=\"priority\" type=\"(bi)\" />" \
     "<arg direction=\"in\" name=\"level\" type=\"(bi)\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"MixingAudioSupported\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"attenuatedSupported\" type=\"b\" />" \
     "</method>" \
     "<method name=\"DialNumber\">" \
     "<arg direction=\"in\" name=\"number\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"SystemRequest\">" \
     "<arg direction=\"in\" name=\"requestType\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"fileName\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"appID\" type=\"(bs)\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"PolicyUpdate\">" \
     "<arg direction=\"in\" name=\"file\" type=\"s\" />" \
     "<arg direction=\"in\" name=\"timeout\" type=\"i\" />" \
     "<arg direction=\"in\" name=\"retry\" type=\"ai\" />" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "</method>" \
     "<method name=\"GetSystemInfo\">" \
     "<arg direction=\"out\" name=\"retCode\" type=\"i\" />" \
+    "<arg direction=\"out\" name=\"retMessage\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"ccpu_version\" type=\"s\" />" \
     "<arg direction=\"out\" name=\"language\" type=\"i\" />" \
     "<arg direction=\"out\" name=\"wersCountryCode\" type=\"s\" />" \
@@ -149,16 +158,16 @@ public slots:
     void GetSystemInfo(const Message& message);
 
 public:
-    void ReplyUpdateAppList(int handle);
-    void ReplyUpdateDeviceList(int handle);
-    void ReplyAllowDeviceToConnect(int handle, bool allow);
-    void ReplyActivateApp(int handle);
-    void ReplyMixingAudioSupported(int handle, bool attenuatedSupported);
-    void ReplyDialNumber(int handle);
-    void ReplySystemRequest(int handle);
-    void ReplyPolicyUpdate(int handle);
-    void ReplyGetSystemInfo(int handle, const QString& ccpu_version, int language,
-        const QString& wersCountryCode);
+    void ReplyUpdateAppList(const Handle& handle);
+    void ReplyUpdateDeviceList(const Handle& handle);
+    void ReplyAllowDeviceToConnect(const Handle& handle, bool allow);
+    void ReplyActivateApp(const Handle& handle);
+    void ReplyMixingAudioSupported(const Handle& handle, bool attenuatedSupported);
+    void ReplyDialNumber(const Handle& handle);
+    void ReplySystemRequest(const Handle& handle);
+    void ReplyPolicyUpdate(const Handle& handle);
+    void ReplyGetSystemInfo(const Handle& handle, const QString& ccpu_version,
+                            int language, const QString& wersCountryCode);
 
 private slots:
     void OnResumeAudioSource(int appID);
@@ -201,16 +210,17 @@ public:
     Q_INVOKABLE void onDeactivateHMI(bool isDeactivated);
     Q_INVOKABLE void onEventChanged(int eventName, bool isActive);
 
-    Q_INVOKABLE void replyUpdateAppList(int handle);
-    Q_INVOKABLE void replyUpdateDeviceList(int handle);
-    Q_INVOKABLE void replyAllowDeviceToConnect(int handle, bool allow);
-    Q_INVOKABLE void replyActivateApp(int handle);
-    Q_INVOKABLE void replyMixingAudioSupported(int handle, bool attenuatedSupported);
-    Q_INVOKABLE void replyDialNumber(int handle);
-    Q_INVOKABLE void replySystemRequest(int handle);
-    Q_INVOKABLE void replyPolicyUpdate(int handle);
-    Q_INVOKABLE void replyGetSystemInfo(int handle, const QString& ccpu_version,
-        int language, const QString& wersCountryCode);
+    Q_INVOKABLE void replyUpdateAppList(const QVariantMap& handle);
+    Q_INVOKABLE void replyUpdateDeviceList(const QVariantMap& handle);
+    Q_INVOKABLE void replyAllowDeviceToConnect(const QVariantMap& handle, bool allow);
+    Q_INVOKABLE void replyActivateApp(const QVariantMap& handle);
+    Q_INVOKABLE void replyMixingAudioSupported(const QVariantMap& handle,
+                                               bool attenuatedSupported);
+    Q_INVOKABLE void replyDialNumber(const QVariantMap& handle);
+    Q_INVOKABLE void replySystemRequest(const QVariantMap& handle);
+    Q_INVOKABLE void replyPolicyUpdate(const QVariantMap& handle);
+    Q_INVOKABLE void replyGetSystemInfo(const QVariantMap& handle,
+        const QString& ccpu_version, int language, const QString& wersCountryCode);
 
 signals:
     void onResumeAudioSource(int appID);

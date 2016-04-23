@@ -12,7 +12,7 @@ void Buttons::onButtonPress(int name, int mode, const QVariant &customButtonID,
     emit adapter->OnButtonPress(name, mode, customButtonID, appID);
 }
 
-void Buttons::replyGetCapabilities(int handle, const QVariantList &capabilities,
+void Buttons::replyGetCapabilities(const QVariantMap& handle, const QVariantList &capabilities,
     const QVariant &presetBankCapabilities)
 {
     adapter->ReplyGetCapabilities(handle,
@@ -30,7 +30,7 @@ void ButtonsAdapter::GetCapabilities(const Message &message)
     invoke("GetCapabilities", message).run();
 }
 
-void ButtonsAdapter::ReplyGetCapabilities(int handle,
+void ButtonsAdapter::ReplyGetCapabilities(const Handle& handle,
     const QList<ButtonCapabilities> &capabilities,
     const Optional<PresetBankCapabilities> &presetBankCapabilities)
 {
