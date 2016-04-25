@@ -63,6 +63,7 @@
 #  include "protocol/interfaces/navigation.h"
 #  include "protocol/interfaces/basiccommunication.h"
 #  include "protocol/interfaces/ui.h"
+#  include "protocol/interfaces/vehicleinfo.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -105,6 +106,21 @@ void DbusPlugin::registerTypes(const char *uri) {
   register_struct<HMICapabilities>();
   register_struct<TouchCoord>();
   register_struct<TouchEvent>();
+  register_struct<VehicleType>();
+  register_struct<DIDResult>();
+  register_struct<GPSData>();
+  register_struct<SingleTireStatus>();
+  register_struct<TireStatus>();
+  register_struct<BeltStatus>();
+  register_struct<BodyInformation>();
+  register_struct<DeviceStatus>();
+  register_struct<HeadLampStatus>();
+  register_struct<ECallInfo>();
+  register_struct<AirbagStatus>();
+  register_struct<EmergencyEvent>();
+  register_struct<ClusterModeStatus>();
+  register_struct<MyKey>();
+  register_struct<VehicleDataResult>();
 
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
   qmlRegisterType<TTS>(uri, 1, 0, "TTS");
@@ -112,6 +128,7 @@ void DbusPlugin::registerTypes(const char *uri) {
   qmlRegisterType<Navigation>(uri, 1, 0, "Navigation");
   qmlRegisterType<BasicCommunication>(uri, 1, 0, "BasicCommunication");
   qmlRegisterType<UI>(uri, 1, 0, "UI");
+  qmlRegisterType<VehicleInfo>(uri, 1, 0, "VehicleInfo");
 #endif  // QT_5
 
   RegisterDbusMetatypes();

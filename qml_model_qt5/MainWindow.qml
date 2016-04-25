@@ -320,13 +320,12 @@ Rectangle {
         id: sdlUI
         object: main
     }
+    HmiApi.VehicleInfo {
+        id: sdlVehicleInfo
+        object: main
+    }
 
     HMIAdapter {
-        HmiApi.VehicleInfoProxy {
-            id: sdlVehicleInfo
-            objectName: "VehicleInfo"
-        }
-
         HmiApi.SDLProxy {
             id: sdlSDL
             objectName: "SDL"

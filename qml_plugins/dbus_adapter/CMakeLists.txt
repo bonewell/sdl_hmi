@@ -113,6 +113,7 @@ set(SOURCES
   protocol/interfaces/navigation.cpp
   protocol/interfaces/basiccommunication.cpp
   protocol/interfaces/ui.cpp
+  protocol/interfaces/vehicleinfo.cpp
 # end new solution
 )
 include_directories(

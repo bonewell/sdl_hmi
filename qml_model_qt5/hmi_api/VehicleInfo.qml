@@ -32,193 +32,182 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
 
-Item {
-    function isReady () {
+VehicleInfo
+{
+    function isReady(handle) {
         console.log("Message Received - {method: 'VehicleInfo.IsReady'}")
-        return {
-            available: dataContainer.hmiVehicleInfoAvailable
-        }
+        replyIsReady(handle, dataContainer.hmiVehicleInfoAvailable)
     }
 
-    function getVehicleType() {
+    function getVehicleType(handle) {
         console.log("Message Received - {method: 'VehicleInfo.GetVehicleType'}")
-        return {
-            "vehicleType": {
-                "make": "Ford",
-                "model": "Fiesta",
-                "modelYear": "2013",
-                "trim": "SE"
-                }
-        }
+        replyGetVehicleType(handle, {
+            "make": "Ford",
+            "model": "Fiesta",
+            "modelYear": "2013",
+            "trim": "SE"
+        });
     }
 
-    function getGpsData(appID) {
+    function getGpsData(handle, appID) {
         console.debug("enter")
+        replyGetGpsData(handle, dataContainer.vehicleInfoModel.gps)
         console.debug("exit")
-        return { gps: dataContainer.vehicleInfoModel.gps }
     }
 
-    function getSpeed(appID) {
+    function getSpeed(handle, appID) {
         console.debug("enter")
+        replyGetSpeed(handle, dataContainer.vehicleInfoModel.speed)
         console.debug("exit")
-        return { speed: dataContainer.vehicleInfoModel.speed }
     }
 
-    function getRpm(appID) {
+    function getRpm(handle, appID) {
         console.debug("enter")
+        handle.code = Common.Result.DATA_NOT_AVAILABLE;
+        replyGetRpm(handle, dataContainer.vehicleInfoModel.rpm);
         console.debug("exit")
-        return {
-            rpm: dataContainer.vehicleInfoModel.rpm,
-            __retCode: Common.Result.DATA_NOT_AVAILABLE
-        }
     }
 
-    function getFuelLevel(appID) {
+    function getFuelLevel(handle, appID) {
         console.debug("enter")
+        replyGetFuelLevel(handle, dataContainer.vehicleInfoModel.fuelLevel)
         console.debug("exit")
-        return { fuelLevel: dataContainer.vehicleInfoModel.fuelLevel }
     }
 
-    function getFuelLevelState(appID) {
+    function getFuelLevelState(handle, appID) {
         console.debug("enter")
+        replyGetFuelLevelState(handle, dataContainer.vehicleInfoModel.fuelLevel_State)
         console.debug("exit")
-        return { fuelLevel_State: dataContainer.vehicleInfoModel.fuelLevel_State }
     }
 
-    function getInstantFuelConsumption(appID) {
+    function getInstantFuelConsumption(handle, appID) {
         console.debug("enter")
+        replyGetInstantFuelConsumption(handle, dataContainer.vehicleInfoModel.instantFuelConsumption)
         console.debug("exit")
-        return { instantFuelConsumption: dataContainer.vehicleInfoModel.instantFuelConsumption }
     }
 
-    function getExternalTemperature(appID) {
+    function getExternalTemperature(handle, appID) {
         console.debug("enter")
+        replyGetExternalTemperature(handle, dataContainer.vehicleInfoModel.externalTemperature)
         console.debug("exit")
-        return { externalTemperature: dataContainer.vehicleInfoModel.externalTemperature }
     }
 
-    function getVin(appID) {
+    function getVin(handle, appID) {
         console.debug("enter")
+        replyGetVin(handle, dataContainer.vehicleInfoModel.vin)
         console.debug("exit")
-        return { vin: dataContainer.vehicleInfoModel.vin }
     }
 
-    function getPrndl(appID) {
+    function getPrndl(handle, appID) {
         console.debug("enter")
         if (dataContainer.vehicleInfoModel.prndl === -1) { // Test value, to check response
-            console.debug("exit")
-            return {
-                prndl: dataContainer.vehicleInfoModel.prndl,
-                __retCode: Common.Result.DATA_NOT_AVAILABLE
-            }
+            handle.code = Common.Result.DATA_NOT_AVAILABLE;
         }
+        replyGetPrndl(handle, dataContainer.vehicleInfoModel.prndl);
         console.debug("exit")
-        return { prndl: dataContainer.vehicleInfoModel.prndl }
     }
 
-    function getTirePressure(appID) {
+    function getTirePressure(handle, appID) {
         console.debug("enter")
+        replyGetTirePressure(handle, dataContainer.vehicleInfoModel.tirePressure)
         console.debug("exit")
-        return { tirePressure: dataContainer.vehicleInfoModel.tirePressure }
     }
 
-    function getOdometer(appID) {
+    function getOdometer(handle, appID) {
         console.debug("enter")
+        handle.code = Common.Result.DATA_NOT_AVAILABLE;
+        replyGetOdometer(handle, dataContainer.vehicleInfoModel.odometer);
         console.debug("exit")
-        return {
-          odometer: dataContainer.vehicleInfoModel.odometer,
-          __retCode: Common.Result.DATA_NOT_AVAILABLE
-        }
     }
 
-    function getBeltStatus(appID) {
+    function getBeltStatus(handle, appID) {
         console.debug("enter")
+        replyGetBeltStatus(handle, dataContainer.vehicleInfoModel.beltStatus)
         console.debug("exit")
-        return { beltStatus: dataContainer.vehicleInfoModel.beltStatus }
     }
 
-    function getBodyInformation(appID) {
+    function getBodyInformation(handle, appID) {
         console.debug("enter")
+        replyGetBodyInformation(handle, dataContainer.vehicleInfoModel.bodyInformation)
         console.debug("exit")
-        return { bodyInformation: dataContainer.vehicleInfoModel.bodyInformation }
     }
 
-    function getDeviceStatus(appID) {
+    function getDeviceStatus(handle, appID) {
         console.debug("enter")
+        replyGetDeviceStatus(handle, dataContainer.vehicleInfoModel.deviceStatus)
         console.debug("exit")
-        return { deviceStatus: dataContainer.vehicleInfoModel.deviceStatus }
     }
 
-    function getDriverBraking(appID) {
+    function getDriverBraking(handle, appID) {
         console.debug("enter")
+        replyGetDriverBraking(handle, dataContainer.vehicleInfoModel.driverBraking)
         console.debug("exit")
-        return { driverBraking: dataContainer.vehicleInfoModel.driverBraking }
     }
 
-    function getWiperStatus(appID) {
+    function getWiperStatus(handle, appID) {
         console.debug("enter")
+        replyGetWiperStatus(handle, dataContainer.vehicleInfoModel.wiperStatus)
         console.debug("exit")
-        return { wiperStatus: dataContainer.vehicleInfoModel.wiperStatus }
     }
 
-    function getHeadLampStatus(appID) {
+    function getHeadLampStatus(handle, appID) {
         console.debug("enter")
+        replyGetHeadLampStatus(handle, dataContainer.vehicleInfoModel.headLampStatus)
         console.debug("exit")
-        return { headLampStatus: dataContainer.vehicleInfoModel.headLampStatus }
     }
 
-    function getEngineTorque(appID) {
+    function getEngineTorque(handle, appID) {
         console.debug("enter")
+        replyGetEngineTorque(handle, dataContainer.vehicleInfoModel.engineTorque)
         console.debug("exit")
-        return { engineTorque: dataContainer.vehicleInfoModel.engineTorque }
     }
 
-    function getAccPedalPosition(appID) {
+    function getAccPedalPosition(handle, appID) {
         console.debug("enter")
+        replyGetgetAccPedalPosition(handle, dataContainer.vehicleInfoModel.accPedalPosition)
         console.debug("exit")
-        return { accPedalPosition: dataContainer.vehicleInfoModel.accPedalPosition }
     }
 
-    function getSteeringWheelAngle(appID) {
+    function getSteeringWheelAngle(handle, appID) {
         console.debug("enter")
+        replyGetSteeringWheelAngle(handle, dataContainer.vehicleInfoModel.steeringWheelAngle)
         console.debug("exit")
-        return { steeringWheelAngle: dataContainer.vehicleInfoModel.steeringWheelAngle }
     }
 
-    function getECallInfo(appID) {
+    function getECallInfo(handle, appID) {
         console.debug("enter")
+        replyGetECallInfo(handle, dataContainer.vehicleInfoModel.eCallInfo)
         console.debug("exit")
-        return { eCallInfo: dataContainer.vehicleInfoModel.eCallInfo }
     }
 
-    function getAirbagStatus(appID) {
+    function getAirbagStatus(handle, appID) {
         console.debug("enter")
+        replyGetAirbagStatus(handle, dataContainer.vehicleInfoModel.airbagStatus)
         console.debug("exit")
-        return { airbagStatus: dataContainer.vehicleInfoModel.airbagStatus }
     }
 
-    function getEmergencyEvent(appID) {
+    function getEmergencyEvent(handle, appID) {
         console.debug("enter")
+        replyGetEmergencyEvent(handle, dataContainer.vehicleInfoModel.emergencyEvent)
         console.debug("exit")
-        return { emergencyEvent: dataContainer.vehicleInfoModel.emergencyEvent }
     }
 
-    function getClusterModeStatus(appID) {
+    function getClusterModeStatus(handle, appID) {
         console.debug("enter")
+        replyGetClusterModeStatus(handle, dataContainer.vehicleInfoModel.clusterModeStatus)
         console.debug("exit")
-        return { clusterModeStatus: dataContainer.vehicleInfoModel.clusterModeStatus }
     }
 
-    function getMyKey(appID) {
+    function getMyKey(handle, appID) {
         console.debug("enter")
+        replyGetMyKey(handle, dataContainer.vehicleInfoModel.myKey)
         console.debug("exit")
-        return { myKey: dataContainer.vehicleInfoModel.myKey }
     }
 
-    function getDTCs(ecuName, dtcMask, appID) {
+    function getDTCs(handle, ecuName, dtcMask, appID) {
         console.log("Message Received - {method: 'VehicleInfo.GetDTCs', params:{ " +
                     "ecuName: " + ecuName + ", " +
                     "dtcMask: " + dtcMask + ", " +
@@ -230,10 +219,10 @@ Item {
         for (var i = 0; i < 3; i++) {
             dtc.push("line" + i)
         }
-        return {ecuHeader: ecuHeader, dtc: dtc}
+        replyGetDTCs(handle, ecuHeader, dtc);
     }
 
-    function readDID(ecuName, didLocation, appID) {
+    function readDID(handle, ecuName, didLocation, appID) {
         console.debug("Enter")
         console.log("Message Received - {method: 'VehicleInfo.ReadDID', params:{ " +
                     "ecuName: " + ecuName + ", " +
@@ -257,508 +246,514 @@ Item {
                 didResult[i].data = '0'
             }
         }
+        replyReadDID(handle, didResult);
         console.debug("Exit")
-        return {didResult: didResult}
     }
 
-    function subscribeGps(appID) {
+    function subscribeGps(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onGpsChanged.disconnect(model.sendGpsChange)
         model.onGpsChanged.connect(model.sendGpsChange)
-        console.debug("exit")
-        return {gps:
+        replySubscribeGps(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_GPS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS} }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS});
+        console.debug("exit")
     }
-    function unsubscribeGps(appID) {
+    function unsubscribeGps(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onGpsChanged.disconnect(model.sendGpsChange)
-        console.debug("exit")
-        return {gps:
+        replyUnsubscribeGps(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_GPS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS} }
-
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS});
+        console.debug("exit")
     }
 
-    function subscribeSpeed(appID) {
+    function subscribeSpeed(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onSpeedChanged.disconnect(model.sendSpeedChange)
         model.onSpeedChanged.connect(model.sendSpeedChange)
-        console.debug("exit")
-        return { speed:
+        replySubscrcibeSpeed(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_SPEED,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeSpeed(appID) {
+    function unsubscribeSpeed(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onSpeedChanged.disconnect(model.sendSpeedChange)
-        console.debug("exit")
-        return { speed:
+        replyUnsubscribeSpeed(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_SPEED,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeRpm(appID) {
+    function subscribeRpm(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onRpmChanged.disconnect(model.sendRpmChange)
         model.onRpmChanged.connect(model.sendRpmChange)
-        console.debug("exit")
-        return { rpm:
+        replySubscribeRpm(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_RPM,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeRpm(appID) {
+    function unsubscribeRpm(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onRpmChanged.disconnect(model.sendRpmChange)
-        console.debug("exit")
-        return { rpm:
+        replyUnsubscribeRpm(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_RPM,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeFuelLevel(appID) {
+    function subscribeFuelLevel(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onFuelLevelChanged.disconnect(model.sendFuelLevelChange)
         model.onFuelLevelChanged.connect(model.sendFuelLevelChange)
-        console.debug("exit")
-        return { fuelLevel:
+        replySubscribeFuelLevel(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_FUELLEVEL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeFuelLevel(appID) {
+    function unsubscribeFuelLevel(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onFuelLevelChanged.disconnect(model.sendFuelLevelChange)
-        console.debug("exit")
-        return { fuelLevel:
+        replyUnsubscribeFuelLevel(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_FUELLEVEL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeFuelLevel_State(appID) {
+    function subscribeFuelLevel_State(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onFuelLevel_StateChanged.disconnect(model.sendFuelLevel_StateChange)
         model.onFuelLevel_StateChanged.connect(model.sendFuelLevel_StateChange)
-        console.debug("exit")
-        return { fuelLevel_State:
+        replySubscribeFuelLevel_State(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_FUELLEVEL_STATE,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeFuelLevel_State(appID) {
+    function unsubscribeFuelLevel_State(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onFuelLevel_StateChanged.disconnect(model.sendFuelLevel_StateChange)
-        console.debug("exit")
-        return { fuelLevel_State:
+        replyUnsubscribeFuelLevel_State(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_FUELLEVEL_STATE,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeInstantFuelConsumption(appID) {
+    function subscribeInstantFuelConsumption(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onInstantFuelConsumptionChanged.disconnect(model.sendInstantFuelConsumptionChange)
         model.onInstantFuelConsumptionChanged.connect(model.sendInstantFuelConsumptionChange)
-        console.debug("exit")
-        return { instantFuelConsumption:
+        replySubscribeInstantFuelConsumption(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_FUELCONSUMPTION,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeInstantFuelConsumption(appID) {
+    function unsubscribeInstantFuelConsumption(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onInstantFuelConsumptionChanged.disconnect(model.sendInstantFuelConsumptionChange)
-        console.debug("exit")
-        return { instantFuelConsumption:
+        replyUnsubscribeInstantFuelConsumption(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_FUELCONSUMPTION,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeExternalTemperature(appID) {
+    function subscribeExternalTemperature(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onExternalTemperatureChanged.disconnect(model.sendExternalTemperatureChange)
         model.onExternalTemperatureChanged.connect(model.sendExternalTemperatureChange)
-        console.debug("exit")
-        return { externalTemperature:
+        replySubscribeExternalTemperature(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_EXTERNTEMP,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeExternalTemperature(appID) {
+    function unsubscribeExternalTemperature(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onExternalTemperatureChanged.disconnect(model.sendExternalTemperatureChange)
-        console.debug("exit")
-        return { externalTemperature:
+        replyUnsubscribeExternalTemperature(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_EXTERNTEMP,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribePrndl(appID) {
+    function subscribePrndl(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onPrndlChanged.disconnect(model.sendPrndlChange)
         model.onPrndlChanged.connect(model.sendPrndlChange)
-        console.debug("exit")
-        return { prndl:
+        replySubscribePrndl(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_PRNDL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribePrndl(appID) {
+    function unsubscribePrndl(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onPrndlChanged.disconnect(model.sendPrndlChange)
-        console.debug("exit")
-        return { prndl:
+        replyUnsubscribePrndl(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_PRNDL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeVin(appID) {
+    function subscribeVin(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onVinChanged.disconnect(model.sendVinChange)
         model.onVinChanged.connect(model.sendVinChange)
-        console.debug("exit")
-        return { vin:
+        replySubscribeVin(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_VIN,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeVin(appID) {
+    function unsubscribeVin(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onVinChanged.disconnect(model.sendVinChange)
-        console.debug("exit")
-        return { vin:
+        replyUnsubscribeVin(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_VIN,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeTirePressure(appID) {
+    function subscribeTirePressure(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onTirePressureChanged.disconnect(model.sendTirePressureChange)
         model.onTirePressureChanged.connect(model.sendTirePressureChange)
-        console.debug("exit")
-        return { tirePressure:
+        replySubscribeTirePressure(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_TIREPRESSURE,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeTirePressure(appID) {
+    function unsubscribeTirePressure(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onTirePressureChanged.disconnect(model.sendTirePressureChange)
-        console.debug("exit")
-        return { tirePressure:
+        replyUnsubscribeTirePressure(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_TIREPRESSURE,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeOdometer(appID) {
+    function subscribeOdometer(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onOdometerChanged.disconnect(model.sendOdometerChange)
         model.onOdometerChanged.connect(model.sendOdometerChange)
-        console.debug("exit")
-        return { odometer:
+        replySubscribeOdometer(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ODOMETER,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeOdometer(appID) {
+    function unsubscribeOdometer(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onOdometerChanged.disconnect(model.sendOdometerChange)
-        console.debug("exit")
-        return { odometer:
+        replyUnsubscribeOdometer(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ODOMETER,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeBeltStatus(appID) {
+    function subscribeBeltStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onBeltStatusChanged.disconnect(model.sendBeltStatusChange)
         model.onBeltStatusChanged.connect(model.sendBeltStatusChange)
-        console.debug("exit")
-        return { beltStatus:
+        replySubscribeBeltStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_BELTSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeBeltStatus(appID) {
+    function unsubscribeBeltStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onBeltStatusChanged.disconnect(model.sendBeltStatusChange)
-        console.debug("exit")
-        return { beltStatus:
+        replyUnsubscribeBeltStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_BELTSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeBodyInformation(appID) {
+    function subscribeBodyInformation(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onBodyInformationChanged.disconnect(model.sendBodyInformationChange)
         model.onBodyInformationChanged.connect(model.sendBodyInformationChange)
-        console.debug("exit")
-        return { bodyInformation:
+        replySubscribeBodyInformation(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_BODYINFO,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeBodyInformation(appID) {
+    function unsubscribeBodyInformation(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onBodyInformationChanged.disconnect(model.sendBodyInformationChange)
-        console.debug("exit")
-        return { bodyInformation:
+        replyUnsubscribeBodyInformation(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_BODYINFO,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeDeviceStatus(appID) {
+    function subscribeDeviceStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onDeviceStatusChanged.disconnect(model.sendDeviceStatusChange)
         model.onDeviceStatusChanged.connect(model.sendDeviceStatusChange)
-        console.debug("exit")
-        return { deviceStatus:
+        replySubscribeDeviceStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_DEVICESTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeDeviceStatus(appID) {
+    function unsubscribeDeviceStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onDeviceStatusChanged.disconnect(model.sendDeviceStatusChange)
-        console.debug("exit")
-        return { deviceStatus:
+        replyUnsubscribeDeviceStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_DEVICESTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeDriverBraking(appID) {
+    function subscribeDriverBraking(handle, appID) {
         console.debug("enter")
+        replySubscribe
         var model = dataContainer.vehicleInfoModel;
         model.onDriverBrakingChanged.disconnect(model.sendDriverBrakingChange)
         model.onDriverBrakingChanged.connect(model.sendDriverBrakingChange)
-        console.debug("exit")
-        return { driverBraking:
+        replyUnsubscribeDriverBraking(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_BRAKING,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeDriverBraking(appID) {
+    function unsubscribeDriverBraking(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onDriverBrakingChanged.disconnect(model.sendDriverBrakingChange)
-        console.debug("exit")
-        return { driverBraking:
+        replyUnsubscribeDriverBraking(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_BRAKING,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeWiperStatus(appID) {
+    function subscribeWiperStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onWiperStatusChanged.disconnect(model.sendWiperStatusChange)
         model.onWiperStatusChanged.connect(model.sendWiperStatusChange)
-        console.debug("exit")
-        return { wiperStatus:
+        replySubscribeWiperStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_WIPERSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeWiperStatus(appID) {
+    function unsubscribeWiperStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onWiperStatusChanged.disconnect(model.sendWiperStatusChange)
-        console.debug("exit")
-        return { wiperStatus:
+        replyUnsubscribeWiperStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_WIPERSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeHeadLampStatus(appID) {
+    function subscribeHeadLampStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onHeadLampStatusChanged.disconnect(model.sendHeadLampStatusChange)
         model.onHeadLampStatusChanged.connect(model.sendHeadLampStatusChange)
-        console.debug("exit")
-        return { headLampStatus:
+        replySubscribeHeadLampStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_HEADLAMPSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeHeadLampStatus(appID) {
+    function unsubscribeHeadLampStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onHeadLampStatusChanged.disconnect(model.sendHeadLampStatusChange)
-        console.debug("exit")
-        return { headLampStatus:
+        replyUnsubscribeHeadLampStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_HEADLAMPSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeEngineTorque(appID) {
+    function subscribeEngineTorque(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onEngineTorqueChanged.disconnect(model.sendEngineTorqueChange)
         model.onEngineTorqueChanged.connect(model.sendEngineTorqueChange)
-        console.debug("exit")
-        return { engineTorque:
+        replySubscribeEngineTorque(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ENGINETORQUE,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeEngineTorque(appID) {
+    function unsubscribeEngineTorque(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onEngineTorqueChanged.disconnect(model.sendEngineTorqueChange)
-        console.debug("exit")
-        return { engineTorque:
+        replyUnsubscribeEngineTorque(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ENGINETORQUE,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeAccPedalPosition(appID) {
+    function subscribeAccPedalPosition(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onAccPedalPositionChanged.disconnect(model.sendAccPedalPositionChange)
         model.onAccPedalPositionChanged.connect(model.sendAccPedalPositionChange)
-        console.debug("exit")
-        return { accPedalPosition:
+        replySubscribeAccPedalPosition(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ACCPEDAL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeAccPedalPosition(appID) {
+    function unsubscribeAccPedalPosition(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onAccPedalPositionChanged.disconnect(model.sendAccPedalPositionChange)
-        console.debug("exit")
-        return { accPedalPosition:
+        replyUnsubscribeAccPedalPosition(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ACCPEDAL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeSteeringWheelAngle(appID) {
+    function subscribeSteeringWheelAngle(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onSteeringWheelAngleChanged.disconnect(model.sendSteeringWheelAngleChange)
         model.onSteeringWheelAngleChanged.connect(model.sendSteeringWheelAngleChange)
-        console.debug("exit")
-        return { steeringWheelAngle:
+        replySubscribeSteeringWheelAngle(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_STEERINGWHEEL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeSteeringWheelAngle(appID) {
+    function unsubscribeSteeringWheelAngle(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onSteeringWheelAngleChanged.disconnect(model.sendSteeringWheelAngleChange)
-        console.debug("exit")
-        return { steeringWheelAngle:
+        replyUnsubscribeSteeringWheelAngle(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_STEERINGWHEEL,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeECallInfo(appID) {
+    function subscribeECallInfo(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onECallInfoChanged.disconnect(model.sendECallInfoChange)
         model.onECallInfoChanged.connect(model.sendECallInfoChange)
-        console.debug("exit")
-        return { eCallInfo:
+        replySubscribeECallInfo(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ECALLINFO,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeECallInfo(appID) {
+    function unsubscribeECallInfo(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onECallInfoChanged.disconnect(model.sendECallInfoChange)
-        console.debug("exit")
-        return { eCallInfo:
+        replyUnsubscribeECallInfo(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_ECALLINFO,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeAirbagStatus(appID) {
+    function subscribeAirbagStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onAirbagStatusChanged.disconnect(model.sendAirbagStatusChange)
         model.onAirbagStatusChanged.connect(model.sendAirbagStatusChange)
-        console.debug("exit")
-        return { airbagStatus:
+        replySubscribeAirbagStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_AIRBAGSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeAirbagStatus(appID) {
+    function unsubscribeAirbagStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onAirbagStatusChanged.disconnect(model.sendAirbagStatusChange)
-        console.debug("exit")
-        return { airbagStatus:
+        replyUnsubscribeAirbagStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_AIRBAGSTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeEmergencyEvent(appID) {
+    function subscribeEmergencyEvent(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onEmergencyEventChanged.disconnect(model.sendEmergencyEventChange)
         model.onEmergencyEventChanged.connect(model.sendEmergencyEventChange)
-        console.debug("exit")
-        return { emergencyEvent:
+        replySubscribeEmergencyEvent(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_EMERGENCYEVENT,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeEmergencyEvent(appID) {
+    function unsubscribeEmergencyEvent(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onEmergencyEventChanged.disconnect(model.sendEmergencyEventChange)
-        console.debug("exit")
-        return { emergencyEvent:
+        replyUnsubscribeEmergencyEvent(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_EMERGENCYEVENT,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeClusterModeStatus(appID) {
+    function subscribeClusterModeStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onClusterModeStatusChanged.disconnect(model.sendClusterModeStatusChange)
         model.onClusterModeStatusChanged.connect(model.sendClusterModeStatusChange)
-        console.debug("exit")
-        return { clusterModeStatus:
+        replySubscribeClusterModeStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_CLUSTERMODESTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeClusterModeStatus(appID) {
+    function unsubscribeClusterModeStatus(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onClusterModeStatusChanged.disconnect(model.sendClusterModeStatusChange)
-        console.debug("exit")
-        return { clusterModeStatus:
+        replyUnsubscribeClusterModeStatus(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_CLUSTERMODESTATUS,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
 
-    function subscribeMyKey(appID) {
+    function subscribeMyKey(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onMyKeyChanged.disconnect(model.sendMyKeyChange)
         model.onMyKeyChanged.connect(model.sendMyKeyChange)
-        console.debug("exit")
-        return { myKey:
+        replySubscribeMyKey(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_MYKEY,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
     }
-    function unsubscribeMyKey(appID) {
+    function unsubscribeMyKey(handle, appID) {
         console.debug("enter")
         var model = dataContainer.vehicleInfoModel;
         model.onMyKeyChanged.disconnect(model.sendMyKeyChange)
-        console.debug("exit")
-        return { myKey:
+        replyUnsubscribeMyKey(handle,
             { dataType: Common.VehicleDataType.VEHICLEDATA_MYKEY,
-              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS } }
+              resultCode: Common.VehicleDataResultCode.VDRC_SUCCESS });
+        console.debug("exit")
+    }
+
+    function diagnosticMessage(handle, targetID, messageLength, messageData, appID) {
+        console.log("Message Received - {method: 'VehicleInfo.DiagnosticMessage'}");
+        // TODO: it's stub, need to implement
+        replyDiagnosticMessage(handle, []);
     }
 }
