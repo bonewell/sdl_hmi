@@ -41,5 +41,8 @@
 #include "protocol/structures/clustermodestatus.h"
 #include "protocol/structures/mykey.h"
 #include "protocol/structures/vehicledataresult.h"
+#include "protocol/structures/permissionitem.h"
+#include "protocol/structures/userfriendlymessage.h"
+#include "protocol/structures/serviceinfo.h"
 
 #endif // STRUCTURES_H

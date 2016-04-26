@@ -114,6 +114,7 @@ set(SOURCES
   protocol/interfaces/basiccommunication.cpp
   protocol/interfaces/ui.cpp
   protocol/interfaces/vehicleinfo.cpp
+  protocol/interfaces/sdl.cpp
 # end new solution
 )
 include_directories(

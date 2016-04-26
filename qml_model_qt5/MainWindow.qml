@@ -324,30 +324,13 @@ Rectangle {
         id: sdlVehicleInfo
         object: main
     }
-
-    HMIAdapter {
-        HmiApi.SDLProxy {
-            id: sdlSDL
-            objectName: "SDL"
-        }
+    HmiApi.SDL {
+        id: sdlSDL
+        object: main
     }
 
     SDLAdapter {
         id: sdlProxy
-
-        onOnAppPermissionChanged: {
-
-        }
-
-
-        onOnSDLConsentNeeded: {
-
-        }
-
-        onOnStatusUpdate: {
-            console.log("enter onStatusUpdate")
-            settingsContainer.updateStatus(status);
-        }
     }
 
     Component.onCompleted: {

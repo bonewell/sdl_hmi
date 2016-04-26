@@ -64,6 +64,7 @@
 #  include "protocol/interfaces/basiccommunication.h"
 #  include "protocol/interfaces/ui.h"
 #  include "protocol/interfaces/vehicleinfo.h"
+#  include "protocol/interfaces/sdl.h"
 #endif  // QT_VERSION
 
 #ifdef ENABLE_LOG
@@ -121,6 +122,9 @@ void DbusPlugin::registerTypes(const char *uri) {
   register_struct<ClusterModeStatus>();
   register_struct<MyKey>();
   register_struct<VehicleDataResult>();
+  register_struct<PermissionItem>();
+  register_struct<UserFriendlyMessage>();
+  register_struct<ServiceInfo>();
 
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
   qmlRegisterType<TTS>(uri, 1, 0, "TTS");
@@ -129,6 +133,7 @@ void DbusPlugin::registerTypes(const char *uri) {
   qmlRegisterType<BasicCommunication>(uri, 1, 0, "BasicCommunication");
   qmlRegisterType<UI>(uri, 1, 0, "UI");
   qmlRegisterType<VehicleInfo>(uri, 1, 0, "VehicleInfo");
+  qmlRegisterType<SDL>(uri, 1, 0, "SDL");
 #endif  // QT_5
 
   RegisterDbusMetatypes();

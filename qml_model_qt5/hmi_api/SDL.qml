@@ -30,8 +30,29 @@
   * POSSIBILITY OF SUCH DAMAGE.
   */
 
-import QtQuick 2.0
+import com.ford.sdl.hmi.dbus_adapter 1.0
 import "Common.js" as Common
 
-Item {
+SDL
+{
+    onOnAppPermissionChanged: {
+        console.log("enter onStatusUpdate");
+        console.log("appID = ", JSON.stringify(appID));
+        console.log("appID = ", JSON.stringify(isAppPermissionsRevoked));
+        console.log("appID = ", JSON.stringify(appRevokedPermissions));
+        console.log("appID = ", JSON.stringify(appRevoked));
+        console.log("appID = ", JSON.stringify(appPermissionsConsentNeeded));
+        console.log("appID = ", JSON.stringify(appUnauthorized));
+        console.log("appID = ", JSON.stringify(priority));
+        console.log("appID = ", JSON.stringify(requestType));
+    }
+
+    onOnSDLConsentNeeded: {
+        console.log("enter onStatusUpdate: ", JSON.stringify(device));
+    }
+
+    onOnStatusUpdate: {
+        console.log("enter onStatusUpdate")
+        settingsContainer.updateStatus(status);
+    }
 }
