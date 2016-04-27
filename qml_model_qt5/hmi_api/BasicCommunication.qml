@@ -237,7 +237,7 @@ BasicCommunication
         settingsContainer.timeoutPTExchange = timeout;
         settingsContainer.retriesPTExchange = retry;
         var service = 7; // service type for Ford specific policy
-        RequestToSDL.SDL_GetURLS(service, settingsContainer.startPTExchange);
+        sdlSDL.getURLS(service, settingsContainer.startPTExchange);
         replyPolicyUpdate(handle);
         console.log("exit policyUpdate");
     }

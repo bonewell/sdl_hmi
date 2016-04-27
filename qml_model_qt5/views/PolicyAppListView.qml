@@ -76,9 +76,9 @@ GeneralView {
                     anchors.left: appIcon.right
                     anchors.leftMargin: Constants.margin
                     onClicked: {
-                        RequestToSDL.SDL_GetListOfPermissions(appId, function(params){
+                        sdlSDL.getListOfPermissions(function(params){
                             settingsContainer.getListOfPermissions_Response(appId, params)
-                        });
+                        }, appId);
                     }
                 }
             }

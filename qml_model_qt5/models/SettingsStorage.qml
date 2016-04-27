@@ -244,9 +244,12 @@ Item
 
         console.debug("SDL.ActivateApp Request enter", appId);
 
-        RequestToSDL.SDL_ActivateApp(appId, function(isSDLAllowed, device, isPermissionsConsentNeeded, isAppPermissionsRevoked, appRevokedPermissions, isAppRevoked, priority){
-            settingsContainer.activateApp_Response(appId, isSDLAllowed, device, isPermissionsConsentNeeded, isAppPermissionsRevoked, appRevokedPermissions, isAppRevoked, priority)
-        })
+        sdlSDL.activateApp(function(isSDLAllowed, device, isPermissionsConsentNeeded,
+            isAppPermissionsRevoked, appRevokedPermissions, isAppRevoked, priority){
+                settingsContainer.activateApp_Response(appId, isSDLAllowed, device,
+                    isPermissionsConsentNeeded, isAppPermissionsRevoked,
+                    appRevokedPermissions, isAppRevoked, priority)
+        }, appId)
 
         console.debug("SDL.ActivateApp Request exit");
     }
@@ -267,9 +270,9 @@ Item
         }
 
         if (isPermissionsConsentNeeded) {
-            RequestToSDL.SDL_GetListOfPermissions(appId, function(allowedFunctions){
+            sdlSDL.getListOfPermissions(function(allowedFunctions) {
                 settingsContainer.getListOfPermissions_Response(appId, allowedFunctions)
-            })
+            }, appId)
         }
 
         if (isAppPermissionsRevoked) {
@@ -279,9 +282,9 @@ Item
 
         if (isAppRevoked) {
 
-            RequestToSDL.SDL_GetUserFriendlyMessage(["AppUnsupported"], dataContainer.hmiUILanguage, function(messages){
+            sdlSDL.getUserFriendlyMessage(function(messages) {
                 settingsContainer.getUserFriendlyMessageAppPermissionsRevoked("AppUnsupported", messages)
-            });
+            }, ["AppUnsupported"], dataContainer.hmiUILanguage);
         } else if (isSDLAllowed && !isPermissionsConsentNeeded) {
 
             dataContainer.setCurrentApplication(appId)
@@ -315,9 +318,9 @@ Item
             messageCodes.push(x.name);
         });
 
-        RequestToSDL.SDL_GetUserFriendlyMessage(messageCodes, dataContainer.hmiUILanguage, function(messages){
+        sdlSDL.getUserFriendlyMessage(function(messages) {
             settingsContainer.onAppPermissionConsent_Notification(appId, messages)
-        });
+        }, messageCodes, dataContainer.hmiUILanguage);
 
         console.log("getListOfPermissions_Response exit");
     }
@@ -332,9 +335,9 @@ Item
 
         messageCodes.push("AppPermissionsRevoked");
 
-        RequestToSDL.SDL_GetUserFriendlyMessage(messageCodes, dataContainer.hmiUILanguage, function(messages){
+        sdlSDL.getUserFriendlyMessage(function(messages) {
             settingsContainer.getUserFriendlyMessageAppPermissionsRevoked(title, messages)
-        });
+        }, messageCodes, dataContainer.hmiUILanguage);
     }
 
     function getUserFriendlyMessageAppPermissionsRevoked (title, messages) {
@@ -396,6 +399,6 @@ Item
     function updateIVSU(appId) {
         appIdIVSU = appId;
         var service = 4; // service type for IVSU
-        RequestToSDL.SDL_GetURLS(service, startIVSU);
+        sdlSDL.getURLS(startIVSU, service);
     }
 }

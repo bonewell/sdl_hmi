@@ -73,6 +73,12 @@ void TTSAdapter::ReplyChangeRegistration(const Handle& handle)
     reply(handle).send();
 }
 
+void TTSAdapter::ReplyGetSupportedLanguages(const Handle &handle,
+    const QList<int> &languages)
+{
+    reply(handle).out(languages).send();
+}
+
 void TTSAdapter::ReplyGetLanguage(const Handle& handle, int language)
 {
     reply(handle).out(language).send();

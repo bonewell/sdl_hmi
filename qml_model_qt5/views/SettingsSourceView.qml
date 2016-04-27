@@ -41,9 +41,9 @@ GeneralView {
 
     onItemActivated: {
         switch (item) {
-            case "update_sdl": RequestToSDL.SDL_UpdateSDL(settingsContainer.updateStatus); break;
-            case "get_status_update": RequestToSDL.SDL_GetStatusUpdate(settingsContainer.updateStatus); break;
-            case "get_urls": RequestToSDL.SDL_GetURLS(0, settingsContainer.startPTExchange); break;
+            case "update_sdl": sdlSDL.updateSDL(settingsContainer.updateStatus); break;
+            case "get_status_update": sdlSDL.getStatusUpdate(settingsContainer.updateStatus); break;
+            case "get_urls": sdlSDL.getURLS(settingsContainer.startPTExchange, 0); break;
         }
     }
 
