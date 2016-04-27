@@ -30,54 +30,56 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set(codegen_dir ${CMAKE_SOURCE_DIR}/codegen)
-set(codegen ${codegen_dir}/make_qml_dbus_cpp.py)
-set(codegen_request_to_sdl ${codegen_dir}/make_request_to_sdl.py)
-set(codegen_hmi_requests ${codegen_dir}/make_hmi_requests.py)
-set(codegen_notification_qml ${codegen_dir}/make_notifications_qml.py)
-set(parser ${codegen_dir}/ford_xml_parser.py)
-set(interfaces_dir ${CMAKE_SOURCE_DIR})
-set(api_xml ${interfaces_dir}/QT_HMI_API.xml)
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.cc ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h
-  COMMAND python ${codegen} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${api_xml} ${codegen} ${parser}
-  COMMENT "Generating files:
-    ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.cc
-    ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h
-    from:
-    ${api_xml} ..."
-)
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.cc ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h
-  COMMAND python ${codegen_request_to_sdl} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${api_xml} ${codegen_request_to_sdl} ${parser}
-  COMMENT "Generating files:
-    ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.cc
-    ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h
-    from:
-    ${api_xml} ..."
-)
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.cc ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.h
-  COMMAND python ${codegen_hmi_requests} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${api_xml} ${codegen_hmi_requests} ${parser}
-  COMMENT "Generating files:
-    ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.cc
-    ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.h
-    from:
-    ${api_xml} ..."
-)
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.cc ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.h
-  COMMAND python ${codegen_notification_qml} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${api_xml} ${codegen_notification_qml} ${parser}
-  COMMENT "Generating files:
-    ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.cc
-    ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.h
-    from:
-    ${api_xml} ..."
-)
+if(${qt_version} MATCHES "4.8.5")
+  set(codegen_dir ${CMAKE_SOURCE_DIR}/codegen)
+  set(codegen ${codegen_dir}/make_qml_dbus_cpp.py)
+  set(codegen_request_to_sdl ${codegen_dir}/make_request_to_sdl.py)
+  set(codegen_hmi_requests ${codegen_dir}/make_hmi_requests.py)
+  set(codegen_notification_qml ${codegen_dir}/make_notifications_qml.py)
+  set(parser ${codegen_dir}/ford_xml_parser.py)
+  set(interfaces_dir ${CMAKE_SOURCE_DIR})
+  set(api_xml ${interfaces_dir}/QT_HMI_API.xml)
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.cc ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h
+    COMMAND python ${codegen} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${api_xml} ${codegen} ${parser}
+    COMMENT "Generating files:
+      ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.cc
+      ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h
+      from:
+      ${api_xml} ..."
+  )
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.cc ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h
+    COMMAND python ${codegen_request_to_sdl} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${api_xml} ${codegen_request_to_sdl} ${parser}
+    COMMENT "Generating files:
+      ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.cc
+      ${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h
+      from:
+      ${api_xml} ..."
+  )
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.cc ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.h
+    COMMAND python ${codegen_hmi_requests} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${api_xml} ${codegen_hmi_requests} ${parser}
+    COMMENT "Generating files:
+      ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.cc
+      ${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.h
+      from:
+      ${api_xml} ..."
+  )
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.cc ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.h
+    COMMAND python ${codegen_notification_qml} --infile ${api_xml} --version ${qt_version} --outdir ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS ${api_xml} ${codegen_notification_qml} ${parser}
+    COMMENT "Generating files:
+      ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.cc
+      ${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.h
+      from:
+      ${api_xml} ..."
+  )
+endif()
 
 set(target DbusAdapter)
 set(destination com/ford/sdl/hmi/dbus_adapter)
@@ -87,6 +89,10 @@ set(library_name ${CMAKE_SHARED_LIBRARY_PREFIX}${target}${CMAKE_SHARED_LIBRARY_S
 set(CMAKE_AUTOMOC ON)
 set(SOURCES
   dbus_plugin.cc
+)
+
+if(${qt_version} MATCHES "4.8.5")
+list(APPEND SOURCES
   ${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.cc
   moc_qml_dbus.cpp
   sdl_proxy.cc
@@ -99,7 +105,9 @@ set(SOURCES
   moc_request_to_sdl.cpp
   hmi_requests.cc
   moc_hmi_requests.cpp
-# new solution
+)
+else()
+list(APPEND SOURCES
   core/abstractadapter.cpp
   core/courier.cpp
   core/optional.cpp
@@ -115,8 +123,9 @@ set(SOURCES
   protocol/interfaces/ui.cpp
   protocol/interfaces/vehicleinfo.cpp
   protocol/interfaces/sdl.cpp
-# end new solution
 )
+endif()
+
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -124,7 +133,7 @@ include_directories(
 
 add_library(${target} SHARED ${SOURCES})
 
-if (${qt_version} MATCHES "4.8.5")
+if(${qt_version} MATCHES "4.8.5")
   qt4_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.h moc_hmi_requests.cpp)
   qt4_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h moc_request_to_sdl.cpp)
   qt4_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h moc_qml_dbus.cpp)
@@ -132,16 +141,12 @@ if (${qt_version} MATCHES "4.8.5")
   qt4_use_modules(${target} Core DBus Declarative)
   set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt4/)
   set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt4/${destination})
-elseif (${qt_version} MATCHES "5.1.0")
-  qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/hmi_requests.h moc_hmi_requests.cpp)
-  qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/request_to_sdl.h moc_request_to_sdl.cpp)
-  qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/qml_dbus.h moc_qml_dbus.cpp)
-  qt5_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/sdl_proxy.h moc_sdl_proxy.cpp)
+else()
   qt5_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/core/watcher.h core/moc_watcher.cpp)
   qt5_use_modules(${target} Core DBus Qml)
   set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
   set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
-endif ()
+endif()
 
 target_link_libraries(${target} log4cxx)
 

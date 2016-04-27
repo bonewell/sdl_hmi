@@ -34,7 +34,6 @@
 
 import QtQuick 2.0
 import QtMultimedia 5.0
-import com.ford.sdl.hmi.dbus_adapter 1.0
 import com.ford.sdl.hmi.log4cxx 1.0
 import com.ford.sdl.hmi.named_pipe_notifier 1.0
 import "./controls"
@@ -327,10 +326,6 @@ Rectangle {
     HmiApi.SDL {
         id: sdlSDL
         object: main
-    }
-
-    SDLAdapter {
-        id: sdlProxy
     }
 
     Component.onCompleted: {
