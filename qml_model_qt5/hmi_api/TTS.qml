@@ -140,7 +140,7 @@ TTS
         console.debug("exit");
     }
 
-    function changeRegistration(handle, language, appID) {
+    function changeRegistration(handle, ttsName, language, appID) {
         console.debug("enter:", language, appID);
         console.log("Message Received - {method: 'TTS.ChangeRegistration', params:{ " +
                     "language: " + language + ", " +

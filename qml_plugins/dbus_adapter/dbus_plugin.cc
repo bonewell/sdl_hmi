@@ -132,6 +132,8 @@ void DbusPlugin::registerTypes(const char *uri) {
   register_struct<TireStatus>();
   register_struct<BeltStatus>();
   register_struct<BodyInformation>();
+  register_struct<HMIApplication>();
+  register_struct<DeviceInfo>();
   register_struct<DeviceStatus>();
   register_struct<HeadLampStatus>();
   register_struct<ECallInfo>();

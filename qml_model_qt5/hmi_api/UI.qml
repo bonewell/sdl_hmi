@@ -649,7 +649,8 @@ UI
                 "audioType": Common.AudioType.PCM
             },
             Common.HmiZoneCapabilities.FRONT,
-            settingsContainer.softButtonCapabilities);
+            settingsContainer.softButtonCapabilities
+        );
     }
 
     function performAudioPassThru(handle, appID, audioPassThruDisplayTexts, timeout) {
