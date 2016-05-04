@@ -44,5 +44,9 @@
 #include "protocol/structures/permissionitem.h"
 #include "protocol/structures/userfriendlymessage.h"
 #include "protocol/structures/serviceinfo.h"
+#include "protocol/structures/datetime.h"
+#include "protocol/structures/oasisaddress.h"
+#include "protocol/structures/coordinate.h"
+#include "protocol/structures/locationdetails.h"
 
 #endif // STRUCTURES_H

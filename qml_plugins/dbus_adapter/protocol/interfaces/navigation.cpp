@@ -15,16 +15,16 @@ void NavigationAdapter::IsReady(const Message &message)
     invoke("IsReady", message).run();
 }
 
-void NavigationAdapter::SendLocation(int appID, double longitudeDegrees,
-    double latitudeDegrees, const Optional<QString> &locationName,
-    const Optional<QString> &locationDescription,
-    const Optional<QStringList> &addressLines,
+void NavigationAdapter::SendLocation(int appID, const Optional<double> &longitudeDegrees,
+    const Optional<double> &latitudeDegrees, const Optional<QString> &locationName,
+    const Optional<QString> &locationDescription, const Optional<QStringList> &addressLines,
     const Optional<QString> &phoneNumber, const Optional<Image> &locationImage,
+    const Optional<DateTime> &timeStamp, const Optional<OASISAddress> &address,
     const Message &message)
 {
     invoke("SendLocation", message).in(appID).in(longitudeDegrees).in(latitudeDegrees)
         .in(locationName).in(locationDescription).in(addressLines).in(phoneNumber)
-            .in(locationImage).run();
+            .in(locationImage).in(timeStamp).in(address).run();
 }
 
 void NavigationAdapter::ShowConstantTBT(const QList<TextFieldStruct> &navigationTexts,
@@ -70,6 +70,21 @@ void NavigationAdapter::StopAudioStream(int appID, const Message &message)
     invoke("StopAudioStream", message).in(appID).run();
 }
 
+void NavigationAdapter::GetWayPoints(const Optional<int> &wayPointType, const Message &message)
+{
+    invoke("GetWayPoints", message).in(wayPointType).run();
+}
+
+void NavigationAdapter::SubscribeWayPoints(const Message &message)
+{
+    invoke("SubscribeWayPoints", message).run();
+}
+
+void NavigationAdapter::UnsubscribeWayPoints(const Message &message)
+{
+    invoke("UnsubscribeWayPoints", message).run();
+}
+
 void NavigationAdapter::ReplyIsReady(const Handle& handle, bool available)
 {
     reply(handle).out(available).send();
@@ -111,6 +126,22 @@ void NavigationAdapter::ReplyStartAudioStream(const Handle& handle)
 }
 
 void NavigationAdapter::ReplyStopAudioStream(const Handle& handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyGetWayPoints(const Handle &handle, int appID,
+    const Optional<LocationDetails> &wayPoints)
+{
+    reply(handle).out(appID).out(wayPoints).send();
+}
+
+void NavigationAdapter::ReplySubscribeWayPoints(const Handle &handle)
+{
+    reply(handle).send();
+}
+
+void NavigationAdapter::ReplyUnsubscribeWayPoints(const Handle &handle)
 {
     reply(handle).send();
 }
@@ -160,7 +191,28 @@ void Navigation::replyStopAudioStream(const QVariantMap& handle)
     adapter->ReplyStopAudioStream(handle);
 }
 
-void Navigation::OnTBTClientState(int state)
+void Navigation::replyGetWayPoints(const QVariantMap &handle, int appID,
+    const QVariant &wayPoints)
+{
+    adapter->ReplyGetWayPoints(handle, appID, wayPoints);
+}
+
+void Navigation::replySubscribeWayPoints(const QVariantMap &handle)
+{
+    adapter->ReplySubscribeWayPoints(handle);
+}
+
+void Navigation::replyUnsubscribeWayPoints(const QVariantMap &handle)
+{
+    adapter->ReplyUnsubscribeWayPoints(handle);
+}
+
+void Navigation::onTBTClientState(int state)
 {
     emit adapter->OnTBTClientState(state);
+}
+
+void Navigation::onWayPointChange(const QVariantList &wayPoints)
+{
+    emit adapter->OnWayPointChange(multiple<LocationDetails>(wayPoints));
 }

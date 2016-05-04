@@ -145,6 +145,10 @@ void DbusPlugin::registerTypes(const char *uri) {
   register_struct<PermissionItem>();
   register_struct<UserFriendlyMessage>();
   register_struct<ServiceInfo>();
+  register_struct<DateTime>();
+  register_struct<OASISAddress>();
+  register_struct<Coordinate>();
+  register_struct<LocationDetails>();
 
   // @uri sdl.core.api
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");

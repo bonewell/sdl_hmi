@@ -52,9 +52,9 @@ Navigation
         replyIsReady(handle, dataContainer.hmiNavigationAvailable)
     }
 
-    function sendLocation(handle, appID, longitudeDegrees, latitudeDegrees, locationName,
-        locationDescription, addressLines, phoneNumber, locationImage) {
-        console.log("Message Received - {method: 'Navigation.SendLocation'}")
+    function sendLocation(handle, params) {
+        console.log("Message Received - {method: 'Navigation.SendLocation'}");
+        console.log("params=", JSON.stringify(params));
         replySendLocation(handle);
     }
 
@@ -272,5 +272,21 @@ Navigation
                         turnIcon: element.turnIcon
                     });
         console.debug(element.navigationText)
-    }    
+    }
+
+    function getWayPoints(handle, wayPointType) {
+        console.log("Message Received - {method: 'Navigation.GetWayPoints'");
+        console.log("wayPointType=", JSON.stringify(wayPointType));
+        replyGetWayPoints(handle, []);
+    }
+
+    function subscribeWayPoints(handle) {
+        console.log("Message Received - {method: 'Navigation.SubscribeWayPoints'");
+        replySubscribeWayPoints(handle);
+    }
+
+    function unsubscribeWayPoints(handle) {
+        console.log("Message Received - {method: 'Navigation.UnsubscribeWayPoints'");
+        replyUnsubscribeWayPoints(handle);
+    }
 }

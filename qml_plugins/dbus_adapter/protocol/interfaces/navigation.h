@@ -86,13 +86,16 @@ class NavigationAdapter : public AbstractAdapter
 
 signals:
     void OnTBTClientState(int state);
+    void OnWayPointChange(const QList<LocationDetails>& wayPoints);
 
 public slots:
     void IsReady(const Message& message);
-    void SendLocation(int appID, double longitudeDegrees, double latitudeDegrees,
-        const Optional<QString>& locationName, const Optional<QString>& locationDescription,
-        const Optional<QStringList>& addressLines, const Optional<QString>& phoneNumber,
-        const Optional<Image>& locationImage, const Message& message);
+    void SendLocation(int appID, const Optional<double>& longitudeDegrees,
+        const Optional<double>& latitudeDegrees, const Optional<QString>& locationName,
+        const Optional<QString>& locationDescription, const Optional<QStringList>& addressLines,
+        const Optional<QString>& phoneNumber, const Optional<Image>& locationImage,
+        const Optional<DateTime>& timeStamp, const Optional<OASISAddress>& address,
+        const Message& message);
     void ShowConstantTBT(const QList<TextFieldStruct>& navigationTexts,
         const Optional<Image>& turnIcon, const Optional<Image>& nextTurnIcon,
         double distanceToManeuver, double distanceToManeuverScale,
@@ -106,6 +109,9 @@ public slots:
     void StopStream(int appID, const Message& message);
     void StartAudioStream(const QString& url, int appID, const Message& message);
     void StopAudioStream(int appID, const Message& message);
+    void GetWayPoints(const Optional<int>& wayPointType, const Message& message);
+    void SubscribeWayPoints(const Message& message);
+    void UnsubscribeWayPoints(const Message& message);
 
 private slots:
     void OnAudioDataStreaming(bool available);
@@ -121,6 +127,10 @@ public:
     void ReplyStopStream(const Handle& handle);
     void ReplyStartAudioStream(const Handle& handle);
     void ReplyStopAudioStream(const Handle& handle);
+    void ReplyGetWayPoints(const Handle& handle, int appID,
+        const Optional<LocationDetails>& wayPoints);
+    void ReplySubscribeWayPoints(const Handle& handle);
+    void ReplyUnsubscribeWayPoints(const Handle& handle);
 };
 
 class Navigation : public AbstractItem
@@ -129,7 +139,8 @@ class Navigation : public AbstractItem
     CONNECT_ADAPTER(Navigation, NavigationAdapter)
 
 public:
-    Q_INVOKABLE void OnTBTClientState(int state);
+    Q_INVOKABLE void onTBTClientState(int state);
+    Q_INVOKABLE void onWayPointChange(const QVariantList& wayPoints);
 
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
     Q_INVOKABLE void replySendLocation(const QVariantMap& handle);
@@ -140,6 +151,10 @@ public:
     Q_INVOKABLE void replyStopStream(const QVariantMap& handle);
     Q_INVOKABLE void replyStartAudioStream(const QVariantMap& handle);
     Q_INVOKABLE void replyStopAudioStream(const QVariantMap& handle);
+    Q_INVOKABLE void replyGetWayPoints(const QVariantMap& handle, int appID,
+        const QVariant& wayPoints = QVariant());
+    Q_INVOKABLE void replySubscribeWayPoints(const QVariantMap& handle);
+    Q_INVOKABLE void replyUnsubscribeWayPoints(const QVariantMap& handle);
 
 signals:
     void onAudioDataStreaming(bool available);
