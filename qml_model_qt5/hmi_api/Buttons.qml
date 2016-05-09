@@ -39,7 +39,7 @@ Buttons
     onOnButtonSubscription: {
         console.log("name = ", JSON.stringify(name));
         console.log("isSubscribed = ", JSON.stringify(isSubscribed));
-        console.log("appID = ", JSON.stringify(appId));
+        console.log("appID = ", JSON.stringify(appID));
     }
 
     function getCapabilities(handle) {

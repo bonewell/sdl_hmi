@@ -34,6 +34,7 @@
 
 import com.ford.sdl.hmi.dbus_adapter 1.0
 import "../hmi_api/Common.js" as Common
+import "../models/Internal.js" as Internal
 
 BasicCommunication
 {
@@ -63,12 +64,11 @@ BasicCommunication
             }
         }
 
-        dataContainer.addApplication(
-        {
+        dataContainer.addApplication({
             appName: application.appName,
             ngnMediaScreenAppName: application.ngnMediaScreenAppName,
             icon: application.icon,
-            deviceName: application.deviceName,
+            deviceName: application.deviceInfo.name,
             appId: application.appID,
             hmiDisplayLanguageDesired: application.hmiDisplayLanguageDesired,
             isMediaApplication: application.isMediaApplication,
@@ -81,7 +81,7 @@ BasicCommunication
                 "endTime": -1,
                 "startTimeForProgress": -1
             }
-         });
+        });
         console.debug("exit onAppRegistered")
     }
 
@@ -122,7 +122,7 @@ BasicCommunication
         deviceList.forEach(function (device) {
             var exist = false;
             for (var i = 0; i < dataContainer.deviceList.count; ++i) {
-                exist = device.id === dataContainer.deviceList[i].devid;
+                exist = device.id === dataContainer.deviceList.get(i).devid;
             }
             if (!exist) {
                 dataContainer.deviceList.append({ name: device.name,
@@ -132,43 +132,20 @@ BasicCommunication
         });
 
         for (var i = 0; i < dataContainer.deviceList.count; ++i) {
+            var exist = false;
             deviceList.forEach(function (device) {
-                var exist = dataContainer.deviceList[i].id === device.id;
-                if (!exist) {
-                    dataContainer.deviceList.remove(i);
-                }
+                exist = exist || dataContainer.deviceList.get(i).devid === device.id;
             });
+            if (!exist) {
+                dataContainer.deviceList.remove(i);
+            }
         }
         replyUpdateDeviceList(handle);
     }
 
     function updateAppList(handle, applications) {
-        var applicationsLog = "",
-            appTypeLog = "";
-        if (applications) {
-            for (var i = 0; i < applications.length; i++) {
-                appTypeLog = "";
-
-                for (var j = 0; j < applications[i].appType.length; i++) {
-                    appTypeLog += "'" + applications[i].appType + "', "
-                }
-
-                applicationsLog += "{name: '" + applications[i].name + "', " +
-                        "appName: '" + applications[i].appName + "', " +
-                        "ngnMediaScreenAppName: '" + applications[i].ngnMediaScreenAppName + "', " +
-                        "icon: '" + applications[i].icon + "', " +
-                        "deviceName: '" + applications[i].deviceName + "', " +
-                        "appID: " + applications[i].appID + ", " +
-                        "hmiDisplayLanguageDesired: '" + applications[i].hmiDisplayLanguageDesired + "', " +
-                        "isMediaApplication: " + applications[i].isMediaApplication + ", " +
-                        "appType: [" + applications[i].deviceName + "]" +
-                        "},";
-            }
-        }
-        console.log("Message Received - {method: 'BasicCommunication.UpdateAppList', params:{ " +
-                    "applications: [" + applicationsLog + "]" +
-                    "}}")
-
+        console.log("Message Received - {method: 'BasicCommunication.UpdateAppList',
+            params:{ 'applications:'", JSON.stringify(applications));
 
         dataContainer.applicationList.clear();
         for(var i = 0; i < applications.length; i++) {
@@ -176,11 +153,11 @@ BasicCommunication
                  appName: applications[i].appName,
                  ngnMediaScreenAppName: applications[i].ngnMediaScreenAppName,
                  icon: applications[i].icon,
-                 deviceName: applications[i].deviceName,
+                 deviceName: applications[i].deviceInfo.name,
                  appId: applications[i].appID,
                  hmiDisplayLanguageDesired: applications[i].hmiDisplayLanguageDesired,
                  isMediaApplication: applications[i].isMediaApplication,
-                 appType: applications[i].appType
+//                 appType: applications[i].appType
             });
         }
         replyUpdateAppList(handle);

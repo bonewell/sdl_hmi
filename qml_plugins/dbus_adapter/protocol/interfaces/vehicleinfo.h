@@ -756,7 +756,7 @@ public:
     Q_INVOKABLE void onClusterModeStatus(const QVariantMap& clusterModeStatus);
     Q_INVOKABLE void onMyKey(const QVariantMap& myKey);
 
-    Q_INVOKABLE void replyIsRead(const QVariantMap& handle, bool available);
+    Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
     Q_INVOKABLE void replyGetVehicleType(const QVariantMap& handle,
         const QVariantMap& vehicleType);
     Q_INVOKABLE void replyReadDID(const QVariantMap& handle,

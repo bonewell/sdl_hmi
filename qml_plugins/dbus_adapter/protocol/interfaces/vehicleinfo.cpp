@@ -865,7 +865,7 @@ void VehicleInfoAdapter::ReplyUnsubscribeMyKey(const Handle &handle,
     reply(handle).out(myKey).send();
 }
 
-void VehicleInfo::replyIsRead(const QVariantMap &handle, bool available)
+void VehicleInfo::replyIsReady(const QVariantMap &handle, bool available)
 {
     adapter->ReplyIsReady(handle, available);
 }

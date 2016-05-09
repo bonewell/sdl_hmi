@@ -78,7 +78,7 @@ TTS
 
     function getLanguage(handle) {
         console.log("Message Received - {method: 'TTS.GetLanguage'}")
-        replyGetLanguage(dataContainer.hmiTTSVRLanguage)
+        replyGetLanguage(handle, dataContainer.hmiTTSVRLanguage)
     }
 
     function getSupportedLanguages(handle) {
@@ -170,7 +170,7 @@ TTS
                     "appID:" + appID + ", " +
                     "helpPrompt: [" + helpPromptLog + "], " +
                     "timeoutPrompt: [" + timeoutPromptLog + "]" +
-                    "}}")
+                    "}}");
 
         var newHelpPropmt = helpPrompt ?
                     helpPrompt.map(

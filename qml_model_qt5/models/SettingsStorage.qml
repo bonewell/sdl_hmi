@@ -89,6 +89,7 @@ Item
             Common.TextFieldName.sliderFooter,
             Common.TextFieldName.notificationText
         ],
+        "imageFields": [],
         "mediaClockFormats": [
             Common.MediaClockFormat.CLOCK1,
             Common.MediaClockFormat.CLOCK2,
