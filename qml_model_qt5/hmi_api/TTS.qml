@@ -60,7 +60,7 @@ TTS
                     "}}")
         if (ttsPopUp.async) {
             console.log('speak send abort');
-            throw Common.Result.ABORTED;
+            sendError(handle, Common.Result.ABORTED);
         }
         var message = ttsChunksToString(ttsChunks);
         ttsPopUp.activate(message);
@@ -68,11 +68,10 @@ TTS
         console.debug('exit');
     }
 
-    function stopSpeaking(handle) {
+    function stopSpeaking() {
         console.debug("enter");
         console.log("Message Received - {method: 'TTS.StopSpeaking'}")
         ttsPopUp.deactivate();
-        replyStopSpeaking(handle);
         console.debug("exit");
     }
 
@@ -140,18 +139,17 @@ TTS
         console.debug("exit");
     }
 
-    function changeRegistration(handle, ttsName, language, appID) {
+    function changeRegistration(ttsName, language, appID) {
         console.debug("enter:", language, appID);
         console.log("Message Received - {method: 'TTS.ChangeRegistration', params:{ " +
                     "language: " + language + ", " +
                     "appID: " + appID +
                     "}}")
         dataContainer.changeRegistrationTTSVR(language, appID);
-        replyChangeRegistration(handle);
         console.debug("exit");
     }
 
-    function setGlobalProperties(handle, helpPrompt, timeoutPrompt, appID) {
+    function setGlobalProperties(helpPrompt, timeoutPrompt, appID) {
         var helpPromptLog = "",
             timeoutPromptLog = "";
         if (helpPrompt) {
@@ -192,7 +190,6 @@ TTS
                                                    helpPrompt: newHelpPropmt,
                                                    timeoutPrompt: newTimeoutPrompt
                                                })
-        replySetGlobalProperties(handle);
         console.debug("exit")
     }
 }

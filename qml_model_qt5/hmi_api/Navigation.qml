@@ -52,10 +52,10 @@ Navigation
         replyIsReady(handle, dataContainer.hmiNavigationAvailable)
     }
 
-    function sendLocation(handle, params) {
+    function sendLocation(appID, longitudeDegrees, latitudeDegrees, locationName,
+        locationDescription, addressLines, phoneNumber, locationImage, timeStamp, address) {
         console.log("Message Received - {method: 'Navigation.SendLocation'}");
         console.log("params=", JSON.stringify(params));
-        replySendLocation(handle);
     }
 
     function showConstantTBT(handle, navigationTexts, turnIcon, nextTurnIcon,
@@ -111,7 +111,7 @@ Navigation
         } else {
             handle.code = Common.Result.INVALID_DATA;
             handle.message = "distanceToManeuver absence";
-            replyShowConstantTBT(handle);
+            sendResult(handle);
             return;
         }
         if (distanceToManeuverScale !== undefined) {
@@ -119,7 +119,7 @@ Navigation
         } else {
             handle.code = Common.Result.INVALID_DATA;
             handle.message = "distanceToManeuverScale absence";
-            replyShowConstantTBT(handle);
+            sendResult(handle);
             return;
         }
         if (maneuverComplete !== undefined) {
@@ -134,16 +134,16 @@ Navigation
         } else {
             handle.code = Common.Result.INVALID_DATA;
             handle.message = "appID absence";
-            replyShowConstantTBT(handle);
+            sendResult(handle);
             return;
         }
 
         dataContainer.setApplicationProperties(appID, { navigationModel : dataToUpdate } )
-        replyShowConstantTBT(handle);
+        sendResult(handle);
         contentLoader.go("./views/TurnByTurnView.qml", appID)
     }
 
-    function alertManeuver(handle, softButtons, appID) {
+    function alertManeuver(softButtons, appID) {
         console.debug("enter")
         var softButtonsLog = "";
 
@@ -163,10 +163,9 @@ Navigation
                     "}}")
 
         console.debug("exit")
-        replyAlertManeuver(handle);
     }
 
-    function updateTurnList(handle, turnList, softButtons, appID) {
+    function updateTurnList(turnList, softButtons, appID) {
         console.debug("enter")
         var turnListLog = "",
             softButtonsLog = "";
@@ -199,7 +198,6 @@ Navigation
             softButtons.forEach(fillSoftButtons, dataContainer.getApplication(appID).turnListSoftButtons);
         }
         dataContainer.navigationModel.appId = appID;
-        replyUpdateTurnList(handle);
         console.debug("exit")
     }
 
@@ -223,36 +221,32 @@ Navigation
         }
     }
 
-    function startStream(handle, url, appID) {
+    function startStream(url, appID) {
         console.debug("enter")
         player.startStream(url)
-        replyStartStream(handle)
         console.debug("exit")
     }
 
-    function stopStream(handle, appID) {
+    function stopStream(appID) {
         console.debug("enter")
         player.stop()
-        replyStopStream(handle)
         console.debug("exit")
     }
 
-    function startAudioStream(handle, url, appID) {
+    function startAudioStream(url, appID) {
         console.log("Message Received - {method: 'Navigation.StartAudioStream', params:{ " +
                     "url: '" + url + "'" +
                     "appID: " + appID +
                     "}}")
         stream.source = url;
         stream.play();
-        replyStartAudioStream(handle);
     }
 
-    function stopAudioStream(handle, appID) {
+    function stopAudioStream(appID) {
         console.log("Message Received - {method: 'Navigation.StopAudioStream', params:{ " +
                     "appID: " + appID +
                     "}}")
         stream.stop();
-        replyStopAudioStream(handle);
     }
 
     function fillSoftButtons(element, index, array) {
@@ -280,13 +274,11 @@ Navigation
         replyGetWayPoints(handle, []);
     }
 
-    function subscribeWayPoints(handle) {
+    function subscribeWayPoints() {
         console.log("Message Received - {method: 'Navigation.SubscribeWayPoints'");
-        replySubscribeWayPoints(handle);
     }
 
-    function unsubscribeWayPoints(handle) {
+    function unsubscribeWayPoints() {
         console.log("Message Received - {method: 'Navigation.UnsubscribeWayPoints'");
-        replyUnsubscribeWayPoints(handle);
     }
 }

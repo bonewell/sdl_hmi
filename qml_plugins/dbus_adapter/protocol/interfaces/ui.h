@@ -276,26 +276,17 @@ public slots:
 
 public:
     void ReplyAlert(const Handle& handle, const Optional<int>& tryAgainTime);
-    void ReplyShow(const Handle& handle);
-    void ReplyAddCommand(const Handle& handle);
-    void ReplyDeleteCommand(const Handle& handle);
-    void ReplyAddSubMenu(const Handle& handle);
-    void ReplyDeleteSubMenu(const Handle& handle);
     void ReplyPerformInteraction(const Handle& handle,
         const Optional<int>& choiceID, const Optional<QString>& manualTextEntry);
-    void ReplySetMediaClockTimer(const Handle& handle);
-    void ReplySetGlobalProperties(const Handle& handle);
     void ReplyGetCapabilities(const Handle& handle,
         const DisplayCapabilities& displayCapabilities,
         const AudioPassThruCapabilities& audioPassThruCapabilities,
         int hmiZoneCapabilities,
         const Optional<QList<SoftButtonCapabilities> >& softButtonCapabilities,
         const Optional<HMICapabilities>& hmiCapabilities);
-    void ReplyChangeRegistration(const Handle& handle);
     void ReplyGetSupportedLanguages(const Handle& handle,
                                     const QList<int>& languages);
     void ReplyGetLanguage(const Handle& handle, int language);
-    void ReplySetAppIcon(const Handle& handle);
     void ReplySetDisplayLayout(const Handle& handle,
         const Optional<DisplayCapabilities>& displayCapabilities,
         const Optional<QList<ButtonCapabilities> >& buttonCapabilities,
@@ -303,11 +294,7 @@ public:
         const Optional<PresetBankCapabilities>& presetBankCapabilities);
     void ReplyShowCustomForm(const Handle& handle, const Optional<QString>& info);
     void ReplySlider(const Handle& handle, const Optional<int>& sliderPosition);
-    void ReplyScrollableMessage(const Handle& handle);
-    void ReplyPerformAudioPassThru(const Handle& handle);
-    void ReplyEndAudioPassThru(const Handle& handle);
     void ReplyIsReady(const Handle& handle, bool available);
-    void ReplyClosePopUp(const Handle& handle);
 
 private slots:
     void OnRecordStart(int appID);
@@ -329,26 +316,17 @@ public:
 
     Q_INVOKABLE void replyAlert(const QVariantMap& handle,
                                 const QVariant& tryAgainTime = QVariant());
-    Q_INVOKABLE void replyShow(const QVariantMap& handle);
-    Q_INVOKABLE void replyAddCommand(const QVariantMap& handle);
-    Q_INVOKABLE void replyDeleteCommand(const QVariantMap& handle);
-    Q_INVOKABLE void replyAddSubMenu(const QVariantMap& handle);
-    Q_INVOKABLE void replyDeleteSubMenu(const QVariantMap& handle);
     Q_INVOKABLE void replyPerformInteraction(const QVariantMap& handle,
         const QVariant& choiceID = QVariant(),
         const QVariant& manualTextEntry = QVariant());
-    Q_INVOKABLE void replySetMediaClockTimer(const QVariantMap& handle);
-    Q_INVOKABLE void replySetGlobalProperties(const QVariantMap& handle);
     Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QVariantMap& displayCapabilities,
         const QVariantMap& audioPassThruCapabilities, int hmiZoneCapabilities,
         const QVariant& softButtonCapabilities = QVariant(),
         const QVariant& hmiCapabilities = QVariant());
-    Q_INVOKABLE void replyChangeRegistration(const QVariantMap& handle);
     Q_INVOKABLE void replyGetSupportedLanguages(const QVariantMap& handle,
                                                 const QList<int>& languages);
     Q_INVOKABLE void replyGetLanguage(const QVariantMap& handle, int language);
-    Q_INVOKABLE void replySetAppIcon(const QVariantMap& handle);
     Q_INVOKABLE void replySetDisplayLayout(const QVariantMap& handle,
         const QVariant& displayCapabilities = QVariant(),
         const QVariant& buttonCapabilities = QVariant(),
@@ -358,11 +336,7 @@ public:
                                          const QVariant& info = QVariant());
     Q_INVOKABLE void replySlider(const QVariantMap& handle,
                                  const QVariant& sliderPosition = QVariant());
-    Q_INVOKABLE void replyScrollableMessage(const QVariantMap& handle);
-    Q_INVOKABLE void replyPerformAudioPassThru(const QVariantMap& handle);
-    Q_INVOKABLE void replyEndAudioPassThru(const QVariantMap& handle);
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
-    Q_INVOKABLE void replyClosePopUp(const QVariantMap& handle);
 
 signals:
     void onRecordStart(int appID);

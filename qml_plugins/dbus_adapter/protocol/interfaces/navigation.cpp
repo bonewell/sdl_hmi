@@ -90,60 +90,10 @@ void NavigationAdapter::ReplyIsReady(const Handle& handle, bool available)
     reply(handle).out(available).send();
 }
 
-void NavigationAdapter::ReplySendLocation(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyShowConstantTBT(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyAlertManeuver(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyUpdateTurnList(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyStartStream(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyStopStream(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyStartAudioStream(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyStopAudioStream(const Handle& handle)
-{
-    reply(handle).send();
-}
-
 void NavigationAdapter::ReplyGetWayPoints(const Handle &handle, int appID,
     const Optional<LocationDetails> &wayPoints)
 {
     reply(handle).out(appID).out(wayPoints).send();
-}
-
-void NavigationAdapter::ReplySubscribeWayPoints(const Handle &handle)
-{
-    reply(handle).send();
-}
-
-void NavigationAdapter::ReplyUnsubscribeWayPoints(const Handle &handle)
-{
-    reply(handle).send();
 }
 
 void Navigation::replyIsReady(const QVariantMap& handle, bool available)
@@ -151,60 +101,10 @@ void Navigation::replyIsReady(const QVariantMap& handle, bool available)
     adapter->ReplyIsReady(handle, available);
 }
 
-void Navigation::replySendLocation(const QVariantMap& handle)
-{
-    adapter->ReplySendLocation(handle);
-}
-
-void Navigation::replyShowConstantTBT(const QVariantMap& handle)
-{
-    adapter->ReplyShowConstantTBT(handle);
-}
-
-void Navigation::replyAlertManeuver(const QVariantMap& handle)
-{
-    adapter->ReplyAlertManeuver(handle);
-}
-
-void Navigation::replyUpdateTurnList(const QVariantMap& handle)
-{
-    adapter->ReplyUpdateTurnList(handle);
-}
-
-void Navigation::replyStartStream(const QVariantMap& handle)
-{
-    adapter->ReplyStartStream(handle);
-}
-
-void Navigation::replyStopStream(const QVariantMap& handle)
-{
-    adapter->ReplyStopStream(handle);
-}
-
-void Navigation::replyStartAudioStream(const QVariantMap& handle)
-{
-    adapter->ReplyStartAudioStream(handle);
-}
-
-void Navigation::replyStopAudioStream(const QVariantMap& handle)
-{
-    adapter->ReplyStopAudioStream(handle);
-}
-
 void Navigation::replyGetWayPoints(const QVariantMap &handle, int appID,
     const QVariant &wayPoints)
 {
     adapter->ReplyGetWayPoints(handle, appID, wayPoints);
-}
-
-void Navigation::replySubscribeWayPoints(const QVariantMap &handle)
-{
-    adapter->ReplySubscribeWayPoints(handle);
-}
-
-void Navigation::replyUnsubscribeWayPoints(const QVariantMap &handle)
-{
-    adapter->ReplyUnsubscribeWayPoints(handle);
 }
 
 void Navigation::onTBTClientState(int state)

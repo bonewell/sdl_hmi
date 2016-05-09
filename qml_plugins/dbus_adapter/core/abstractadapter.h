@@ -49,6 +49,7 @@ public:
     AbstractAdapter(QObject *item, QObject *object);
     void init();
     void sendError(Handle handle, const QString& error, const QString& text);
+    void sendResult(Handle handle);
 
 protected:
     virtual bool isConnected() { return false; }
@@ -65,6 +66,7 @@ private:
     inline Handle handle() const;
     inline QString createSlot(const QMetaMethod meta);
     inline QChar methodType(QMetaMethod::MethodType type) const;
+    inline bool compare(const QMetaMethod& m1, const QMetaMethod& m2) const;
     PrivateAdapter impl_;
     QMap<QString, int> meta_;
     QMap<int, Slave*> msgs_;
@@ -79,8 +81,14 @@ public:
     explicit AbstractItem(QObject *parent=0) : QObject(parent), object_(0) {}
     virtual ~AbstractItem() {}
     virtual void classBegin() {}
-    Q_INVOKABLE void sendError(const QVariantMap& handle, const QString& code, const QString& text) {
+    Q_INVOKABLE void sendError(const QVariantMap& handle, const QString& code,
+        const QString& text)
+    {
         getAdapter()->sendError(handle, code, text);
+    }
+    Q_INVOKABLE void sendResult(const QVariantMap& handle)
+    {
+        getAdapter()->sendResult(handle);
     }
 protected:
     virtual AbstractAdapter* getAdapter() = 0;

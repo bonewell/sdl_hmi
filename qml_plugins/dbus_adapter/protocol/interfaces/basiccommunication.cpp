@@ -52,46 +52,16 @@ void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
     invoke("GetSystemInfo", message).run();
 }
 
-void BasicCommunicationAdapter::ReplyUpdateAppList(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void BasicCommunicationAdapter::ReplyUpdateDeviceList(const Handle& handle)
-{
-    reply(handle).send();
-}
-
 void BasicCommunicationAdapter::ReplyAllowDeviceToConnect(const Handle& handle,
                                                           bool allow)
 {
     reply(handle).out(allow).send();
 }
 
-void BasicCommunicationAdapter::ReplyActivateApp(const Handle& handle)
-{
-    reply(handle).send();
-}
-
 void BasicCommunicationAdapter::ReplyMixingAudioSupported(const Handle& handle,
     bool attenuatedSupported)
 {
     reply(handle).out(attenuatedSupported).send();
-}
-
-void BasicCommunicationAdapter::ReplyDialNumber(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void BasicCommunicationAdapter::ReplySystemRequest(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void BasicCommunicationAdapter::ReplyPolicyUpdate(const Handle& handle)
-{
-    reply(handle).send();
 }
 
 void BasicCommunicationAdapter::ReplyGetSystemInfo(const Handle& handle,
@@ -226,46 +196,16 @@ void BasicCommunication::onEventChanged(int eventName, bool isActive)
     emit adapter->OnEventChanged(eventName, isActive);
 }
 
-void BasicCommunication::replyUpdateAppList(const QVariantMap& handle)
-{
-    adapter->ReplyUpdateAppList(handle);
-}
-
-void BasicCommunication::replyUpdateDeviceList(const QVariantMap& handle)
-{
-    adapter->ReplyUpdateDeviceList(handle);
-}
-
 void BasicCommunication::replyAllowDeviceToConnect(const QVariantMap& handle,
                                                    bool allow)
 {
     adapter->ReplyAllowDeviceToConnect(handle, allow);
 }
 
-void BasicCommunication::replyActivateApp(const QVariantMap& handle)
-{
-    adapter->ReplyActivateApp(handle);
-}
-
 void BasicCommunication::replyMixingAudioSupported(const QVariantMap& handle,
                                                    bool attenuatedSupported)
 {
     adapter->ReplyMixingAudioSupported(handle, attenuatedSupported);
-}
-
-void BasicCommunication::replyDialNumber(const QVariantMap& handle)
-{
-    adapter->ReplyDialNumber(handle);
-}
-
-void BasicCommunication::replySystemRequest(const QVariantMap& handle)
-{
-    adapter->ReplySystemRequest(handle);
-}
-
-void BasicCommunication::replyPolicyUpdate(const QVariantMap& handle)
-{
-    adapter->ReplyPolicyUpdate(handle);
 }
 
 void BasicCommunication::replyGetSystemInfo(const QVariantMap& handle,

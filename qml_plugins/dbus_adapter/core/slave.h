@@ -36,6 +36,7 @@ public:
     void run();
     void send();
     void error(const QString& name, const QString& text);
+    bool hasHandle() const;
 
 signals:
     void pass();
@@ -47,7 +48,8 @@ private slots:
 
 private:
     inline std::string name() const;
-    inline bool invoke();
+    inline bool invoke() const;
+    inline bool canSplit(int max) const;
     const Handle handle_;
     const QMetaMethod meta_;
     Message request_;

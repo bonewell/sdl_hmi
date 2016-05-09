@@ -21,31 +21,49 @@ void Slave::run()
         QString text = QString("No method ").append(name().c_str());
         error("Error.NoMethod", text);
     }
+    if (!hasHandle()) {
+        out(handle_.code).out(handle_.message).send();
+    }
 }
 
-bool Slave::invoke()
-{
-    QVariantMap map = handle_;
-    const int kMaxArgs = 10;
-    if (input_.size() < kMaxArgs) {
-        QVector<QGenericArgument> args(kMaxArgs);
-        int i = 0;
-        foreach (const QVariant& v, input_) {
-            args[i] = Q_ARG(QVariant, v);
-            ++i;
-        }
-        return QMetaObject::invokeMethod(impl_.item(), name().c_str(),
-                                         Qt::DirectConnection,
-                                         Q_ARG(QVariant, QVariant(map)),
-                                         args[0], args[1], args[2],
-                                         args[3], args[4], args[5],
-                                         args[6], args[7], args[8]);
+bool Slave::hasHandle() const {
+    return meta_.parameterCount() > 0 && meta_.parameterNames().at(0) == "handle";
+}
 
+bool Slave::canSplit(int max) const
+{
+    if (hasHandle()) {
+        return input_.size() < max;
+    } else {
+        return input_.size() <= max;
     }
+}
+
+bool Slave::invoke() const
+{
+    const int kMaxArgs = 10;
+    QVector<QGenericArgument> args(kMaxArgs);
+
+    int i = 0;
+
+    QVariant hdl = QVariantMap(handle_);
+    if (hasHandle()) {
+        args[i++] = Q_ARG(QVariant, hdl);
+    }
+
+    if (canSplit(kMaxArgs)) {
+        foreach (const QVariant& v, input_) {
+            args[i++] = Q_ARG(QVariant, v);
+        }
+    } else {
+        args[i] = Q_ARG(QVariant, QVariant(input_));
+    }
+
     return QMetaObject::invokeMethod(impl_.item(), name().c_str(),
-                                     Qt::DirectConnection,
-                                     Q_ARG(QVariant, QVariant(map)),
-                                     Q_ARG(QVariant, QVariant(input_)));
+                                     Qt::DirectConnection, args[0],
+                                     args[1], args[2], args[3],
+                                     args[4], args[5], args[6],
+                                     args[7], args[8], args[9]);
 }
 
 void Slave::send()
@@ -73,6 +91,5 @@ void Slave::sendError(const QString& name, const QString& text)
 std::string Slave::name() const
 {
     QString name = QString::fromLatin1(meta_.name());
-    name[0] = name[0].toLower();
     return name.toStdString();
 }

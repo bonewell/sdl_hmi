@@ -104,11 +104,8 @@ public slots:
 
 public:
     void ReplyIsReady(const Handle& handle, bool available);
-    void ReplyAddCommand(const Handle& handle);
-    void ReplyDeleteCommand(const Handle& handle);
     void ReplyPerformInteraction(const Handle& handle,
                                  const Optional<int>& choiceID);
-    void ReplyChangeRegistration(const Handle& handle);
     void ReplyGetSupportedLanguages(const Handle& handle,
                                     const QList<int>& languages);
     void ReplyGetLanguage(const Handle& handle, int language);
@@ -128,11 +125,8 @@ public:
     Q_INVOKABLE void onLanguageChange(int language);
 
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
-    Q_INVOKABLE void replyAddCommand(const QVariantMap& handle);
-    Q_INVOKABLE void replyDeleteCommand(const QVariantMap& handle);
     Q_INVOKABLE void replyPerformInteraction(const QVariantMap& handle,
         const QVariant& choiceID = QVariant());
-    Q_INVOKABLE void replyChangeRegistration(const QVariantMap& handle);
     Q_INVOKABLE void replyGetSupportedLanguages(const QVariantMap& handle,
                                                 const QList<int>& Blanguages);
     Q_INVOKABLE void replyGetLanguage(const QVariantMap& handle, int language);

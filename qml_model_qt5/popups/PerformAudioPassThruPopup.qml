@@ -64,7 +64,7 @@ ContextPopup {
             break;
         case Common.Result.SUCCESS:
             console.debug("exit with success")
-            sdlUI.replyPerformAudioPassThru(async)
+            sdlUI.sendResult(async)
             break;
         case Common.Result.RETRY:
             console.debug("exit with retry")

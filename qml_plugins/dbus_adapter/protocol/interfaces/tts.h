@@ -97,12 +97,8 @@ public:
         const QList<int>& speechCapabilities,
         const QList<int>& prerecordedSpeechCapabilities);
     void ReplyIsReady(const Handle& handle, bool available);
-    void ReplySpeak(const Handle& handle);
-    void ReplyStopSpeaking(const Handle& handle);
-    void ReplyChangeRegistration(const Handle& handle);
     void ReplyGetSupportedLanguages(const Handle& handle, const QList<int>& languages);
     void ReplyGetLanguage(const Handle& handle, int language);
-    void ReplySetGlobalProperties(const Handle& handle);
 };
 
 class TTS : public AbstractItem
@@ -120,12 +116,8 @@ public:
         const QList<int>& speechCapabilities,
         const QList<int>& prerecordedSpeechCapabilities);
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
-    Q_INVOKABLE void replySpeak(const QVariantMap& handle);
-    Q_INVOKABLE void replyStopSpeaking(const QVariantMap& handle);
-    Q_INVOKABLE void replyChangeRegistration(const QVariantMap& handle);
     Q_INVOKABLE void replyGetSupportedLanguages(const QVariantMap& handle, const QList<int>& languages);
     Q_INVOKABLE void replyGetLanguage(const QVariantMap& handle, int language);
-    Q_INVOKABLE void replySetGlobalProperties(const QVariantMap& handle);
 };
 
 #endif // TTS_H

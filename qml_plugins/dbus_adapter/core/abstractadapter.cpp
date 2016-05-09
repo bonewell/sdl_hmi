@@ -13,7 +13,7 @@ void AbstractAdapter::init()
     if (isConnected()) {
         impl_.connect(serviceName(), interfaceName());
     }
-    const QMetaObject* mo = this->metaObject();
+    const QMetaObject *mo = this->metaObject();
     for(int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
         QMetaMethod meta = mo->method(i);
         subscribe(meta);
@@ -21,21 +21,35 @@ void AbstractAdapter::init()
     }
 }
 
+bool AbstractAdapter::compare(const QMetaMethod &m1, const QMetaMethod &m2) const
+{
+    return m1.name().toLower() == m2.name().toLower();
+}
+
 void AbstractAdapter::publish(const QMetaMethod &meta)
 {
     if (meta.methodType() == QMetaMethod::Slot &&
         meta.access() == QMetaMethod::Public) {
-        QString name = QString::fromLatin1(meta.name());
-        meta_[name] = meta.methodIndex();
+        const QMetaObject *mo = impl_.item()->metaObject();
+        for(int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
+            QMetaMethod qml_meta = mo->method(i);
+            if (compare(qml_meta, meta)) {
+                QString name = QString::fromLatin1(meta.name());
+                meta_[name] = qml_meta.methodIndex();
+            }
+        }
     }
 }
 
 Slave& AbstractAdapter::invoke(const QString& name, const Message &message)
 {
     Handle hdl = handle();
-    QMetaMethod meta = this->metaObject()->method(meta_[name]);
+    QMetaMethod meta = impl_.item()->metaObject()->method(meta_[name]);
+    Q_ASSERT(meta.isValid());
     Slave* s = new Slave(hdl, message, meta, impl_);
-    msgs_[hdl.uid] = s;
+    if (s->hasHandle()) {
+        msgs_[hdl.uid] = s;
+    }
     return *s;
 }
 
@@ -55,6 +69,11 @@ Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
 void AbstractAdapter::sendError(Handle handle, const QString& error, const QString& text)
 {
     reply(handle).error(error, text);
+}
+
+void AbstractAdapter::sendResult(Handle handle)
+{
+    reply(handle).send();
 }
 
 Handle AbstractAdapter::handle() const

@@ -58,21 +58,6 @@ void TTSAdapter::ReplyIsReady(const Handle& handle, bool available)
     reply(handle).out(available).send();
 }
 
-void TTSAdapter::ReplySpeak(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void TTSAdapter::ReplyStopSpeaking(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void TTSAdapter::ReplyChangeRegistration(const Handle& handle)
-{
-    reply(handle).send();
-}
-
 void TTSAdapter::ReplyGetSupportedLanguages(const Handle &handle,
     const QList<int> &languages)
 {
@@ -82,11 +67,6 @@ void TTSAdapter::ReplyGetSupportedLanguages(const Handle &handle,
 void TTSAdapter::ReplyGetLanguage(const Handle& handle, int language)
 {
     reply(handle).out(language).send();
-}
-
-void TTSAdapter::ReplySetGlobalProperties(const Handle& handle)
-{
-    reply(handle).send();
 }
 
 void TTS::replyGetCapabilities(const QVariantMap& handle, const QList<int> &speechCapabilities,
@@ -101,21 +81,6 @@ void TTS::replyIsReady(const QVariantMap& handle, bool available)
     adapter->ReplyIsReady(handle, available);
 }
 
-void TTS::replySpeak(const QVariantMap& handle)
-{
-    adapter->ReplySpeak(handle);
-}
-
-void TTS::replyStopSpeaking(const QVariantMap& handle)
-{
-    adapter->ReplyStopSpeaking(handle);
-}
-
-void TTS::replyChangeRegistration(const QVariantMap& handle)
-{
-    adapter->ReplyChangeRegistration(handle);
-}
-
 void TTS::replyGetSupportedLanguages(const QVariantMap& handle, const QList<int> &languages)
 {
     adapter->ReplyGetSupportedLanguages(handle, languages);
@@ -124,11 +89,6 @@ void TTS::replyGetSupportedLanguages(const QVariantMap& handle, const QList<int>
 void TTS::replyGetLanguage(const QVariantMap& handle, int language)
 {
     adapter->ReplyGetLanguage(handle, language);
-}
-
-void TTS::replySetGlobalProperties(const QVariantMap& handle)
-{
-    adapter->ReplySetGlobalProperties(handle);
 }
 
 void TTS::started()

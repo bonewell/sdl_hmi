@@ -102,7 +102,7 @@ PopUp {
         text.text = '';
         timer.stop();
         hide();
-        sdlTTS.replySpeak(async);
+        sdlTTS.sendResult(async);
         async = null;
         console.debug("Exit");
     }

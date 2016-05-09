@@ -42,7 +42,7 @@ VR
         replyIsReady(handle, dataContainer.hmiVRAvailable)
     }
 
-    function addCommand(handle, cmdID, vrCommands, type, grammarID, appID) {
+    function addCommand(cmdID, vrCommands, type, grammarID, appID) {
         var vrCommandsLog = "";
         if (vrCommands) {
             for (var i = 0; i < vrCommands.length; i++) {
@@ -76,11 +76,10 @@ VR
                                                });
             }
         }
-        replyAddCommand(handle);
         console.log("exit")
     }
 
-    function deleteCommand(handle, cmdID, type, grammarID, appID) {
+    function deleteCommand(cmdID, type, grammarID, appID) {
         console.log("Message Received - {method: 'VR.DeleteCommand', params:{ " +
                     "appID: " + appID + ", " +
                     "cmdID: " + cmdID +
@@ -93,7 +92,6 @@ VR
             }
             ++i;
         }
-        replyDeleteCommand(handle);
         console.log("exit")
     }
 
@@ -112,14 +110,13 @@ VR
         replyGetCapabilities(handle, [ Common.VrCapabilities.VR_TEXT ])
     }
 
-    function changeRegistration(handle, vrSynonyms, language, appID) {
+    function changeRegistration(vrSynonyms, language, appID) {
         console.debug("enter");
         console.log("Message Received - {method: 'VR.ChangeRegistration', params:{ " +
                     "language: " + language + ", " +
                     "appID: " + appID +
                     "}}")
         dataContainer.changeRegistrationTTSVR(language, appID);
-        replyChangeRegistration(handle);
         console.debug("exit");
     }
 
@@ -127,7 +124,7 @@ VR
         return ttsChunks.map(function(str) { return str.text }).join('\n')
     }
 
-    function performInteraction(handle, helpPrompt, initialPrompt, timeoutPrompt,
+    function performInteraction(helpPrompt, initialPrompt, timeoutPrompt,
         timeout, grammarID, appID) {
         console.debug("enter");
         var helpttsChunksLog = "",
@@ -165,7 +162,6 @@ VR
                                     ttsChunksToString(timeoutPrompt),
                                     timeout)
         interactionPopup.grammarID = grammarID
-        replyPerformInteraction(handle);
         console.debug("exit");
     }
 }

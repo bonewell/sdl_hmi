@@ -53,24 +53,9 @@ void VRAdapter::ReplyIsReady(const Handle& handle, bool available)
     reply(handle).out(available).send();
 }
 
-void VRAdapter::ReplyAddCommand(const Handle& handle)
-{
-    reply(handle).send();
-}
-
-void VRAdapter::ReplyDeleteCommand(const Handle& handle)
-{
-    reply(handle).send();
-}
-
 void VRAdapter::ReplyPerformInteraction(const Handle& handle, const Optional<int> &choiceID)
 {
     reply(handle).out(choiceID).send();
-}
-
-void VRAdapter::ReplyChangeRegistration(const Handle& handle)
-{
-    reply(handle).send();
 }
 
 void VRAdapter::ReplyGetSupportedLanguages(const Handle& handle, const QList<int> &languages)
@@ -93,24 +78,9 @@ void VR::replyIsReady(const QVariantMap& handle, bool available)
     adapter->ReplyIsReady(handle, available);
 }
 
-void VR::replyAddCommand(const QVariantMap& handle)
-{
-    adapter->ReplyAddCommand(handle);
-}
-
-void VR::replyDeleteCommand(const QVariantMap& handle)
-{
-    adapter->ReplyDeleteCommand(handle);
-}
-
 void VR::replyPerformInteraction(const QVariantMap& handle, const QVariant &choiceID)
 {
     adapter->ReplyPerformInteraction(handle, choiceID);
-}
-
-void VR::replyChangeRegistration(const QVariantMap& handle)
-{
-    adapter->ReplyChangeRegistration(handle);
 }
 
 void VR::replyGetSupportedLanguages(const QVariantMap& handle, const QList<int> &languages)

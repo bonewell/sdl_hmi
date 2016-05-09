@@ -158,14 +158,8 @@ public slots:
     void GetSystemInfo(const Message& message);
 
 public:
-    void ReplyUpdateAppList(const Handle& handle);
-    void ReplyUpdateDeviceList(const Handle& handle);
     void ReplyAllowDeviceToConnect(const Handle& handle, bool allow);
-    void ReplyActivateApp(const Handle& handle);
     void ReplyMixingAudioSupported(const Handle& handle, bool attenuatedSupported);
-    void ReplyDialNumber(const Handle& handle);
-    void ReplySystemRequest(const Handle& handle);
-    void ReplyPolicyUpdate(const Handle& handle);
     void ReplyGetSystemInfo(const Handle& handle, const QString& ccpu_version,
                             int language, const QString& wersCountryCode);
 
@@ -210,15 +204,9 @@ public:
     Q_INVOKABLE void onDeactivateHMI(bool isDeactivated);
     Q_INVOKABLE void onEventChanged(int eventName, bool isActive);
 
-    Q_INVOKABLE void replyUpdateAppList(const QVariantMap& handle);
-    Q_INVOKABLE void replyUpdateDeviceList(const QVariantMap& handle);
     Q_INVOKABLE void replyAllowDeviceToConnect(const QVariantMap& handle, bool allow);
-    Q_INVOKABLE void replyActivateApp(const QVariantMap& handle);
     Q_INVOKABLE void replyMixingAudioSupported(const QVariantMap& handle,
                                                bool attenuatedSupported);
-    Q_INVOKABLE void replyDialNumber(const QVariantMap& handle);
-    Q_INVOKABLE void replySystemRequest(const QVariantMap& handle);
-    Q_INVOKABLE void replyPolicyUpdate(const QVariantMap& handle);
     Q_INVOKABLE void replyGetSystemInfo(const QVariantMap& handle,
         const QString& ccpu_version, int language, const QString& wersCountryCode);
 

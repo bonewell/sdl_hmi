@@ -248,7 +248,7 @@ Rectangle {
             hide()
             switch (reason) {
             case Common.Result.SUCCESS:
-                sdlUI.replyAlert(async);
+                sdlUI.sendResult(async);
                 break
             // For other cases
             }

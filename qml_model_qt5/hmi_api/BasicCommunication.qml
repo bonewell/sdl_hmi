@@ -109,7 +109,7 @@ BasicCommunication
                     syncFileName, fileType, persistentFile);
     }
 
-    function updateDeviceList(handle, deviceList) {
+    function updateDeviceList(deviceList) {
         var deviceListLog = "";
         deviceList.forEach(function (device) {
             deviceListLog += "{name: '" + device.name + "', " +
@@ -140,10 +140,9 @@ BasicCommunication
                 dataContainer.deviceList.remove(i);
             }
         }
-        replyUpdateDeviceList(handle);
     }
 
-    function updateAppList(handle, applications) {
+    function updateAppList(applications) {
         console.log("Message Received - {method: 'BasicCommunication.UpdateAppList',
             params:{ 'applications:'", JSON.stringify(applications));
 
@@ -160,7 +159,6 @@ BasicCommunication
 //                 appType: applications[i].appType
             });
         }
-        replyUpdateAppList(handle);
     }
 
     function getResumeResult (appID) {
@@ -180,10 +178,9 @@ BasicCommunication
         replyMixingAudioSupported(handle, true)
     }
 
-    function dialNumber(handle, number, appID) {
+    function dialNumber(number, appID) {
         console.log("Message Received - {method: 'BasicCommunication.DialNumber'}");
         console.log("Number =", number, ", appID =", appID);
-        replyDialNumber(handle);
     }
 
     function allowAllApps() {
@@ -200,26 +197,24 @@ BasicCommunication
         }
     }
 
-    function activateApp(handle, appID, priority, level) {
+    function activateApp(appID, priority, level) {
         console.log("Message Received - {method: 'BasicCommunication.ActivateApp', params:{ " +
                     "appID: " + appID +
                     "}}")
-        replyActivateApp(handle);
         contentLoader.go("views/SDLPlayerView.qml", appID);
     }
 
-    function policyUpdate(handle, file, timeout, retry) {
+    function policyUpdate(file, timeout, retry) {
         console.log("enter policyUpdate");
         settingsContainer.filePTSnapshot = file;
         settingsContainer.timeoutPTExchange = timeout;
         settingsContainer.retriesPTExchange = retry;
         var service = 7; // service type for Ford specific policy
         sdlSDL.getURLS(service, settingsContainer.startPTExchange);
-        replyPolicyUpdate(handle);
         console.log("exit policyUpdate");
     }
 
-    function systemRequest(handle, requestType, fileName, appID) {
+    function systemRequest(requestType, fileName, appID) {
         console.log("enter systemRequest", requestType, fileName, appID);
 
         console.log(requestType, Common.RequestType.PROPRIETARY, Common.RequestType.HTTP);
@@ -238,7 +233,6 @@ BasicCommunication
                 break;
             }
         }
-        replySystemRequest(handle);
         console.log("exit systemRequest");
     }
 

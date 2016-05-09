@@ -119,18 +119,8 @@ private slots:
 
 public:
     void ReplyIsReady(const Handle& handle, bool available);
-    void ReplySendLocation(const Handle& handle);
-    void ReplyShowConstantTBT(const Handle& handle);
-    void ReplyAlertManeuver(const Handle& handle);
-    void ReplyUpdateTurnList(const Handle& handle);
-    void ReplyStartStream(const Handle& handle);
-    void ReplyStopStream(const Handle& handle);
-    void ReplyStartAudioStream(const Handle& handle);
-    void ReplyStopAudioStream(const Handle& handle);
     void ReplyGetWayPoints(const Handle& handle, int appID,
         const Optional<LocationDetails>& wayPoints);
-    void ReplySubscribeWayPoints(const Handle& handle);
-    void ReplyUnsubscribeWayPoints(const Handle& handle);
 };
 
 class Navigation : public AbstractItem
@@ -143,18 +133,8 @@ public:
     Q_INVOKABLE void onWayPointChange(const QVariantList& wayPoints);
 
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
-    Q_INVOKABLE void replySendLocation(const QVariantMap& handle);
-    Q_INVOKABLE void replyShowConstantTBT(const QVariantMap& handle);
-    Q_INVOKABLE void replyAlertManeuver(const QVariantMap& handle);
-    Q_INVOKABLE void replyUpdateTurnList(const QVariantMap& handle);
-    Q_INVOKABLE void replyStartStream(const QVariantMap& handle);
-    Q_INVOKABLE void replyStopStream(const QVariantMap& handle);
-    Q_INVOKABLE void replyStartAudioStream(const QVariantMap& handle);
-    Q_INVOKABLE void replyStopAudioStream(const QVariantMap& handle);
     Q_INVOKABLE void replyGetWayPoints(const QVariantMap& handle, int appID,
         const QVariant& wayPoints = QVariant());
-    Q_INVOKABLE void replySubscribeWayPoints(const QVariantMap& handle);
-    Q_INVOKABLE void replyUnsubscribeWayPoints(const QVariantMap& handle);
 
 signals:
     void onAudioDataStreaming(bool available);
