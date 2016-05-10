@@ -95,14 +95,13 @@ UI
                     "appID: " + appID + "', " +
                     "}}")
         var fieldSubstrings = alertStrings
-	    .sort(function(a, b) { return a.fieldName - b.fieldName }) // sorting by fieldName
-        .map(function(val) { return val.fieldText });              // mapping to array of strings
+            .sort(function(a, b) { return a.fieldName - b.fieldName }) // sorting by fieldName
+            .map(function(val) { return val.fieldText });              // mapping to array of strings
 
         var tryAgainTime = alertWindow.alert(fieldSubstrings, duration, softButtons, progressIndicator, alertType, appID)
         if (tryAgainTime === undefined) {
             alertWindow.async = handle;
-        }
-        else {
+        } else {
             handle.code = Common.Result.REJECTED;
             replyAlert(handle, tryAgainTime);
         }
@@ -307,7 +306,8 @@ UI
                     "timeout: " + timeout + ", " +
                     "interactionLayout: " + interactionLayout +
                     "}}")
-        interactionPopup.performInteraction(initialText, choiceSet, vrHelpTitle, vrHelp, timeout, interactionLayout, appID)
+        interactionPopup.performInteraction(initialText, choiceSet, vrHelpTitle,
+                                            vrHelp, timeout, interactionLayout, appID);
         interactionPopup.async = handle;
         console.debug("exit")
     }

@@ -248,6 +248,7 @@ Rectangle {
             hide()
             switch (reason) {
             case Common.Result.SUCCESS:
+                async.message = "UI.Alert";
                 sdlUI.sendResult(async);
                 break
             // For other cases

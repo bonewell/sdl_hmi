@@ -46,8 +46,9 @@ GeneralView {
     onLeaveScreen: {
         timer.stop()
         dataContainer.scrollableMessageModel.running = false
-            // TODO: find solution for these cases
-//        DBus.sendReply(dataContainer.scrollableMessageModel.async, { __retCode: dataContainer.scrollableMessageModel.result })
+        handle = dataContainer.scrollableMessageModel.async;
+        handle.code = dataContainer.scrollableMessageModel.result;
+        sdlUI.sendResult(handle);
     }
     Component.onCompleted: {
         dataContainer.scrollableMessageModel.result = Common.Result.ABORTED

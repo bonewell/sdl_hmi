@@ -82,7 +82,8 @@ Handle AbstractAdapter::handle() const
     return Handle(++i);
 }
 
-QChar AbstractAdapter::methodType(QMetaMethod::MethodType type) const {
+QChar AbstractAdapter::methodType(QMetaMethod::MethodType type) const
+{
     switch (type) {
     case QMetaMethod::Method: return QChar(QMETHOD_CODE); break;
     case QMetaMethod::Slot: return QChar(QSLOT_CODE); break;

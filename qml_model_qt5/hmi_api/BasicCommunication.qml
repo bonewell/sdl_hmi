@@ -143,8 +143,8 @@ BasicCommunication
     }
 
     function updateAppList(applications) {
-        console.log("Message Received - {method: 'BasicCommunication.UpdateAppList',
-            params:{ 'applications:'", JSON.stringify(applications));
+        console.log("Message Received - {method: 'BasicCommunication.UpdateAppList'," +
+            "params:{ 'applications:'", JSON.stringify(applications));
 
         dataContainer.applicationList.clear();
         for(var i = 0; i < applications.length; i++) {

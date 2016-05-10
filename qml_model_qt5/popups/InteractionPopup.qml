@@ -157,12 +157,12 @@ ContextPopup {
                 sdlUI.repyPerformInteraction(async, choiceID, manualTextEntry)
                 break
             case Common.Result.ABORTED:
-                // TODO: find solution for these cases
-//                DBus.sendReply(async, { __retCode: Common.Result.ABORTED })
+                async.code = Common.Result.ABORTED;
+                sdlUI.sendResult(async);
                 break
             case Common.Result.TIMED_OUT:
-                // TODO: find solution for these cases
-//                DBus.sendReply(async, { __retCode: Common.Result.TIMED_OUT })
+                async.code = Common.Result.TIMED_OUT;
+                sdlUI.sendResult(async);
                 break
         }
         timer.stop()

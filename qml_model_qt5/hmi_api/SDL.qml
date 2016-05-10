@@ -38,13 +38,13 @@ SDL
     onOnAppPermissionChanged: {
         console.log("enter onStatusUpdate");
         console.log("appID = ", JSON.stringify(appID));
-        console.log("appID = ", JSON.stringify(isAppPermissionsRevoked));
-        console.log("appID = ", JSON.stringify(appRevokedPermissions));
-        console.log("appID = ", JSON.stringify(appRevoked));
-        console.log("appID = ", JSON.stringify(appPermissionsConsentNeeded));
-        console.log("appID = ", JSON.stringify(appUnauthorized));
-        console.log("appID = ", JSON.stringify(priority));
-        console.log("appID = ", JSON.stringify(requestType));
+        console.log("isAppPermissionsRevoked = ", JSON.stringify(isAppPermissionsRevoked));
+        console.log("appRevokedPermissions = ", JSON.stringify(appRevokedPermissions));
+        console.log("appRevoked = ", JSON.stringify(appRevoked));
+        console.log("appPermissionsConsentNeeded = ", JSON.stringify(appPermissionsConsentNeeded));
+        console.log("appUnauthorized = ", JSON.stringify(appUnauthorized));
+        console.log("priority = ", JSON.stringify(priority));
+        console.log("requestType = ", JSON.stringify(requestType));
     }
 
     onOnSDLConsentNeeded: {
