@@ -37,13 +37,15 @@ import com.ford.sdl.hmi.dbus_adapter 1.0
 Buttons
 {
     onOnButtonSubscription: {
-        console.log("name = ", JSON.stringify(name));
-        console.log("isSubscribed = ", JSON.stringify(isSubscribed));
-        console.log("appID = ", JSON.stringify(appID));
+        console.log("Received signal: Buttons.OnButtonSubscription");
+        console.debug("name = ", JSON.stringify(name));
+        console.debug("isSubscribed = ", JSON.stringify(isSubscribed));
+        console.debug("appID = ", JSON.stringify(appID));
+        console.warn("Not implemented");
     }
 
     function getCapabilities(handle) {
-        console.log("Message Received - {method: 'Buttons.GetCapabilities'}")
+        console.log("Received method: Buttons.GetCapabilities");
         replyGetCapabilities(handle, settingsContainer.buttonCapabilities,
                              { onScreenPresetsAvailable: true });
     }

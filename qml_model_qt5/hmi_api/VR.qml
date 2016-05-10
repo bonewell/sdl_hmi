@@ -38,24 +38,18 @@ import "Common.js" as Common
 VR
 {
     function isReady(handle) {
-        console.log("Message Received - {method: 'VR.IsReady'}")
-        replyIsReady(handle, dataContainer.hmiVRAvailable)
+        console.log("Received method: VR.IsReady");
+        replyIsReady(handle, dataContainer.hmiVRAvailable);
     }
 
     function addCommand(cmdID, vrCommands, type, grammarID, appID) {
-        var vrCommandsLog = "";
-        if (vrCommands) {
-            for (var i = 0; i < vrCommands.length; i++) {
-                vrCommandsLog += "'" + vrCommands[i] + "', ";
-            }
-        }
-        console.log("Message Received - {method: 'VR.AddCommand', params:{ " +
-                    "vrCommands: [" + vrCommandsLog + "], " +
-                    "cmdID: " + cmdID + ", " +
-                    "appID: " + appID + ", " +
-                    "type: " + type + ", " +
-                    "grammarID: " + grammarID +
-                    "}}")
+        console.log("Received method: VR.AddCommand");
+        console.debug("cmdID =", JSON.stringify(cmdID));
+        console.debug("vrCommands =", JSON.stringify(vrCommands));
+        console.debug("type =", JSON.stringify(type));
+        console.debug("grammarID =", JSON.stringify(grammarID));
+        console.debug("appID =", JSON.stringify(appID));
+
         for (var i = 0; i < vrCommands.length; ++i) {
             if (type === Common.VRCommandType.Command) {
                 dataContainer.vrCommands.append({
@@ -76,14 +70,15 @@ VR
                                                });
             }
         }
-        console.log("exit")
     }
 
     function deleteCommand(cmdID, type, grammarID, appID) {
-        console.log("Message Received - {method: 'VR.DeleteCommand', params:{ " +
-                    "appID: " + appID + ", " +
-                    "cmdID: " + cmdID +
-                    "}}")
+        console.log("Received method: VR.DeleteCommand");
+        console.debug("cmdID =", JSON.stringify(cmdID));
+        console.debug("type =", JSON.stringify(type));
+        console.debug("grammarID =", JSON.stringify(grammarID));
+        console.debug("appID =", JSON.stringify(appID));
+
         for (var i = 0; i < dataContainer.vrCommands.count; ) {
             if ((dataContainer.vrCommands.get(i).cmdID === cmdID) &&
                     ((appID === undefined) || (dataContainer.vrCommands.get(i).appID === appID))) {
@@ -92,32 +87,29 @@ VR
             }
             ++i;
         }
-        console.log("exit")
     }
 
     function getLanguage(handle) {
-        console.log("Message Received - {method: 'VR.GetLanguage'}")
-        replyGetLanguage(handle, dataContainer.hmiTTSVRLanguage)
+        console.log("Received method: VR.GetLanguage");
+        replyGetLanguage(handle, dataContainer.hmiTTSVRLanguage);
     }
 
     function getSupportedLanguages(handle) {
-        console.log("Message Received - {method: 'VR.GetSupportedLanguages'}")
-        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList)
+        console.log("Received method: VR.GetSupportedLanguages");
+        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList);
     }
 
     function getCapabilities(handle) {
-        console.log("Message Received - {method: 'UI.GetCapabilities'}")
-        replyGetCapabilities(handle, [ Common.VrCapabilities.VR_TEXT ])
+        console.log("Received method: UI.GetCapabilities");
+        replyGetCapabilities(handle, [ Common.VrCapabilities.VR_TEXT ]);
     }
 
     function changeRegistration(vrSynonyms, language, appID) {
-        console.debug("enter");
-        console.log("Message Received - {method: 'VR.ChangeRegistration', params:{ " +
-                    "language: " + language + ", " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: VR.ChangeRegistration");
+        console.debug("vrSynonyms =", JSON.stringify(vrSynonyms));
+        console.debug("language =", JSON.stringify(language));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.changeRegistrationTTSVR(language, appID);
-        console.debug("exit");
     }
 
     function ttsChunksToString(ttsChunks){
@@ -126,42 +118,18 @@ VR
 
     function performInteraction(helpPrompt, initialPrompt, timeoutPrompt,
         timeout, grammarID, appID) {
-        console.debug("enter");
-        var helpttsChunksLog = "",
-            initialttsChunkLog = "",
-            timeoutttsChunkLog = "",
-            grammarIDLog ="";
-
-        if (helpPrompt) {
-            for (var i = 0; i < helpPrompt.length; i++) {
-                helpttsChunksLog += "{type: " + helpPrompt[i].type + ", " +
-                        "text: '" + helpPrompt[i].text + "'}, ";
-            }
-        }
-        if (initialPrompt) {
-            for (var i = 0; i < initialPrompt.length; i++) {
-                initialttsChunkLog += "{type: " + initialPrompt[i].type + ", " +
-                        "text: '" + initialPrompt[i].text + "'}, ";
-            }
-        }
-        if (timeoutPrompt) {
-            for (var i = 0; i < timeoutPrompt.length; i++) {
-                timeoutttsChunkLog += "{type: " + timeoutPrompt[i].type + ", " +
-                        "text: '" + timeoutPrompt[i].text + "'}, ";
-            }
-        }
-        console.log("Message Received - {method: 'TTS.PerformInteraction', params:{ " +
-                    "helpPrompt: [" + helpttsChunksLog + "], " +
-                    "initialPrompt: [" + initialttsChunkLog + "], " +
-                    "timeoutPrompt: [" + timeoutttsChunkLog + "], " +
-                    "timeout: " + timeout +
-                    "}}")
+        console.log("Received method: TTS.PerformInteraction");
+        console.debug("helpPrompt =", JSON.stringify(helpPrompt));
+        console.debug("initialPrompt =", JSON.stringify(initialPrompt));
+        console.debug("timeoutPrompt =", JSON.stringify(timeoutPrompt));
+        console.debug("timeout =", JSON.stringify(timeout));
+        console.debug("grammarID =", JSON.stringify(grammarID));
+        console.debug("appID =", JSON.stringify(appID));
 
         ttsPopUp.performInteraction(ttsChunksToString(helpPrompt),
                                     ttsChunksToString(initialPrompt),
                                     ttsChunksToString(timeoutPrompt),
                                     timeout)
         interactionPopup.grammarID = grammarID
-        console.debug("exit");
     }
 }

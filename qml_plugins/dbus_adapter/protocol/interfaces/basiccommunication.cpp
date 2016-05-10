@@ -146,6 +146,11 @@ void BasicCommunication::onFindApplications(const QVariant &deviceInfo)
     emit adapter->OnFindApplications(deviceInfo);
 }
 
+void BasicCommunication::onAppActivated(int appID)
+{
+    emit adapter->OnAppActivated(appID);
+}
+
 void BasicCommunication::onAppDeactivated(int appID)
 {
     emit adapter->OnAppDeactivated(appID);

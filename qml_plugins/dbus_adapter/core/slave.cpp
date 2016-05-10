@@ -27,7 +27,7 @@ void Slave::run()
 }
 
 bool Slave::hasHandle() const {
-    return meta_.parameterCount() > 0 && meta_.parameterNames().at(0) == "handle";
+    return names_.size() > 0 && names_[0] == "handle";
 }
 
 bool Slave::canSplit(int max) const
@@ -39,7 +39,7 @@ bool Slave::canSplit(int max) const
     }
 }
 
-bool Slave::invoke() const
+bool Slave::invoke()
 {
     const int kMaxArgs = 10;
     QVector<QGenericArgument> args(kMaxArgs);
@@ -52,8 +52,10 @@ bool Slave::invoke() const
     }
 
     if (canSplit(kMaxArgs)) {
-        foreach (const QVariant& v, input_) {
-            args[i++] = Q_ARG(QVariant, v);
+        foreach (const QByteArray& v, names_) {
+            if (input_.contains(v)) {
+                args[i++] = Q_ARG(QVariant, input_[v]);
+            }
         }
     } else {
         args[i] = Q_ARG(QVariant, QVariant(input_));

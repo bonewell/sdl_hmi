@@ -39,25 +39,37 @@ import "../models/Internal.js" as Internal
 BasicCommunication
 {
     onOnResumeAudioSource: {
-        console.log("Message Received - {signal: 'BasicCommunication.OnResumeAudioSource'}");
-        console.log("appID =", appID);
+        console.log("Received signal: BasicCommunication.OnResumeAudioSource");
+        console.debug("appID =", JSON.stringify(appID));
+        console.warn("Not implemented");
     }
 
     onOnSDLPersistenceComplete: {
-        console.log("Message Received - {signal: 'BasicCommunication.OnSDLPersistenceComplete'}");
+        console.log("Received signal: BasicCommunication.OnSDLPersistenceComplete");
+        console.warn("Not implemented");
     }
 
     onOnFileRemoved: {
-        console.log("Message Received - {signal: 'BasicCommunication.OnFileRemoved'}");
-        console.log("fileName =", fileName, ", fileType =", fileType, ", appID =", appID);
+        console.log("Received signal: BasicCommunication.OnFileRemoved");
+        console.debug("fileName =", JSON.stringify(fileName));
+        console.debug("fileType =", JSON.stringify(fileType));
+        console.debug("appID =", JSON.stringify(appID));
+        console.warn("Not implemented");
     }
 
     onOnAppRegistered: {
-        console.debug("enter onAppRegistered")
+        console.log("Received signal: BasicCommunicaiont.OnAppRegistered")
+        console.debug("application =", JSON.stringify(application));
+        console.debug("ttsName =", JSON.stringify(ttsName));
+        console.debug("vrSynonyms =", JSON.stringify(vrSynonyms));
+        console.debug("resumeVrGrammars =", JSON.stringify(resumeVrGrammars));
+        console.debug("priority =", JSON.stringify(priority));
+
         var appTypeToAdd = 0
         if (application.appType !== undefined) {
             for (var index in application.appType) {
                 if (application.appType[index] > 31) {
+                    // TODO(KKolodiy): notification don't have response, so that is strange code
                     return { __retCode: Common.Result.GENERIC_ERROR, __message: "Apptype value > 31" }
                 }
                 appTypeToAdd |= 1 << application.appType[index]
@@ -82,11 +94,12 @@ BasicCommunication
                 "startTimeForProgress": -1
             }
         });
-        console.debug("exit onAppRegistered")
     }
 
     onOnAppUnregistered: {
-        console.debug("enter onAppUnregistered")
+        console.log("Received signal: BasicCommunication.OnAppUnregistered");
+        console.debug("unexpectedDisconnect =", JSON.stringify(unexpectedDisconnect));
+        console.debug("appID =", JSON.stringify(appID));
         if ((dataContainer.currentApplication.appId === appID)) {
             if (dataContainer.applicationContext) {
                 contentLoader.go("views/ApplicationListView.qml");
@@ -97,27 +110,28 @@ BasicCommunication
             dataContainer.currentApplication.reset()
         }
         dataContainer.removeApplication(appID);
-        console.debug("exit onAppUnregistered")
     }
 
     onOnSDLClose: {
-        console.debug("enter onOnSDLClose");
+        console.log("Received signal: BasicCommunication.OnSDLClose");
+        console.warn("Not implemented");
     }
 
     onOnPutFile: {
-        console.log("OnPutFile: ", offset, length, fileSize, FileName,
-                    syncFileName, fileType, persistentFile);
+        console.log("Received signal: BasicCommunication.OnPutFile");
+        console.debug("offset =", JSON.stringify(offset));
+        console.debug("length =", JSON.stringify(length));
+        console.debug("fileSize =", JSON.stringify(fileSize));
+        console.debug("FileName =", JSON.stringify(FileName));
+        console.debug("syncFileName =", JSON.stringify(syncFileName));
+        console.debug("fileType =", JSON.stringify(fileType));
+        console.debug("persistentFile =", JSON.stringify(persistentFile));
+        console.warn("Not implemented");
     }
 
     function updateDeviceList(deviceList) {
-        var deviceListLog = "";
-        deviceList.forEach(function (device) {
-            deviceListLog += "{name: '" + device.name + "', " +
-                    "id: '" + device.id + "'},";
-        });
-        console.log("Message Received - {method: 'BasicCommunication.UpdateDeviceList', params:{ " +
-                    "deviceList: [" + deviceListLog + "]" +
-                    "}}")
+        console.log("Received method: BasicCommunication.UpdateDeviceList");
+        console.debug("deviceList =", JSON.stringify(deviceList));
 
         deviceList.forEach(function (device) {
             var exist = false;
@@ -143,8 +157,8 @@ BasicCommunication
     }
 
     function updateAppList(applications) {
-        console.log("Message Received - {method: 'BasicCommunication.UpdateAppList'," +
-            "params:{ 'applications:'", JSON.stringify(applications));
+        console.log("Received method: BasicCommunication.UpdateAppList");
+        console.debug("applications =", JSON.stringify(applications));
 
         dataContainer.applicationList.clear();
         for(var i = 0; i < applications.length; i++) {
@@ -156,68 +170,54 @@ BasicCommunication
                  appId: applications[i].appID,
                  hmiDisplayLanguageDesired: applications[i].hmiDisplayLanguageDesired,
                  isMediaApplication: applications[i].isMediaApplication,
-//                 appType: applications[i].appType
+                 appType: applications[i].appType
             });
         }
     }
 
-    function getResumeResult (appID) {
-        return dataContainer.getResumeResult(appID)
-    }
-
     function allowDeviceToConnect(handle, device) {
-        console.log("Message Received - {method: 'BasicCommunication.AllowDeviceToConnect', params:{ " +
-                    "device: {name: '" + device.name + "', " +
-                        "id: '" + device.id + "'}," +
-                    "}}")
+        console.log("Received method: BasicCommunication.AllowDeviceToConnect");
+        console.debug("device =", JSON.stringify(device));
         replyallowDeviceToConnect(handle, true)
     }
 
     function mixingAudioSupported(handle) {
-        console.log("Message Received - {method: 'BasicCommunication.MixingAudioSupported'}")
+        console.log("Received method: BasicCommunication.MixingAudioSupported");
         replyMixingAudioSupported(handle, true)
     }
 
     function dialNumber(number, appID) {
-        console.log("Message Received - {method: 'BasicCommunication.DialNumber'}");
-        console.log("Number =", number, ", appID =", appID);
-    }
-
-    function allowAllApps() {
-        console.log("Message Received - {method: 'BasicCommunication.AllowAllApps'}")
-        return {
-            allowed: true
-        }
-    }
-
-    function allowApp(app, appPermissions) {
-        console.log("Message Received - {method: 'BasicCommunication.AllowApp'}")
-        return {
-            allowed: true
-        }
+        console.log("Received method: BasicCommunication.DialNumber");
+        console.debug("number =", JSON.stringify(number));
+        console.debug("appID =", JSON.stringify(appID));
+        console.warn("Not implemented");
     }
 
     function activateApp(appID, priority, level) {
-        console.log("Message Received - {method: 'BasicCommunication.ActivateApp', params:{ " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: BasicCommunication.ActivateApp");
+        console.debug("appID =", JSON.stringify(appID));
+        console.debug("priority =", JSON.stringify(priority));
+        console.debug("level =", JSON.stringify(level));
         contentLoader.go("views/SDLPlayerView.qml", appID);
     }
 
     function policyUpdate(file, timeout, retry) {
-        console.log("enter policyUpdate");
+        console.log("Received method: BasicCommunication.PolicyUpdate");
+        console.debug("file =", JSON.stringify(file));
+        console.debug("timeout =", JSON.stringify(timeout));
+        console.debug("retry =", JSON.stringify(retry));
         settingsContainer.filePTSnapshot = file;
         settingsContainer.timeoutPTExchange = timeout;
         settingsContainer.retriesPTExchange = retry;
         var service = 7; // service type for Ford specific policy
         sdlSDL.getURLS(service, settingsContainer.startPTExchange);
-        console.log("exit policyUpdate");
     }
 
     function systemRequest(requestType, fileName, appID) {
-        console.log("enter systemRequest", requestType, fileName, appID);
-
-        console.log(requestType, Common.RequestType.PROPRIETARY, Common.RequestType.HTTP);
+        console.log("Received method: BasicCommunication.SystemRequest");
+        console.debug("requestType =", JSON.stringify(requestType));
+        console.debug("fileName =", JSON.stringify(fileName));
+        console.debug("appID =", JSON.stringify(appID));
 
         switch (requestType) {
             case Common.RequestType.PROPRIETARY: {
@@ -233,11 +233,11 @@ BasicCommunication
                 break;
             }
         }
-        console.log("exit systemRequest");
     }
 
     function getSystemInfo(handle) {
-        console.log("enter getSystemInfo - STUB");
+        console.log("Received method: BasicCommunication.GetSystemInfo");
+        console.warn("Not implemented");
         // TODO: it's stub, you need to implement
         replyGetSystemInfo(handle, "1.1.1", 1, "ru");
     }

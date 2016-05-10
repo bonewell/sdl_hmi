@@ -76,15 +76,15 @@ ContextPopup {
         dataContainer.uiSlider.running = false
         switch(reason) {
         case Common.Result.ABORTED:
-            console.debug("aborted position is", position)
-            resultCode = Common.Result.ABORTED
-            DBus.sendReply(async, {__retCode: resultCode, sliderPosition: position})
+            console.debug("aborted position is", position);
+            async.code = Common.Result.ABORTED;
+            sdlUI.replySlider(async, position);
             break
         case Common.Result.SUCCESS:
-            console.debug("send position", position)
-            resultCode = Common.Result.SUCCESS
-            dataContainer.uiSlider.position = position
-            DBus.sendReply(async, {sliderPosition:position})
+            console.debug("send position", position);
+            async.code = Common.Result.SUCCESS;
+            dataContainer.uiSlider.position = position;
+            sdlUI.replySlider(async, position);
             break
         default:
             break

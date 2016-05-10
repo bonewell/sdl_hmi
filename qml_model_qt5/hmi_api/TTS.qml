@@ -40,53 +40,43 @@ TTS
     }
 
     function isReady(handle) {
-        console.log("Message Received - {method: 'TTS.IsReady'}")
-        replyIsReady(handle, dataContainer.hmiTTSAvailable)
+        console.log("Received method: TTS.IsReady");
+        replyIsReady(handle, dataContainer.hmiTTSAvailable);
     }
 
     function speak(handle, ttsChunks, appID, speakType, playTone) {
-        // appID unused
-        console.debug('enter:', ttsChunks, appID);
-        var ttsChunksLog = "";
-        if (ttsChunks) {
-            for (var i = 0; i < ttsChunks.length; i++) {
-                ttsChunksLog += "{type: " + ttsChunks[i].type + ", " +
-                        "text: '" + ttsChunks[i].text + "'}, ";
-            }
-        }
-        console.log("Message Received - {method: 'TTS.Speak', params:{ " +
-                    "ttsChunks: [" + ttsChunksLog + "], " +
-                    "appID: " + appID + "', " +
-                    "}}")
+        console.log("Received method: TTS.Speak");
+        console.debug("ttsChunks =", JSON.stringify(ttsChunks));
+        console.debug("appID =", JSON.stringify(appID));
+        console.debug("speakType =", JSON.stringify(speakType));
+        console.debug("playTone =", JSON.stringify(playTone));
+
         if (ttsPopUp.async) {
-            console.log('speak send abort');
+            console.warn('speak send abort');
             sendError(handle, Common.Result.ABORTED);
         }
         var message = ttsChunksToString(ttsChunks);
         ttsPopUp.activate(message);
         ttsPopUp.async = handle;
-        console.debug('exit');
     }
 
     function stopSpeaking() {
-        console.debug("enter");
-        console.log("Message Received - {method: 'TTS.StopSpeaking'}")
+        console.log("Received method: TTS.StopSpeaking");
         ttsPopUp.deactivate();
-        console.debug("exit");
     }
 
     function getLanguage(handle) {
-        console.log("Message Received - {method: 'TTS.GetLanguage'}")
-        replyGetLanguage(handle, dataContainer.hmiTTSVRLanguage)
+        console.log("Received method: TTS.GetLanguage");
+        replyGetLanguage(handle, dataContainer.hmiTTSVRLanguage);
     }
 
     function getSupportedLanguages(handle) {
-        console.log("Message Received - {method: 'TTS.GetSupportedLanguages'}")
-        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList)
+        console.log("Received method: TTS.GetSupportedLanguages");
+        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList);
     }
 
     function getCapabilities(handle) {
-        console.log("Message Received - {method: 'TTS.GetCapabilities'}")
+        console.log("Received method: TTS.GetCapabilities");
         replyGetCapabilities(handle,
             [
                 Common.SpeechCapabilities.SC_TEXT,
@@ -103,72 +93,32 @@ TTS
     }
 
     function performInteraction(helpPrompt, initialPrompt, timeoutPrompt, timeout) {
-        console.debug("enter");
-        var helpttsChunksLog = "",
-            initialttsChunkLog = "",
-            timeoutttsChunkLog = "";
+        console.log("Received method: TTS.PerformInteraction");
+        console.debug("helpPrompt =", JSON.stringify(helpttsChunks));
+        console.debug("initialPrompt =", JSON.stringify(initialPrompt));
+        console.debug("timeoutPrompt =", JSON.stringify(timeoutPrompt));
+        console.debug("timeout =", JSON.stringify(timeout));
 
-        if (helpPrompt) {
-            for (var i = 0; i < helpPrompt.length; i++) {
-                helpttsChunksLog += "{type: " + helpPrompt[i].type + ", " +
-                        "text: '" + helpPrompt[i].text + "'}, ";
-            }
-        }
-        if (initialPrompt) {
-            for (var i = 0; i < initialPrompt.length; i++) {
-                initialttsChunkLog += "{type: " + initialPrompt[i].type + ", " +
-                        "text: '" + initialPrompt[i].text + "'}, ";
-            }
-        }
-        if (timeoutPrompt) {
-            for (var i = 0; i < timeoutPrompt.length; i++) {
-                timeoutttsChunkLog += "{type: " + timeoutPrompt[i].type + ", " +
-                        "text: '" + timeoutPrompt[i].text + "'}, ";
-            }
-        }
-        console.log("Message Received - {method: 'TTS.PerformInteraction', params:{ " +
-                    "helpPrompt: [" + helpttsChunksLog + "], " +
-                    "initialPrompt: [" + initialttsChunkLog + "], " +
-                    "timeoutPrompt: [" + timeoutttsChunkLog + "], " +
-                    "timeout: " + timeout +
-                    "}}")
         ttsPopUp.performInteraction(ttsChunksToString(helpPrompt),
                                     ttsChunksToString(initialPrompt),
                                     ttsChunksToString(timeoutPrompt),
                                     timeout)
-        console.debug("exit");
     }
 
     function changeRegistration(ttsName, language, appID) {
-        console.debug("enter:", language, appID);
-        console.log("Message Received - {method: 'TTS.ChangeRegistration', params:{ " +
-                    "language: " + language + ", " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: TTS.ChangeRegistration");
+        console.debug("ttsName =", JSON.stringify(ttsName));
+        console.debug("language =", JSON.stringify(language));
+        console.debug("appID =", JSON.stringify(appID));
+
         dataContainer.changeRegistrationTTSVR(language, appID);
-        console.debug("exit");
     }
 
     function setGlobalProperties(helpPrompt, timeoutPrompt, appID) {
-        var helpPromptLog = "",
-            timeoutPromptLog = "";
-        if (helpPrompt) {
-            for (var i = 0; i < helpPrompt.length; i++) {
-                helpPromptLog += "{type: " + helpPrompt[i].type + ", " +
-                        "text: '" + helpPrompt[i].text + "'}, ";
-            }
-        }
-        if (timeoutPrompt) {
-            for (var i = 0; i < timeoutPrompt.length; i++) {
-                timeoutPromptLog += "{type: " + timeoutPrompt[i].type + ", " +
-                        "text: '" + timeoutPrompt[i].text + "'}, ";
-            }
-        }
-        console.log("Message Received - {method: 'TTS.SetGlobalProperties', params:{ " +
-                    "appID:" + appID + ", " +
-                    "helpPrompt: [" + helpPromptLog + "], " +
-                    "timeoutPrompt: [" + timeoutPromptLog + "]" +
-                    "}}");
+        console.log("Received method: TTS.SetGlobalProperties");
+        console.debug("helpPrompt =", JSON.stringify(helpPrompt));
+        console.debug("timeoutPrompt =", JSON.stringify(timeoutPrompt));
+        console.debug("appID =", JSON.stringify(appID));
 
         var newHelpPropmt = helpPrompt ?
                     helpPrompt.map(
@@ -190,7 +140,6 @@ TTS
                                                    helpPrompt: newHelpPropmt,
                                                    timeoutPrompt: newTimeoutPrompt
                                                })
-        console.debug("exit")
     }
 }
 

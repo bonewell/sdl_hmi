@@ -39,8 +39,9 @@ import "../models/Internal.js" as Internal
 UI
 {
     onOnRecordStart: {
-        console.log("Message Received - {signal: 'UI.OnRecordStart'}");
-        console.log("appID =", appID);
+        console.log("Received signal: UI.OnRecordStart");
+        console.debug("appID =", JSON.stringify(appID));
+        console.warn("Not implemented");
     }
 
     function filter (strings, fields) {
@@ -68,32 +69,14 @@ UI
 
     function alert(handle, alertStrings, duration, softButtons, progressIndicator,
         alertType, appID) {
-        var softButtonsLog = "",
-            alertStringsLog = "";
-        if (alertStrings) {
-            for (var i = 0; i < alertStrings.length; i++) {
-                alertStringsLog += "{fieldName: '" + alertStrings[i].fieldName + "', " +
-                        "fieldText: '" + alertStrings[i].fieldText + "'},";
-            }
-        }
-        if (softButtons) {
-            for (var i = 0; i < softButtons.length; i++) {
-                softButtonsLog += "{type: '" + softButtons[i].type + "', " +
-                        "text: " + softButtons[i].text + "', ";
-                softButtons[i].image ? softButtonsLog += "image: " + "{value: '" + softButtons[i].image.value + "', imageType: " + softButtons[i].image.imageType + "}, " : softButtonsLog += "";
-                softButtonsLog += "isHighlighted: " + softButtons[i].isHighlighted + "', " +
-                        "softButtonID: " + softButtons[i].softButtonID + "', " +
-                        "systemAction: " + softButtons[i].systemAction +
-                        "},";
-            }
-        }
-        console.log("Message Received - {method: 'UI.Alert', params:{ " +
-                    "alertStrings: [" + alertStringsLog + "]," +
-                    "duration: " + duration + "', " +
-                    "softButtons: [" + softButtonsLog + "]," +
-                    "progressIndicator: " + progressIndicator + "', " +
-                    "appID: " + appID + "', " +
-                    "}}")
+        console.log("Received method: UI.Alert");
+        console.debug("alertStrings =", JSON.stringify(alertStrings));
+        console.debug("duration =", JSON.stringify(duration));
+        console.debug("softButtons =", JSON.stringify(softButtons));
+        console.debug("progressIndicator =", JSON.stringify(progressIndicator));
+        console.debug("alertType =", JSON.stringify(alertType));
+        console.debug("appID =", JSON.stringify(appID));
+
         var fieldSubstrings = alertStrings
             .sort(function(a, b) { return a.fieldName - b.fieldName }) // sorting by fieldName
             .map(function(val) { return val.fieldText });              // mapping to array of strings
@@ -109,52 +92,20 @@ UI
 
     function show(showStrings, alignment, graphic, secondaryGraphic,
         softButtons, customPresets, appID) {
-        var softButtonsLog = "",
-            showStringsLog = "",
-            customPresetsLog = "",
-            graphiLog = "",
-            secondaryGraphicLog = "";
-        if (showStrings) {
-            for (var i = 0; i < showStrings.length; i++) {
-                showStringsLog += "{fieldName: '" + showStrings[i].fieldName + "', " +
-                        "fieldText: '" + showStrings[i].fieldText + "'},";
-            }
-        }
-        if (customPresets) {
-            for (var i = 0; i < customPresets.length; i++) {
-                customPresetsLog += "'" + customPresets[i] + "', ";
-            }
-        }
-        if (softButtons) {
-            for (var i = 0; i < softButtons.length; i++) {
-                softButtonsLog += "{type: '" + softButtons[i].type + "', " +
-                        "text: " + softButtons[i].text + "', ";
-                softButtons[i].image ? softButtonsLog += "image: " + "{value: '" + softButtons[i].image.value + "', imageType: " + softButtons[i].image.imageType + "}, " : softButtonsLog += "";
-                softButtonsLog += "isHighlighted: " + softButtons[i].isHighlighted + "', " +
-                        "softButtonID: " + softButtons[i].softButtonID + "', " +
-                        "systemAction: " + softButtons[i].systemAction +
-                        "},";
-            }
-        }
-        if (graphic) {
-            graphiLog = "{value: '" + graphic.value + "', imageType: " + graphic.imageType + "}";
-        }
-        if (secondaryGraphic) {
-            secondaryGraphicLog = "{value: '" + secondaryGraphic.value + "', imageType: " + secondaryGraphic.imageType + "}";
-        }
+        console.log("Received method: UI.Show");
+        console.debug( "showStrings =", JSON.stringify(showStrings));
+        console.debug("alignment =", JSON.stringify(alignment));
+        console.debug("graphic = ", JSON.stringify(graphic));
+        console.debug("secondaryGraphic =", JSON.stringify(secondaryGraphic));
+        console.debug("softButtons =", JSON.stringify(softButtons));
+        console.debug("customPresets =", JSON.stringify(customPresets));
+        console.debug("appID =", JSON.stringify(appID));
 
-        console.log("Message Received - {method: 'UI.Show', params:{ " +
-                    "showStrings: [" + showStringsLog + "], " +
-                    "alignment: " + alignment + "', " +
-                    "graphic: " + graphiLog + ", " +
-                    "secondaryGraphic: " + secondaryGraphicLog+ ", " +
-                    "softButtons: [" + softButtonsLog + "], " +
-                    "customPresets: [" + customPresetsLog + "], " +
-                    "appID: " + appID +
-                    "}}")
         var app = dataContainer.getApplication(appID);
 
-        app.softButtons.clear()
+        if (app.softButtons) {
+            app.softButtons.clear();
+        }
         if (softButtons) {
             softButtons.forEach(function(x) { app.softButtons.append(x); });
         }
@@ -212,122 +163,62 @@ UI
         }
 
         dataContainer.setApplicationProperties(appID, showData);
-        console.debug("exit")
     }
 
     function addCommand(cmdID, menuParams, cmdIcon, appID) {
-        var cmdIconLogs = "",
-            menuParamsLogs = "";
-
-        if (cmdIcon) {
-            cmdIconLogs = "{value: '" + cmdIcon.value + "', imageType: " + cmdIcon.imageType + "}";
-        }
-        if (menuParams) {
-            menuParamsLogs = "{parentID: " + menuParams.parentID + ", position: " + menuParams.position + "}";
-        }
-        console.log("Message Received - {method: 'UI.AddCommand', params:{ " +
-                    "appID: " + appID + ", " +
-                    "cmdID: " + cmdID + ", " +
-                    "cmdIcon: " + cmdIconLogs + ", " +
-                    "menuParams: " + menuParamsLogs +
-                    "}}")
+        console.log("Received method: UI.AddCommand");
+        console.debug("cmdID =", JSON.stringify(cmdID));
+        console.debug("menuParams =", JSON.stringify(menuParams));
+        console.debug("cmdIcon =", JSON.stringify(cmdIcon));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.addCommand(cmdID, menuParams, cmdIcon, appID)
     }
 
     function deleteCommand(cmdID, appID) {
-        console.log("Message Received - {method: 'UI.DeleteCommand', params:{ " +
-                    "appID: " + appID + ", " +
-                    "cmdID: " + cmdID +
-                    "}}")
+        console.log("Received method: UI.DeleteCommand");
+        console.debug("cmdID =", JSON.stringify(cmdID));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.deleteCommand(cmdID, appID)
     }
 
     function addSubMenu(menuID, menuParams, appID) {
-        var menuParamsLogs = "";
-
-        if (menuParams) {
-            menuParamsLogs = "{parentID: " + menuParams.parentID + ", position: " + menuParams.position + "}";
-        }
-        console.log("Message Received - {method: 'UI.AddSubMenu', params:{ " +
-                    "appID: " + appID + ", " +
-                    "menuID: " + menuID + ", " +
-                    "menuParams: " + menuParamsLogs +
-                    "}}")
+        console.log("Received method: UI.AddSubMenu");
+        console.debug("menuID =", JSON.stringify(menuID));
+        console.debug("menuParams =", JSON.stringify(menuParams));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.addSubMenu(menuID, menuParams, appID)
     }
 
     function deleteSubMenu(menuID, appID) {
-        console.log("Message Received - {method: 'UI.DeleteSubMenu', params:{ " +
-                    "appID:" + appID + ", " +
-                    "menuID: " + menuID +
-                    "}}")
+        console.log("Received method: UI.DeleteSubMenu");
+        console.debug("menuID =", JSON.stringify(menuID));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.deleteSubMenu(menuID, appID)
     }
 
     function performInteraction(handle, initialText, choiceSet, vrHelpTitle, vrHelp,
         timeout, interactionLayout, appID) {
-        console.debug("enter")
-        var choiseLog = "",
-            vrHelpLog = "",
-            initialTextLog = "";
-        if (choiceSet) {
-            for (var i = 0; i < choiceSet.length; i++) {
-                choiseLog += "{choiceID: " + choiceSet[i].choiceID + ", " +
-                        "menuName: '" + choiceSet[i].menuName + "', " +
-                        "image: {value: '" + choiceSet[i].image.value + "', imageType: " + choiceSet[i].image.imageType + "}, " +
-                        "secondaryText: '" + choiceSet[i].secondaryText + "', " +
-                        "tertiaryText: '" + choiceSet[i].tertiaryText + "', " +
-                        "secondaryImage: {value: '" + choiceSet[i].image.value + "', imageType: " + choiceSet[i].image.imageType + "}},";
-            }
-        }
-        if (vrHelp) {
-            for (var i = 0; i < vrHelp.length; i++) {
-                var vrHelpImageLog = "";
-                if (vrHelp[i].image) {
-                    vrHelpImageLog = "{value: '" + vrHelp[i].image.value + "', imageType: " + vrHelp[i].image.imageType + "}";
-                }
+        console.log("Received method: UI.PerformInteraction");
+        console.debug("appID:", JSON.stringify(appID));
+        console.debug("initialText =", JSON.stringify(initialText));
+        console.debug("choiceSet =", JSON.stringify(choiceSet));
+        console.debug("vrHelpTitle: '", JSON.stringify(vrHelpTitle));
+        console.debug("vrHelp =", JSON.stringify(vrHelp));
+        console.debug("timeout =", JSON.stringify(timeout));
+        console.debug("interactionLayout =", JSON.stringify(interactionLayout));
 
-                vrHelpLog += "{text: '" + vrHelp[i].text + "', " +
-                        "image: " + vrHelpImageLog + ", " +
-                        "position: " + vrHelp[i].position +
-                        "},";
-            }
-        }
-        if (initialText) {
-            initialTextLog = "{fieldName: " + initialText.fieldName + ", fieldText: '" + initialText.fieldText + "'}";
-        }
-
-        console.log("Message Received - {method: 'UI.PerformInteraction', params:{ " +
-                    "appID:" + appID + ", " +
-                    "initialText: " + initialTextLog + ", " +
-                    "choiceSet: [" + choiseLog + "], " +
-                    "vrHelpTitle: '" + vrHelpTitle + "', " +
-                    "vrHelp: [" + vrHelpLog + "], " +
-                    "timeout: " + timeout + ", " +
-                    "interactionLayout: " + interactionLayout +
-                    "}}")
+        interactionPopup.async = handle;
         interactionPopup.performInteraction(initialText, choiceSet, vrHelpTitle,
                                             vrHelp, timeout, interactionLayout, appID);
-        interactionPopup.async = handle;
-        console.debug("exit")
     }
 
     function setMediaClockTimer(handle, startTime, endTime, updateMode, appID) {
-        var startTimeLog = "",
-            endTimeLog = "";
-        if (startTime) {
-            startTimeLog = "hours: " + startTime.hours + ", minutes: " + startTime.minutes + ", seconds: " + startTime.seconds;
-        }
-        if (endTime) {
-            endTimeLog = "hours: " + endTime.hours + ", minutes: " + endTime.minutes + ", seconds: " + endTime.seconds;
-        }
+        console.log("Received method: UI.SetMediaClockTimer");
+        console.debug("startTime =", JSON.stringify(startTime));
+        console.debug("endTime =", JSON.stringify(endTime));
+        console.debug("updateMode =", JSON.stringify(updateMode));
+        console.debug("appID =", JSON.stringify(appID));
 
-        console.log("Message Received - {method: 'UI.SetMediaClockTimer', params:{ " +
-                    "startTime: {" + startTimeLog + "}, " +
-                    "endTime: {" + endTimeLog + "}, " +
-                    "updateMode: " + updateMode + ", " +
-                    "appID: " + appID +
-                    "}}")
         var app = dataContainer.getApplication(appID)
         var newStartTime
         var newEndTime
@@ -431,43 +322,18 @@ UI
 
         handle.code = resultCode;
         sendResult(handle);
-        console.debug("exit")
     }
 
-    function setGlobalProperties (vrHelpTitle, vrHelp, menuTitle, menuIcon, keyboardProperties, appID) {
-        console.debug("enter")
-        var vrHelpLog = "",
-            menuIconLog = "",
-            keyboardPropertiesLog = "";
-        if (vrHelp) {
-            for (var i = 0; i < vrHelp.length; i++) {
-                var vrHelpImageLog = "";
-                if (vrHelp[i].image) {
-                    vrHelpImageLog = "{value: '" + vrHelp[i].image.value + "', imageType: " + vrHelp[i].image.imageType + "}";
-                }
-                vrHelpLog += "{text: '" + vrHelp[i].text + "', " +
-                        "image: " + vrHelpImageLog + ", " +
-                        "position: " + vrHelp[i].position +
-                        "},";
-            }
-        }
-        if (menuIcon) {
-            menuIconLog = "{value: '" + menuIcon.value + "', imageType: " + menuIcon.imageType + "}";
-        }
-        if (keyboardProperties) {
-            keyboardPropertiesLog = "{language: '" + keyboardProperties.language + "', keyboardLayout: '" + keyboardProperties.language +
-                                "', sendDynamicEntry: '" + keyboardProperties.sendDynamicEntry + "', keypressMode: '" + keyboardProperties.keypressMode +
-                                "', limitedCharacterList: '" + keyboardProperties.limitedCharacterList + "', autoCompleteText: '" + keyboardProperties.autoCompleteText + "'}";
-        }
+    function setGlobalProperties (vrHelpTitle, vrHelp, menuTitle, menuIcon,
+        keyboardProperties, appID) {
+        console.log("Received method: UI.SetGlobalProperties");
+        console.debug("vrHelpTitle =", JSON.stringify(vrHelpTitle));
+        console.debug("vrHelp =", JSON.stringify(vrHelp));
+        console.debug("menuTitle =", JSON.stringify(menuTitle));
+        console.debug("menuIcon =", JSON.stringify(menuIcon));
+        console.debug("keyboardProperties =", JSON.stringify(keyboardProperties));
+        console.debug("appID =", JSON.stringify(appID));
 
-        console.log("Message Received - {method: 'UI.SetGlobalProperties', params:{ " +
-                    "appID:" + appID + ", " +
-                    "vrHelpTitle: '" + vrHelpTitle + "', " +
-                    "vrHelp: [" + vrHelpLog + "], " +
-                    "menuTitle: '" + menuTitle + "', " +
-                    "menuIcon: " + menuIconLog + ", " +
-                    "keyboardProperties: " + keyboardPropertiesLog +
-                    "}}")
         var app = dataContainer.getApplication(appID)
         var dataToUpdate = {}
 
@@ -502,55 +368,49 @@ UI
             dataToUpdate.menuIcon = menuIcon
         }
         dataContainer.setApplicationProperties(appID, dataToUpdate)
-        console.debug("exit")
     }
 
     function isReady(handle) {
-        console.log("Message Received - {method: 'UI.IsReady'}")
-        replyIsReady(handle, dataContainer.hmiUIAvailable)
+        console.log("Received method: UI.IsReady");
+        replyIsReady(handle, dataContainer.hmiUIAvailable);
     }
 
     function getLanguage(handle) {
-        console.log("Message Received - {method: 'UI.GetLanguage'}")
-        replyGetLanguage(handle, dataContainer.hmiUILanguage)
+        console.log("Received method: UI.GetLanguage");
+        replyGetLanguage(handle, dataContainer.hmiUILanguage);
     }
 
     function getSupportedLanguages(handle) {
-        console.log("Message Received - {method: 'UI.GetSupportedLanguages'}")
-        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList)
+        console.log("Received method: UI.GetSupportedLanguages");
+        replyGetSupportedLanguages(handle, settingsContainer.sdlLanguagesList);
     }
 
     function changeRegistration(appName, ngnMediaScreenAppName, language,
         appHMIType, appID) {
-        console.log("Message Received - {method: 'UI.ChangeRegistration', params:{ " +
-                    "language: " + language + ", " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: UI.ChangeRegistration");
+        console.debug("appName =", JSON.stringify(appName));
+        console.debug("ngnMediaScreenAppName =", JSON.stringify(ngnMediaScreenAppName));
+        console.debug("language =", JSON.stringify(language));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.changeRegistrationUI(language, appID)
     }
 
     function setAppIcon(syncFileName, appID) {
-        var syncFileNameLog = "";
-        if (syncFileName) {
-            syncFileNameLog = "{value: '" + syncFileName.value + "', imageType: " + syncFileName.imageType + "}";
-        }
-
-        console.log("Message Received - {method: 'UI.SetAppIcon', params:{ " +
-                    "syncFileName: " + syncFileNameLog + ", " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: UI.SetAppIcon");
+        console.debug("syncFileName =", JSON.stringify(syncFileName));
+        console.debug("appID =", JSON.stringify(appID));
         dataContainer.setApplicationProperties(appID, { icon: syncFileName.value })
     }
 
     function slider(handle, numTicks, position, sliderHeader, sliderFooter, timeout, appID) {
-        console.log("Message Received - {method: 'UI.Slider', params:{ " +
-                    "numTicks: " + numTicks + "', " +
-                    "position: " + position + "', " +
-                    "sliderHeader: '" + sliderHeader + "', " +
-                    "sliderFooter: [" + sliderFooter + "], " +
-                    "timeout: " + timeout + ", " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: UI.Slider");
+        console.debug("numTicks =", JSON.stringify(numTicks));
+        console.debug("position =", JSON.stringify(position));
+        console.debug("sliderHeader =", JSON.stringify(sliderHeader));
+        console.debug("sliderFooter =", JSON.stringify(sliderFooter));
+        console.debug("timeout =", JSON.stringify(timeout));
+        console.debug("appID =", JSON.stringify(appID));
+
         if (dataContainer.uiSlider.running) {
             console.debug("aborted")
             handle.code = Common.Result.ABORTED;
@@ -568,37 +428,18 @@ UI
         if (timeout !== 0) {
             sliderPopup.showSlider()
             sliderPopup.async = handle;
-            console.debug("exit")
         } else {
-            console.debug("exit")
             replySlider(handle, position);
         }
     }
 
     function scrollableMessage(handle, messageText, timeout, softButtons, appID) {
-        var softButtonsLog = "",
-            messageTextLog = "";
-        if (softButtons) {
-            for (var i = 0; i < softButtons.length; i++) {
-                softButtonsLog += "{type: '" + softButtons[i].type + "', " +
-                        "text: " + softButtons[i].text + "', ";
-                softButtons[i].image ? softButtonsLog += "image: " + "{value: '" + softButtons[i].image.value + "', imageType: " + softButtons[i].image.imageType + "}, " : softButtonsLog += "";
-                softButtonsLog += "isHighlighted: " + softButtons[i].isHighlighted + "', " +
-                        "softButtonID: " + softButtons[i].softButtonID + "', " +
-                        "systemAction: " + softButtons[i].systemAction +
-                        "},";
-            }
-        }
-        if (messageText) {
-            messageTextLog = "{fieldName: " + messageText.fieldName + ", fieldText: '" + messageText.fieldText + "'}";
-        }
+        console.log("Received method: UI.ScrollableMessage");
+        console.debug("messageText =", JSON.stringify(messageText));
+        console.debug("timeout =", JSON.stringify(timeout));
+        console.debug("softButtons =", JSON.stringify(softButtons));
+        console.debug("appID =", JSON.stringify(appID));
 
-        console.log("Message Received - {method: 'UI.ScrollableMessage', params:{ " +
-                    "messageText: " + messageTextLog + ", " +
-                    "timeout: " + timeout + "', " +
-                    "softButtons: [" + softButtonsLog + "]," +
-                    "appID: " + appID + "', " +
-                    "}}")
         // TODO{ALeshin}: Also check HMILevel, when it will be available. It should be FULL otherwise - REJECTED
         if (contentLoader.item.systemContext !== Common.SystemContext.SYSCTXT_MAIN) {
             handle.code = Common.Result.REJECTED;
@@ -630,11 +471,10 @@ UI
         dataContainer.scrollableMessageModel.appId = appID
         dataContainer.scrollableMessageModel.async = handle
         contentLoader.go("./views/ScrollableMessageView.qml")
-        console.debug("exit")
     }
 
     function getCapabilities(handle) {
-        console.log("Message Received - {method: 'UI.GetCapabilities'}")
+        console.log("Received method: UI.GetCapabilities");
         replyGetCapabilities(handle, settingsContainer.displayCapabilities,
             {
                 "samplingRate": Common.SamplingRate.RATE_44KHZ,
@@ -647,17 +487,10 @@ UI
     }
 
     function performAudioPassThru(handle, appID, audioPassThruDisplayTexts, timeout) {
-        var displayTextsLog = "";
-        if (audioPassThruDisplayTexts) {
-            for (var i = 0; i < audioPassThruDisplayTexts.length; i++) {
-                displayTextsLog += "{fieldName: '" + audioPassThruDisplayTexts[i].fieldName + "', " +
-                        "fieldText: " + audioPassThruDisplayTexts[i].fieldText + "'},";
-            }
-        }
-        console.log("Message Received - {method: 'UI.PerformAudioPassThru', params:{ " +
-                    "audioPassThruDisplayTexts: [" + displayTextsLog + "], " +
-                    "maxDuration: " + timeout +
-                    "}}")
+        console.log("Received method: UI.PerformAudioPassThru");
+        console.debug("appID =", JSON.stringify(appID));
+        console.debug("audioPassThruDisplayTexts =", JSON.stringify(displayTexts));
+        console.debug("timeout =", JSON.stringify(timeout));
 
         if (dataContainer.uiAudioPassThru.running) {
             console.debug("aborted")
@@ -673,12 +506,10 @@ UI
         }
         performAudioPassThruPopup.async = handle;
         performAudioPassThruPopup.showAudioPassThru()
-        console.debug("exit")
     }
 
     function endAudioPassThru(handle) {
-        console.debug("enter")
-        console.log("Message Received - {method: 'UI.EndAudioPassThru'}")
+        console.log("Received method: UI.EndAudioPassThru");
 
         if (!dataContainer.uiAudioPassThru.running) {
             console.debug("rejected")
@@ -687,14 +518,12 @@ UI
         }
         performAudioPassThruPopup.complete(Common.Result.SUCCESS)
         sendResult(handle);
-        console.debug("exit")
     }
 
     function closePopUp(handle, methodName) {
-        console.debug("enter")
-        console.log("Message Received - {method: 'UI.ClosePopUp', params:{ " +
-                    "methodName: " + methodName +
-                    "}}")
+        console.log("Received method: UI.ClosePopUp");
+        console.debug("methodName =", JSON.stringify(methodName));
+
         var popUpToClose
 
         if (dataContainer.activePopup.length === 0) {
@@ -727,7 +556,6 @@ UI
                 vrHelpPopup.complete(Common.Result.SUCCESS)
                 break
         }
-        console.debug("exit")
     }
 
     function fillSoftButtons(element, index, array) {
@@ -742,12 +570,16 @@ UI
     }
 
     function setDisplayLayout(displayLayout, appID) {
-        console.log("Message Received - {method: 'UI.SetDisplayLayout'");
-        // TODO: it's stub. Need to implement
+        console.log("Received method: UI.SetDisplayLayout");
+        console.debug("displayLayout =", JSON.stringify(displayLayout));
+        console.warn("Not implemented");
     }
 
     function showCustomForm(handle, customFormID, parentFormID) {
-        console.log("Message Received - {method: 'UI.ShowCustomForm'");
+        console.log("Received method: UI.ShowCustomForm");
+        console.debug("customFormID =", JSON.stringify(customFormID));
+        console.debug("parentFormID =", JSON.stringify(parentFormID));
+        console.warn("Not implemented");
         // TODO: it's stub. Need to implement
         replyShowCustomForm(handle, "info");
     }

@@ -258,6 +258,11 @@ void UI::replyShowCustomForm(const QVariantMap& handle, const QVariant &info)
     adapter->ReplyShowCustomForm(handle, info);
 }
 
+void UI::replySlider(const QVariantMap &handle, const QVariant &sliderPosition)
+{
+    adapter->ReplySlider(handle, sliderPosition);
+}
+
 void UI::replyIsReady(const QVariantMap& handle, bool available)
 {
     adapter->ReplyIsReady(handle, available);

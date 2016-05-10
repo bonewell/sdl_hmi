@@ -48,8 +48,8 @@ private slots:
 
 private:
     inline std::string name() const;
-    inline bool invoke() const;
     inline bool canSplit(int max) const;
+    bool invoke();
     const Handle handle_;
     const QMetaMethod meta_;
     Message request_;

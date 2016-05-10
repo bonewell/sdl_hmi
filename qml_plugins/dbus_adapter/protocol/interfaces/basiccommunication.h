@@ -130,6 +130,7 @@ signals:
     void OnEmergencyEvent(bool enabled);
     void OnDeviceChosen(const DeviceInfo& deviceInfo);
     void OnFindApplications(const Optional<DeviceInfo>& deviceInfo);
+    void OnAppActivated(int appID);
     void OnAppDeactivated(int appID);
     void OnExitApplication(int reason, int appID);
     void OnExitAllApplications(int reason);
@@ -191,6 +192,7 @@ public:
     Q_INVOKABLE void onEmergencyEvent(bool enabled);
     Q_INVOKABLE void onDeviceChosen(const QVariantMap& deviceInfo);
     Q_INVOKABLE void onFindApplications(const QVariant& deviceInfo = QVariant());
+    Q_INVOKABLE void onAppActivated(int appID);
     Q_INVOKABLE void onAppDeactivated(int appID);
     Q_INVOKABLE void onExitApplication(int reason, int appID);
     Q_INVOKABLE void onExitAllApplications(int reason);

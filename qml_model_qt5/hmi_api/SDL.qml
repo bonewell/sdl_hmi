@@ -36,23 +36,27 @@ import "Common.js" as Common
 SDL
 {
     onOnAppPermissionChanged: {
-        console.log("enter onStatusUpdate");
-        console.log("appID = ", JSON.stringify(appID));
-        console.log("isAppPermissionsRevoked = ", JSON.stringify(isAppPermissionsRevoked));
-        console.log("appRevokedPermissions = ", JSON.stringify(appRevokedPermissions));
-        console.log("appRevoked = ", JSON.stringify(appRevoked));
-        console.log("appPermissionsConsentNeeded = ", JSON.stringify(appPermissionsConsentNeeded));
-        console.log("appUnauthorized = ", JSON.stringify(appUnauthorized));
-        console.log("priority = ", JSON.stringify(priority));
-        console.log("requestType = ", JSON.stringify(requestType));
+        console.log("Received signal: SDL.OnStatusUpdate");
+        console.debug("appID = ", JSON.stringify(appID));
+        console.debug("isAppPermissionsRevoked = ", JSON.stringify(isAppPermissionsRevoked));
+        console.debug("appRevokedPermissions = ", JSON.stringify(appRevokedPermissions));
+        console.debug("appRevoked = ", JSON.stringify(appRevoked));
+        console.debug("appPermissionsConsentNeeded = ", JSON.stringify(appPermissionsConsentNeeded));
+        console.debug("appUnauthorized = ", JSON.stringify(appUnauthorized));
+        console.debug("priority = ", JSON.stringify(priority));
+        console.debug("requestType = ", JSON.stringify(requestType));
+        console.warn("Not implemented");
     }
 
     onOnSDLConsentNeeded: {
-        console.log("enter onStatusUpdate: ", JSON.stringify(device));
+        console.log("Received signal: SDL.OnSDLConsentNeeded");
+        console.debug("device =", JSON.stringify(device));
+        console.warn("Not implemented");
     }
 
     onOnStatusUpdate: {
-        console.log("enter onStatusUpdate")
+        console.log("Received signal: SDL.OnStatusUpdate");
+        console.debug("status =", JSON.stringify(status));
         settingsContainer.updateStatus(status);
     }
 }

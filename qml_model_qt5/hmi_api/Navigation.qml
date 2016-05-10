@@ -38,67 +38,50 @@ import "Common.js" as Common
 Navigation
 {
     onOnAudioDataStreaming: {
-        console.log("Message Received - {signal: 'Navigation.OnAudioDataStreaming'}")
-        console.log("Available =", available);
+        console.log("Received signal: Navigation.OnAudioDataStreaming")
+        console.log("available =", JSON.stringify(available));
+        console.warn("Not implemented");
     }
 
     onOnVideoDataStreaming: {
-        console.log("Message Received - {signal: 'Navigation.OnVideoDataStreaming'}")
-        console.log("Available =", available);
+        console.log("Received signal: Navigation.OnVideoDataStreaming")
+        console.log("available =", JSON.stringify(available));
+        console.warn("Not implemented");
     }
 
     function isReady(handle) {
-        console.log("Message Received - {method: 'Navigation.IsReady'}")
+        console.log("Received method: Navigation.IsReady")
         replyIsReady(handle, dataContainer.hmiNavigationAvailable)
     }
 
     function sendLocation(appID, longitudeDegrees, latitudeDegrees, locationName,
         locationDescription, addressLines, phoneNumber, locationImage, timeStamp, address) {
-        console.log("Message Received - {method: 'Navigation.SendLocation'}");
-        console.log("params=", JSON.stringify(params));
+        console.log("Received method: Navigation.SendLocation");
+        console.log("appID =", JSON.stringify(appID));
+        console.log("longitudeDegrees =", JSON.stringify(longitudeDegrees));
+        console.log("latitudeDegrees =", JSON.stringify(latitudeDegrees));
+        console.log("locationName =", JSON.stringify(locationName));
+        console.log("locationDescription =", JSON.stringify(locationDescription));
+        console.log("addressLines =", JSON.stringify(addressLines));
+        console.log("phoneNumber =", JSON.stringify(phoneNumber));
+        console.log("locationImage =", JSON.stringify(locationImage));
+        console.log("timeStamp =", JSON.stringify(timeStamp));
+        console.log("address =", JSON.stringify(address));
+        console.warn("Not implemented");
     }
 
     function showConstantTBT(handle, navigationTexts, turnIcon, nextTurnIcon,
         distanceToManeuver, distanceToManeuverScale, maneuverComplete,
         softButtons, appID) {
-        console.debug("enter")
-        var navigationTextsLog = "",
-            softButtonsLog = "",
-            turnIconLogs = "",
-            nextTurnIconLogs = "";
-        if (navigationTexts) {
-            for (var i = 0; i < navigationTexts.length; i++) {
-                navigationTextsLog += "{fieldName: '" + navigationTexts[i].fieldName + "', " +
-                        "fieldText: '" + navigationTexts[i].fieldText + "'},";
-            }
-        }
-        if (softButtons) {
-            for (var i = 0; i < softButtons.length; i++) {
-                softButtonsLog += "{type: '" + softButtons[i].type + "', " +
-                        "text: " + softButtons[i].text + "', ";
-                softButtons[i].image ? softButtonsLog += "image: " + "{value: '" + softButtons[i].image.value + "', imageType: " + softButtons[i].image.imageType + "}, " : softButtonsLog += "";
-                softButtonsLog += "isHighlighted: " + softButtons[i].isHighlighted + "', " +
-                        "softButtonID: " + softButtons[i].softButtonID + "', " +
-                        "systemAction: " + softButtons[i].systemAction +
-                        "},";
-            }
-        }
-        if (turnIcon) {
-            turnIconLogs = "{value: '" + turnIcon.value + "', imageType: " + turnIcon.imageType + "}";
-        }
-        if (nextTurnIcon) {
-            nextTurnIconLogs = "{value: '" + nextTurnIcon.value + "', imageType: " + nextTurnIcon.imageType + "}";
-        }
-        console.log("Message Received - {method: 'Navigation.ShowConstantTBT', params:{ " +
-                    "navigationTexts: [" + navigationTextsLog + "], " +
-                    "turnIcon: " + turnIconLogs + ", " +
-                    "nextTurnIcon: " + nextTurnIconLogs + ", " +
-                    "distanceToManeuver: " + distanceToManeuver + ", " +
-                    "distanceToManeuverScale: " + distanceToManeuverScale + ", " +
-                    "maneuverComplete: " + maneuverComplete + ", " +
-                    "softButtons: [" + softButtonsLog + "], " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: Navigation.ShowConstantTBT");
+        console.debug("navigationTexts =", JSON.stringify(navigationTexts));
+        console.debug("turnIcon =", JSON.stringify(turnIcon));
+        console.debug("nextTurnIcon =", JSON.stringify(nextTurnIcon));
+        console.debug("distanceToManeuver =", JSON.stringify(distanceToManeuver));
+        console.debug("distanceToManeuverScale =", JSON.stringify(distanceToManeuverScale));
+        console.debug("maneuverComplete =", JSON.stringify(maneuverComplete));
+        console.debug("softButtons =", JSON.stringify(softButtons));
+        console.debug("appID =", JSON.stringify(appID));
 
         var app = dataContainer.getApplication(appID)
         var dataToUpdate = {}
@@ -144,51 +127,18 @@ Navigation
     }
 
     function alertManeuver(softButtons, appID) {
-        console.debug("enter")
-        var softButtonsLog = "";
-
-        if (softButtons) {
-            for (var i = 0; i < softButtons.length; i++) {
-                softButtonsLog += "{type: '" + softButtons[i].type + "', " +
-                        "text: " + softButtons[i].text + "', ";
-                softButtons[i].image ? softButtonsLog += "image: " + "{value: '" + softButtons[i].image.value + "', imageType: " + softButtons[i].image.imageType + "}, " : softButtonsLog += "";
-                softButtonsLog += "isHighlighted: " + softButtons[i].isHighlighted + "', " +
-                        "softButtonID: " + softButtons[i].softButtonID + "', " +
-                        "systemAction: " + softButtons[i].systemAction +
-                        "},";
-            }
-        }
-        console.log("Message Received - {method: 'Navigation.AlertManeuver', params:{ " +
-                    "softButtons: [" + softButtonsLog + "]" +
-                    "}}")
-
-        console.debug("exit")
+        console.log("Received method: Navigation.AlertManeuver");
+        console.debug("softButtons =", JSON.stringify(softButtons));
+        console.debug("appID =", JSON.stringify(appID));
+        console.warn("Not implemented");
     }
 
     function updateTurnList(turnList, softButtons, appID) {
-        console.debug("enter")
-        var turnListLog = "",
-            softButtonsLog = "";
-        if (turnList) {
-            for (var i = 0; i < turnList.length; i++) {
-                turnList[i].navigationText ? turnListLog += "{navigationText: {fieldName: '" + turnList[i].navigationText.fieldName + "', fieldText: '" + turnList[i].navigationText.fieldText + "'}," : turnListLog += "{";
-                turnList[i].turnIcon ? turnListLog += "turnIcon: " + "{value: '" + turnList[i].turnIcon.value + "', imageType: " + turnList[i].turnIcon.imageType + "}}, " : turnListLog += "},";
-            }
-        }
-        if (softButtons) {
-            softButtonsLog += "{type: '" + softButtons[0].type + "', " +
-                    "text: '" + softButtons[0].text + "', ";
-            softButtons[0].image ? softButtonsLog += "image: " + "{value: '" + softButtons[0].image.value + "', imageType: " + softButtons[0].image.imageType + "}, " : softButtonsLog += "";
-            softButtonsLog += "isHighlighted: " + softButtons[0].isHighlighted + "', " +
-                    "softButtonID: " + softButtons[0].softButtonID + "', " +
-                    "systemAction: " + softButtons[0].systemAction +
-                    "},";
-        }
-        console.log("Message Received - {method: 'Navigation.UpdateTurnList', params:{ " +
-                    "softButtons: [" + softButtonsLog + "], " +
-                    "turnList: [" + turnListLog + "], " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: Navigation.UpdateTurnList");
+        console.debug("turnList =", JSON.stringify(turnList));
+        console.debug("softButtons =", JSON.stringify(softButtons));
+        console.debug("appID =", JSON.stringify(appID));
+
         if (turnList !== undefined) {
             dataContainer.getApplication(appID).turnList.clear();
             turnList.forEach(fillTurnList, dataContainer.getApplication(appID).turnList);
@@ -198,7 +148,6 @@ Navigation
             softButtons.forEach(fillSoftButtons, dataContainer.getApplication(appID).turnListSoftButtons);
         }
         dataContainer.navigationModel.appId = appID;
-        console.debug("exit")
     }
 
     function fillTexts(element, index, array) {
@@ -222,30 +171,29 @@ Navigation
     }
 
     function startStream(url, appID) {
-        console.debug("enter")
+        console.log("Received method: Navigation.StartStream");
+        console.debug("url =", JSON.stringify(url));
+        console.debug("appID =", JSON.stringify(appID));
         player.startStream(url)
-        console.debug("exit")
     }
 
     function stopStream(appID) {
-        console.debug("enter")
+        console.log("Received method: Navigation.StopStream");
+        console.debug("appID =", JSON.stringify(appID));
         player.stop()
-        console.debug("exit")
     }
 
     function startAudioStream(url, appID) {
-        console.log("Message Received - {method: 'Navigation.StartAudioStream', params:{ " +
-                    "url: '" + url + "'" +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: Navigation.StartAudioStream");
+        console.debug("url =", JSON.stringify(url));
+        console.debug("appID =", JSON.stringify(appID));
         stream.source = url;
         stream.play();
     }
 
     function stopAudioStream(appID) {
-        console.log("Message Received - {method: 'Navigation.StopAudioStream', params:{ " +
-                    "appID: " + appID +
-                    "}}")
+        console.log("Received method: Navigation.StopAudioStream");
+        console.debug("appID =", JSON.stringify(appID));
         stream.stop();
     }
 
@@ -265,20 +213,23 @@ Navigation
                         navigationText: element.navigationText,
                         turnIcon: element.turnIcon
                     });
-        console.debug(element.navigationText)
     }
 
     function getWayPoints(handle, wayPointType) {
-        console.log("Message Received - {method: 'Navigation.GetWayPoints'");
-        console.log("wayPointType=", JSON.stringify(wayPointType));
+        console.log("Received method: Navigation.GetWayPoints");
+        console.debug("wayPointType=", JSON.stringify(wayPointType));
+        console.warn("Not implemented");
+        // TODO: it's stub, you need to implement
         replyGetWayPoints(handle, []);
     }
 
     function subscribeWayPoints() {
-        console.log("Message Received - {method: 'Navigation.SubscribeWayPoints'");
+        console.log("Received method: Navigation.SubscribeWayPoints");
+        console.warn("Not implemented");
     }
 
     function unsubscribeWayPoints() {
-        console.log("Message Received - {method: 'Navigation.UnsubscribeWayPoints'");
+        console.log("Received method: Navigation.UnsubscribeWayPoints");
+        console.warn("Not implemented");
     }
 }
