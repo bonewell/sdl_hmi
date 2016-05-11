@@ -178,7 +178,7 @@ BasicCommunication
     function allowDeviceToConnect(handle, device) {
         console.log("Received method: BasicCommunication.AllowDeviceToConnect");
         console.debug("device =", JSON.stringify(device));
-        replyallowDeviceToConnect(handle, true)
+        replyAllowDeviceToConnect(handle, true)
     }
 
     function mixingAudioSupported(handle) {
