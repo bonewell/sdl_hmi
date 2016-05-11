@@ -154,7 +154,7 @@ ContextPopup {
         console.debug("enter")
         switch (reason) {
             case Common.Result.SUCCESS:
-                sdlUI.repyPerformInteraction(async, choiceID, manualTextEntry)
+                sdlUI.replyPerformInteraction(async, choiceID, manualTextEntry)
                 break
             case Common.Result.ABORTED:
                 async.code = Common.Result.ABORTED;
