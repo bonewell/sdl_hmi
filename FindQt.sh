@@ -41,20 +41,15 @@ usage() {
   echo
 }
 
-version2int() {
-  IFS="."
-  local ver=0
-  for i in $1; do
-    ver=$(( $ver * 32 + $i ))
-  done
-  echo $ver
+major_minor() {
+  version=$1
+  echo `expr "$version" : '\([0-9]\+[.][0-9]\+\)'`
 }
 
 version_match() {
-  v1=$(version2int $1)
-  v2=$(version2int $2)
-  # It's bash way to say "if ((version1 < version2) and (major1 == major2))
-  if [[ ( $v1 -le $v2 ) && ( $(( ($v1 / 1024) - ($v2 / 1024) )) == 0 ) ]]; then
+  v1=$(major_minor $1)
+  v2=$(major_minor $2)
+  if [[ $v1 == $v2 ]]; then
     return 0;
   else
     return 1;

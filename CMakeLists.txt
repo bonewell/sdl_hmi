@@ -30,6 +30,8 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+set(QT_VERSION "5.1.0" CACHE STRING "Desired version of Qt to build")
+
 option(BUILD_TESTS "Possibility to build and run tests" OFF)
 option(ENABLE_LOG "Logging feature" ON)
 
@@ -68,8 +70,6 @@ if (ENABLE_LOG)
   message(STATUS "Log is turned on")
   add_definitions(-DENABLE_LOG)
 endif()
-
-set(qt_version "5.1.0")
 
 execute_process(
     COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${qt_version}
