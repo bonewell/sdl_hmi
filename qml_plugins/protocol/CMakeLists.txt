@@ -30,21 +30,18 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set(target DbusAdapter)
-set(destination com/ford/sdl/hmi/dbus_adapter)
+set(target Protocol)
+set(destination com/ford/sdl/hmi/protocol)
 set(install_destination bin/plugins/${destination})
 set(library_name ${CMAKE_SHARED_LIBRARY_PREFIX}${target}${CMAKE_SHARED_LIBRARY_SUFFIX})
 
 set(CMAKE_AUTOMOC ON)
 set(SOURCES
-  dbus_plugin.cc
+  protocol_plugin.cc
   core/abstractadapter.cpp
   core/courier.cpp
   core/optional.cpp
   core/slave.cpp
-  core/moc_watcher.cpp
-  core/dbus/dbusconnector.cpp
-  core/dbus/dbuswatcher.cpp
   protocol/interfaces/buttons.cpp
   protocol/interfaces/tts.cpp
   protocol/interfaces/vr.cpp
@@ -53,7 +50,22 @@ set(SOURCES
   protocol/interfaces/ui.cpp
   protocol/interfaces/vehicleinfo.cpp
   protocol/interfaces/sdl.cpp
+  moc_watcher.cpp
 )
+
+if(${TRANSPORT} STREQUAL "dbus")
+  list(APPEND SOURCES
+    dbus/dbusconnector.cpp
+    dbus/dbuswatcher.cpp
+  )
+  add_definitions(-DDBUS)
+elseif(${TRANSPORT} STREQUAL "websocket")
+  list(APPEND SOURCES
+    websocket/websocketconnector.cpp
+    websocket/websocketwatcher.cpp
+  )
+  add_definitions(-DWEBSOCKET)
+endif()
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -62,8 +74,8 @@ include_directories(
 
 add_library(${target} SHARED ${SOURCES})
 
-qt5_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/core/watcher.h core/moc_watcher.cpp)
-qt5_use_modules(${target} Core DBus Qml)
+qt5_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/core/watcher.h moc_watcher.cpp)
+qt5_use_modules(${target} Core DBus Qml WebSockets)
 set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
 set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
 

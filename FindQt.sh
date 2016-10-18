@@ -136,7 +136,7 @@ fi
 export -f find_file
 export -f qmake_data
 export -f version_match
-export -f version2int
+export -f major_minor
 
 qmake=$(find -L $CUSTOM_QT_DIR ~ /opt /usr/local -name '.*' -prune \
         -o -name qmake -type f \

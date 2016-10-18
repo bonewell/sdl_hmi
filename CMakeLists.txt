@@ -73,22 +73,18 @@ if (ENABLE_LOG)
 endif()
 
 execute_process(
-    COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${qt_version}
+    COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${QT_VERSION}
         OUTPUT_VARIABLE qt_bin_dir
 )
-message(STATUS "Binary directory Qt ${qt_version} is ${qt_bin_dir}")
+message(STATUS "Binary directory Qt ${QT_VERSION} is ${qt_bin_dir}")
 set(ENV{PATH} ${qt_bin_dir}:$ENV{PATH})
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5Qml REQUIRED)
 find_package(Qt5Quick REQUIRED)
+find_package(Qt5WebSockets REQUIRED)
 set(qmlplugindump_binary ${qt_bin_dir}/qmlplugindump)
-
-set(RTLIB rt)
-if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
-  set(RTLIB )
-endif()
 
 set(main_qml "MainWindow.qml")
 set(plugins_dir "plugins")
@@ -98,9 +94,11 @@ if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
   set(command_arguments "${main_qml} ${plugins_dir}")
 else ()
   execute_process(
-    COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${qt_version} -b qmlscene
+    COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${QT_VERSION} -b qmlscene
     OUTPUT_VARIABLE start_command
   )
+  set(start_command
+      "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${qt_bin_dir}/../lib\n${start_command}")
   set(command_arguments "${main_qml} -I ${plugins_dir}")
 endif ()
 

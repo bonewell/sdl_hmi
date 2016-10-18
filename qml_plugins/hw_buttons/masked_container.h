@@ -38,26 +38,16 @@
 #include <vector>
 #include <QtCore/QString>
 
-#include "qt_version.h"
-
-#if QT_4
-#  include <QtDeclarative/QDeclarativeItem>
-typedef QDeclarativeItem Item;
-typedef QGraphicsSceneMouseEvent MouseEvent;
-#elif QT_5
-#  include <QtQuick/QQuickItem>
-typedef QQuickItem Item;
-typedef QMouseEvent MouseEvent;
-#endif
+#include <QtQuick/QQuickItem>
 
 #include "attributed_mouse_event.h"
 
-class MaskedContainer : public Item {
+class MaskedContainer : public QQuickItem {
   Q_OBJECT
   Q_DISABLE_COPY(MaskedContainer)
 
  public:
-  explicit MaskedContainer(Item *parent = 0);
+  explicit MaskedContainer(QQuickItem *parent = 0);
   ~MaskedContainer();
 
  signals:
@@ -66,22 +56,16 @@ class MaskedContainer : public Item {
 
  protected:
   virtual void componentComplete();
-  virtual void mousePressEvent(MouseEvent *event);
-  virtual void mouseReleaseEvent(MouseEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
 
  private:
-  std::vector<Item*> images_;
+  std::vector<QQuickItem*> images_;
   int *mask_;
 
-#if QT_4
-  int indexOfMask(qreal x, qreal y) const {
-    return static_cast<int>(y * width() + x);
-  }
-#elif QT_5
   int indexOfMask(int x, int y) const {
     return y * static_cast<int>(width()) + x;
   }
-#endif  // QT_VERSION
 };
 
 QML_DECLARE_TYPE(MaskedContainer)

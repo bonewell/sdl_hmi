@@ -34,6 +34,6 @@
 
 #include "attributed_mouse_event.h"
 
-Item *AttributedMouseEvent::item() const {
+QQuickItem *AttributedMouseEvent::item() const {
     return item_;
 }
