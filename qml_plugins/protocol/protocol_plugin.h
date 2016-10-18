@@ -32,14 +32,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_DBUS_ADAPTER_DBUS_PLUGIN_H_
-#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_DBUS_ADAPTER_DBUS_PLUGIN_H_
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_PROTOCOL_PLUGIN_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_PROTOCOL_PLUGIN_H_
 
 #include <QtDBus/QDBusContext>
 
 #include <QtQml/QQmlExtensionPlugin>
 
-class DbusPlugin : public QQmlExtensionPlugin, public QDBusContext {
+class ProtocolPlugin : public QQmlExtensionPlugin, public QDBusContext {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
@@ -47,5 +47,4 @@ class DbusPlugin : public QQmlExtensionPlugin, public QDBusContext {
   void registerTypes(const char *uri);
 };
 
-#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_DBUS_ADAPTER_DBUS_PLUGIN_H_
-
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_PROTOCOL_PLUGIN_H_

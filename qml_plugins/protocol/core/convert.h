@@ -1,5 +1,5 @@
-#ifndef CONVERT_H
-#define CONVERT_H
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_CONVERT_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_CONVERT_H_
 
 #include <QVariant>
 #include <QJSValue>
@@ -182,4 +182,4 @@ inline QJSValue &operator<<(QJSValue &argument, const QList<T> &value) {
     return argument;
 }
 
-#endif // CONVERT_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_CONVERT_H_

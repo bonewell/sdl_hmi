@@ -1,5 +1,5 @@
-﻿#ifndef ARGUMENT_H
-#define ARGUMENT_H
+﻿#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ARGUMENT_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ARGUMENT_H_
 
 #include <QString>
 #include <QDBusArgument>
@@ -83,4 +83,4 @@ private:
     QJSValue& argument_;
 };
 
-#endif // ARGUMENT_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ARGUMENT_H_

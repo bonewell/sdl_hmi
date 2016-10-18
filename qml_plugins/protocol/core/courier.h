@@ -1,5 +1,5 @@
-#ifndef COURIER_H
-#define COURIER_H
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_COURIER_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_COURIER_H_
 
 #include <QObject>
 #include <QJSValue>
@@ -55,4 +55,4 @@ private:
     int index_;
 };
 
-#endif // COURIER_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_COURIER_H_

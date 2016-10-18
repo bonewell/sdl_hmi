@@ -32,7 +32,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "dbus_plugin.h"
+#include "protocol_plugin.h"
 
 #ifdef ENABLE_LOG
 #  include <log4cxx/logger.h>
@@ -59,7 +59,7 @@ log4cxx::LoggerPtr logger_ = log4cxx::LoggerPtr(
                               log4cxx::Logger::getLogger("DBusPlugin"));
 #endif  // ENABLE_LOG
 
-void DbusPlugin::registerTypes(const char *uri) {
+void ProtocolPlugin::registerTypes(const char *uri) {
 #ifdef ENABLE_LOG
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
 #endif  // ENABLE_LOG

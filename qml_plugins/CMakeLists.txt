@@ -28,8 +28,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# --- DBus plugin
-add_subdirectory(./dbus_adapter)
+# --- Protocol plugin
+add_subdirectory(./protocol)
 
 # --- Hmi Framework plugin
 add_subdirectory(./hw_buttons)

@@ -5,7 +5,7 @@
 #include <QtDBus/QDBusPendingReply>
 #include <QtQuick/QQuickItem>
 
-#include "core/dbus/dbuswatcher.h"
+#include "dbus/dbuswatcher.h"
 
 DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
     interface_(0)

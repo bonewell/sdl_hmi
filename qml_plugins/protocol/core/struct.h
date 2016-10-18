@@ -1,5 +1,5 @@
-#ifndef STRUCT_H
-#define STRUCT_H
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_
 
 #include <QtDBus/QDBusArgument>
 #include <QMetaType>
@@ -71,4 +71,4 @@ inline void register_struct() {
     qDBusRegisterMetaType<Optional<QList<T> > >();
 }
 
-#endif // STRUCT_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_

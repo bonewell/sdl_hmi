@@ -32,7 +32,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.ford.sdl.hmi.dbus_adapter 1.0
+import com.ford.sdl.hmi.protocol 1.0
 import "Common.js" as Common
 
 VehicleInfo

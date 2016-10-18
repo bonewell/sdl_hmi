@@ -1,5 +1,5 @@
-#ifndef HANDLE_H
-#define HANDLE_H
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_HANDLE_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_HANDLE_H_
 #include <QString>
 #include <QVariantMap>
 
@@ -23,4 +23,4 @@ struct Handle
     }
 };
 
-#endif // HANDLE_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_HANDLE_H_

@@ -1,5 +1,5 @@
-#ifndef WATCHER_H
-#define WATCHER_H
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_WATCHER_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_WATCHER_H_
 
 #include <QObject>
 
@@ -14,4 +14,4 @@ signals:
     void finished();
 };
 
-#endif // WATCHER_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_WATCHER_H_

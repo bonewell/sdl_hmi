@@ -31,6 +31,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 set(QT_VERSION "5.1.0" CACHE STRING "Desired version of Qt to build")
+set(TRANSPORT "dbus" CACHE STRING "Type of desired transport [dbus, websocket, mqueue]")
 
 option(BUILD_TESTS "Possibility to build and run tests" OFF)
 option(ENABLE_LOG "Logging feature" ON)

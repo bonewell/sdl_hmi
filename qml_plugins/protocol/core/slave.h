@@ -1,5 +1,5 @@
-#ifndef SLAVE_H
-#define SLAVE_H
+#ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_SLAVE_H_
+#define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_SLAVE_H_
 
 #include <QObject>
 #include <QList>
@@ -60,4 +60,4 @@ private:
     QVariantList output_;
 };
 
-#endif // SLAVE_H
+#endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_SLAVE_H_
