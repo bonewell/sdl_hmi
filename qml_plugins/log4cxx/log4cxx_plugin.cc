@@ -66,14 +66,6 @@ void saveLog(QtMsgType type, log4cxx::spi::LocationInfo &location, const std::st
 }
 #endif  // ENABLE_LOG
 
-#if QT_4
-void smartLogger(QtMsgType type, const char *msg) {
-#ifdef ENABLE_LOG
-  log4cxx::spi::LocationInfo location("", "", -1);
-  saveLog(type, location, std::string(msg));
-#endif  // ENABLE_LOG
-}
-#elif QT_5
 void smartLogger(QtMsgType type, const QMessageLogContext &context,
                  const QString &msg) {
 #ifdef ENABLE_LOG
@@ -83,25 +75,16 @@ void smartLogger(QtMsgType type, const QMessageLogContext &context,
   saveLog(type, location, msg.toStdString());
 #endif  // ENABLE_LOG
 }
-#endif  // QT_VERSION
 
 void Log4cxxPlugin::registerTypes(const char *uri) {
 #ifdef ENABLE_LOG
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
 #endif  // ENABLE_LOG
 
-#if QT_4
-  qInstallMsgHandler(smartLogger);
-#elif QT_5
   qInstallMessageHandler(smartLogger);
-#endif  // QT_VERSION
 
   // @uri com.ford.sdl.hmi.log4cxx
   qmlRegisterType<Logger>(uri, 1, 0, "Logger");
   // Use standart console API Javascript
   // See Debugging QML Applications in Qt documentation
 }
-
-#if QT_4
-Q_EXPORT_PLUGIN2(QmlLog4cxx, Log4cxxPlugin)
-#endif  // QT_4

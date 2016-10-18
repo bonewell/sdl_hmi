@@ -58,8 +58,6 @@ endif()
 
 project(QtHmi)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
 
 set(CMAKE_CXX_FLAGS "-fPIC -std=gnu++0x -Wall -Werror -Wuninitialized -Wvla")
@@ -71,19 +69,7 @@ if (ENABLE_LOG)
   add_definitions(-DENABLE_LOG)
 endif()
 
-find_package(PythonInterp)
-if(NOT PYTHONINTERP_FOUND)
-    message(STATUS "Python interpreter is not found")
-    message(STATUS "To install it type in the command line:")
-    message(STATUS "sudo apt-get install python")
-    message(FATAL_ERROR "Exiting!")
-endif(NOT PYTHONINTERP_FOUND)
-
-if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
-    set(qt_version "4.8.5")
-else ()
-    set(qt_version "5.1.0")
-endif ()
+set(qt_version "5.1.0")
 
 execute_process(
     COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${qt_version}
@@ -92,15 +78,11 @@ execute_process(
 message(STATUS "Binary directory Qt ${qt_version} is ${qt_bin_dir}")
 set(ENV{PATH} ${qt_bin_dir}:$ENV{PATH})
 
-if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
-    find_package(Qt4 ${qt_version} REQUIRED QtCore QtGui QtDBus QtDeclarative)
-else ()
-    find_package(Qt5Core REQUIRED)
-    find_package(Qt5DBus REQUIRED)
-    find_package(Qt5Qml REQUIRED)
-    find_package(Qt5Quick REQUIRED)
-    set(qmlplugindump_binary ${qt_bin_dir}/qmlplugindump)
-endif()
+find_package(Qt5Core REQUIRED)
+find_package(Qt5DBus REQUIRED)
+find_package(Qt5Qml REQUIRED)
+find_package(Qt5Quick REQUIRED)
+set(qmlplugindump_binary ${qt_bin_dir}/qmlplugindump)
 
 set(RTLIB rt)
 if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
@@ -131,13 +113,8 @@ install(FILES ${CMAKE_SOURCE_DIR}/log4cxx.properties
   DESTINATION bin)
 
 add_subdirectory(./qml_plugins)
-
-if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
-    add_subdirectory(./qml_model_qt4)
-else ()
-    add_subdirectory(./qml_model_qt5)
-endif ()
+add_subdirectory(./qml_model_qt5)
 
 if(BUILD_TESTS)
-    add_subdirectory(test)
+  add_subdirectory(test)
 endif()

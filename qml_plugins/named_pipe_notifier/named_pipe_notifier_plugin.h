@@ -35,22 +35,11 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_NAMED_PIPE_NOTIFIER_NAMED_PIPE_NOTIFIER_PLUGIN_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_NAMED_PIPE_NOTIFIER_NAMED_PIPE_NOTIFIER_PLUGIN_H_
 
-#include "qt_version.h"
+#include <QtQml/QQmlExtensionPlugin>
 
-#if QT_4
-#  include <QtDeclarative/QDeclarativeExtensionPlugin>
-typedef QDeclarativeExtensionPlugin ExtensionPlugin;
-#elif QT_5
-#  include <QtQml/QQmlExtensionPlugin>
-typedef QQmlExtensionPlugin ExtensionPlugin;
-#endif  // QT_5
-
-class NamedPipeNotifierPlugin : public ExtensionPlugin {
+class NamedPipeNotifierPlugin : public QQmlExtensionPlugin {
   Q_OBJECT
-
-#if QT_5
   Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
-#endif  // QT_5
 
  public:
   void registerTypes(const char* uri);

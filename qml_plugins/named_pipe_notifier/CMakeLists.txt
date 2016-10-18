@@ -43,15 +43,9 @@ set(SOURCES
 
 add_library(${target} SHARED ${SOURCES})
 
-if (${qt_version} MATCHES "4.8.5")
-  qt4_use_modules(${target} Core Declarative)
-  set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt4/)
-  set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt4/${destination})
-elseif (${qt_version} MATCHES "5.1.0")
-  qt5_use_modules(${target} Core Qml)
-  set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
-  set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
-endif ()
+qt5_use_modules(${target} Core Qml)
+set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
+set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
 
 add_custom_target(copy_library_${target} ALL
   COMMAND ${CMAKE_COMMAND} -E copy_if_different

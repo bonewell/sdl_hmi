@@ -41,30 +41,18 @@
 
 #include <QtCore/QString>
 #include <QtDBus/QDBusConnection>
-#if QT_4
-#  include <QtDeclarative/QDeclarativeContext>
-#  include <QtDeclarative/QDeclarativeListReference>
-#  include <QtDeclarative/QDeclarativeEngine>
-#  include "qml_dbus.h"
-#  include "dbus_controller.h"
-#  include "request_to_sdl.h"
-#  include "hmi_proxy.h"
-#  include "sdl_proxy.h"
-#  include "optional_argument.h"
-#elif QT_5
-#  include <QtQml/qqml.h>
-#  include <QtQml/QQmlContext>
-#  include <QtQml/QQmlListReference>
-#  include <QtQml/QQmlEngine>
-#  include "protocol/interfaces/buttons.h"
-#  include "protocol/interfaces/tts.h"
-#  include "protocol/interfaces/vr.h"
-#  include "protocol/interfaces/navigation.h"
-#  include "protocol/interfaces/basiccommunication.h"
-#  include "protocol/interfaces/ui.h"
-#  include "protocol/interfaces/vehicleinfo.h"
-#  include "protocol/interfaces/sdl.h"
-#endif  // QT_VERSION
+#include <QtQml/qqml.h>
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlListReference>
+#include <QtQml/QQmlEngine>
+#include "protocol/interfaces/buttons.h"
+#include "protocol/interfaces/tts.h"
+#include "protocol/interfaces/vr.h"
+#include "protocol/interfaces/navigation.h"
+#include "protocol/interfaces/basiccommunication.h"
+#include "protocol/interfaces/ui.h"
+#include "protocol/interfaces/vehicleinfo.h"
+#include "protocol/interfaces/sdl.h"
 
 #ifdef ENABLE_LOG
 log4cxx::LoggerPtr logger_ = log4cxx::LoggerPtr(
@@ -76,30 +64,6 @@ void DbusPlugin::registerTypes(const char *uri) {
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
 #endif  // ENABLE_LOG
 
-#if QT_4
-  // @uri sdl.core.api
-  qmlRegisterType<HmiProxy>(uri, 1, 0, "HMIAdapter");
-  qmlRegisterType<SdlProxy>(uri, 1, 0, "SDLAdapter");
-  RegisterDbusMetatypes();
-  qDBusRegisterMetaType<OptionalArgument<int> >();
-  qDBusRegisterMetaType<OptionalArgument<QList<int> > >();
-  qDBusRegisterMetaType<OptionalArgument<QString> >();
-  qDBusRegisterMetaType<OptionalArgument<QStringList> >();
-  qDBusRegisterMetaType<OptionalArgument<bool> >();
-  qDBusRegisterMetaType<OptionalArgument<QList<bool> > >();
-  qDBusRegisterMetaType<OptionalArgument<double> >();
-  qDBusRegisterMetaType<OptionalArgument<QList<double> > >();
-
-  HmiProxy::api_adaptors_.Init(this);
-
-  QDBusConnection::sessionBus().registerObject("/", this);
-
-  dbusController_ = new DBusController();
-  requestToSDL_ = new RequestToSDL();
-
-  HmiProxy::api_adaptors_.SetDBusController(dbusController_);
-
-#elif QT_5
   register_optional();
 
   register_struct<ButtonCapabilities>();
@@ -159,16 +123,6 @@ void DbusPlugin::registerTypes(const char *uri) {
   qmlRegisterType<UI>(uri, 1, 0, "UI");
   qmlRegisterType<VehicleInfo>(uri, 1, 0, "VehicleInfo");
   qmlRegisterType<SDL>(uri, 1, 0, "SDL");
-#endif  // QT_VERSION
 
   QDBusConnection::sessionBus().registerService("com.ford.sdl.hmi");
 }
-
-#if QT_4
-void DbusPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri) {
-    engine->rootContext()->setContextProperty("DBus", dbusController_);
-    engine->rootContext()->setContextProperty("RequestToSDL", requestToSDL_);
-}
-
-Q_EXPORT_PLUGIN2(DbusAdapter, DbusPlugin)
-#endif  // QT_4

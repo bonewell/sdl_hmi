@@ -35,34 +35,16 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_DBUS_ADAPTER_DBUS_PLUGIN_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_DBUS_ADAPTER_DBUS_PLUGIN_H_
 
-#include "qt_version.h"
 #include <QtDBus/QDBusContext>
 
-#if QT_4
-#  include <QtDeclarative/QDeclarativeExtensionPlugin>
-typedef QDeclarativeExtensionPlugin ExtensionPlugin;
-class DBusController;
-class RequestToSDL;
-#elif QT_5
-#  include <QtQml/QQmlExtensionPlugin>
-typedef QQmlExtensionPlugin ExtensionPlugin;
-#endif  // QT_VERSION
+#include <QtQml/QQmlExtensionPlugin>
 
-class DbusPlugin : public ExtensionPlugin, public QDBusContext {
+class DbusPlugin : public QQmlExtensionPlugin, public QDBusContext {
   Q_OBJECT
-
-#if QT_4
-  DBusController *dbusController_;
-  RequestToSDL *requestToSDL_;
-#elif QT_5
   Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
-#endif  // QT_VERSION
 
  public:
   void registerTypes(const char *uri);
-#if QT_4
-  void initializeEngine(QDeclarativeEngine *engine, const char *uri);
-#endif  // QT_4
 };
 
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_DBUS_ADAPTER_DBUS_PLUGIN_H_
