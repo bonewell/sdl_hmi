@@ -30,29 +30,8 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set(codegen_dir ${CMAKE_SOURCE_DIR}/codegen)
-set(codegen ${codegen_dir}/make_qml_dbus_qml.py)
-set(parser ${codegen_dir}/ford_xml_parser.py)
-set(interfaces_dir ${CMAKE_SOURCE_DIR})
-set(api_xml ${CMAKE_SOURCE_DIR}/QT_HMI_API.xml)
-set(proxy_dir ${CMAKE_CURRENT_BINARY_DIR}/hmi_api)
 set(qml_dirs hmi_api controls models popups views)
 set(qml_files MainWindow.qml)
-
-add_custom_target(qml_auto ALL
-  COMMAND python ${codegen} --infile ${api_xml} --version ${qt_version} --outdir ${proxy_dir}
-  DEPENDS ${api_xml} ${codegen} ${parser}
-  COMMENT "Generating files:
-    ${proxy_dir}/BasicCommunicationProxy.qml
-    ${proxy_dir}/ButtonsProxy.qml
-    ${proxy_dir}/NavigationProxy.qml
-    ${proxy_dir}/TTSProxy.qml
-    ${proxy_dir}/UIProxy.qml
-    ${proxy_dir}/VehicleInfoProxy.qml
-    ${proxy_dir}/VRProxy.qml
-    from:
-    ${api_xml} ..."
-)
 
 add_custom_target(qml_copy_resources ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../res ${CMAKE_CURRENT_BINARY_DIR}/res
@@ -64,8 +43,6 @@ if(NOT "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/${qml_dir} ${CMAKE_CURRENT_BINARY_DIR}/${qml_dir}
     COMMENT "Copying directory ${qml_dir}")
   endforeach(qml_dir)
-
-  add_dependencies(qml_auto qml_copy_hmi_api)
 
   foreach(qml_file ${qml_files})
     add_custom_target(qml_copy_${qml_file} ALL
