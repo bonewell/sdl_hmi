@@ -72,7 +72,7 @@ install(FILES qmldir DESTINATION ${install_destination})
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   add_custom_target(qmltypes_${target} ALL
-    COMMAND ${qmlplugindump_binary} -nonrelocatable com.ford.sdl.hmi.hw_buttons 1.0 ${model_dir} > ${CMAKE_CURRENT_BINARY_DIR}/plugins.qmltypes 2>/dev/null
+    COMMAND ${qmlplugindump_binary} -nonrelocatable com.ford.sdl.hmi.hw_buttons 1.0 ${model_dir} > ${CMAKE_CURRENT_BINARY_DIR}/plugins.qmltypes 2>/dev/null || true
     DEPENDS copy_library_${target}
   )
   add_custom_target(copy_qmltypes_${target} ALL

@@ -30,6 +30,7 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+set(QT_DIR "" CACHE PATH "Path to Qt")
 set(QT_VERSION "5.1.0" CACHE STRING "Desired version of Qt to build")
 set(TRANSPORT "dbus" CACHE STRING "Type of desired transport [dbus, websocket, mqueue]")
 
@@ -72,18 +73,26 @@ if (ENABLE_LOG)
   add_definitions(-DENABLE_LOG)
 endif()
 
-execute_process(
+if (QT_DIR STREQUAL "")
+  execute_process(
     COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${QT_VERSION}
-        OUTPUT_VARIABLE qt_bin_dir
-)
-message(STATUS "Binary directory Qt ${QT_VERSION} is ${qt_bin_dir}")
+    OUTPUT_VARIABLE qt_bin_dir
+  )
+  message(STATUS "Binary directory Qt ${QT_VERSION} is ${qt_bin_dir}")
+else()
+  set(qt_bin_dir ${QT_DIR})
+  message(STATUS "Binary directory Qt is ${qt_bin_dir}")
+endif()
 set(ENV{PATH} ${qt_bin_dir}:$ENV{PATH})
 
 find_package(Qt5Core REQUIRED)
-find_package(Qt5DBus REQUIRED)
 find_package(Qt5Qml REQUIRED)
 find_package(Qt5Quick REQUIRED)
-find_package(Qt5WebSockets REQUIRED)
+if (TRANSPORT STREQUAL "dbus")
+  find_package(Qt5DBus REQUIRED)
+elseif (TRANSPORT STREQUAL "web")
+  find_package(Qt5WebSockets REQUIRED)
+endif()
 set(qmlplugindump_binary ${qt_bin_dir}/qmlplugindump)
 
 set(main_qml "MainWindow.qml")
@@ -93,12 +102,8 @@ if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
   set(start_command "./start-qml.sh")
   set(command_arguments "${main_qml} ${plugins_dir}")
 else ()
-  execute_process(
-    COMMAND ${CMAKE_SOURCE_DIR}/FindQt.sh -v ${QT_VERSION} -b qmlscene
-    OUTPUT_VARIABLE start_command
-  )
   set(start_command
-      "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${qt_bin_dir}/../lib\n${start_command}")
+  "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${qt_bin_dir}/../lib\n${qt_bin_dir}/qmlscene")
   set(command_arguments "${main_qml} -I ${plugins_dir}")
 endif ()
 

@@ -75,7 +75,13 @@ include_directories(
 add_library(${target} SHARED ${SOURCES})
 
 qt5_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/core/watcher.h moc_watcher.cpp)
-qt5_use_modules(${target} Core DBus Qml WebSockets)
+set(QT_MODULES Core Qml)
+if (TRANSPORT STREQUAL "dbus")
+  list(APPEND QT_MODULES DBus)
+elseif (TRANSPORT STREQUAL "websocket")
+  list(APPEND QT_MODULES WebSockets)
+endif()
+qt5_use_modules(${target} ${QT_MODULES})
 set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
 set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
 
