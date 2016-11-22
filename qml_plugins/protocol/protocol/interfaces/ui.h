@@ -211,18 +211,9 @@ class UI;
 class UIAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.UI", UI_INTROSPECTION)
+    ADAPTER_INFO(400, "com.ford.sdl.hmi.UI", UI_INTROSPECTION)
     REGISTER_ADAPTER(UIAdapter, UI)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.UI")
-
-signals:
-    void OnCommand(int cmdID, int appID);
-    void OnSystemContext(int systemContext, const Optional<int>& appID);
-    void OnLanguageChange(int language);
-    void OnDriverDistraction(int state);
-    void OnKeyboardInput(int event, const Optional<QString>& data);
-    void OnTouchEvent(int type, const QList<TouchEvent>& event);
-    void OnResetTimeout(int appID, const QString& methodName);
 
 public slots:
     void Alert(const QList<TextFieldStruct>& alertStrings, int duration,

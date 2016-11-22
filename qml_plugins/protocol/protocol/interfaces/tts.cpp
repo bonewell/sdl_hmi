@@ -93,20 +93,20 @@ void TTS::replyGetLanguage(const QVariantMap& handle, int language)
 
 void TTS::started()
 {
-    emit adapter->Started();
+    adapter->signal("Started").send();
 }
 
 void TTS::stopped()
 {
-    emit adapter->Stopped();
+    adapter->signal("Stopped").send();
 }
 
 void TTS::onLanguageChange(int language)
 {
-    emit adapter->OnLanguageChange(language);
+    adapter->signal("OnLanguageChange").arg(language).send();
 }
 
 void TTS::onResetTimeout(int appID, const QString &methodName)
 {
-    emit adapter->OnResetTimeout(appID, methodName);
+    adapter->signal("OnResetTimeout").arg(appID).arg(methodName).send();
 }

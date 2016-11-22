@@ -65,7 +65,6 @@ elseif(${TRANSPORT} STREQUAL "websocket")
   list(APPEND SOURCES
     websocket/websocketconnector.cpp
     websocket/websocketwatcher.cpp
-    websocket/inbox.cpp
   )
   add_definitions(-DWEBSOCKET)
 endif()

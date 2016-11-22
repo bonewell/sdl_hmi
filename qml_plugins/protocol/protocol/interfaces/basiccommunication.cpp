@@ -118,57 +118,57 @@ void BasicCommunication::onReady()
 
 void BasicCommunication::onStartDeviceDiscovery()
 {
-    emit adapter->OnStartDeviceDiscovery();
+    adapter->signal("OnStartDeviceDiscovery").send();
 }
 
 void BasicCommunication::onUpdateDeviceList()
 {
-    emit adapter->OnUpdateDeviceList();
+    adapter->signal("OnUpdateDeviceList").send();
 }
 
 void BasicCommunication::onPhoneCall(bool isActive)
 {
-    emit adapter->OnPhoneCall(isActive);
+    adapter->signal("OnPhoneCall").arg(isActive).send();
 }
 
 void BasicCommunication::onEmergencyEvent(bool enabled)
 {
-    emit adapter->OnEmergencyEvent(enabled);
+    adapter->signal("OnEmergencyEvent").arg(enabled).send();
 }
 
 void BasicCommunication::onDeviceChosen(const QVariantMap &deviceInfo)
 {
-    emit adapter->OnDeviceChosen(single<DeviceInfo>(deviceInfo));
+    adapter->signal("OnDeviceChosen").arg(single<DeviceInfo>(deviceInfo)).send();
 }
 
 void BasicCommunication::onFindApplications(const QVariant &deviceInfo)
 {
-    emit adapter->OnFindApplications(deviceInfo);
+    adapter->signal("OnFindApplications").arg<Optional<DeviceInfo> >(deviceInfo).send();
 }
 
 void BasicCommunication::onAppActivated(int appID)
 {
-    emit adapter->OnAppActivated(appID);
+    adapter->signal("OnAppActivated").arg(appID).send();
 }
 
 void BasicCommunication::onAppDeactivated(int appID)
 {
-    emit adapter->OnAppDeactivated(appID);
+    adapter->signal("OnAppDeactivated").arg(appID).send();
 }
 
 void BasicCommunication::onExitApplication(int reason, int appID)
 {
-    emit adapter->OnExitApplication(reason, appID);
+    adapter->signal("OnExitApplication").arg(reason).arg(appID).send();
 }
 
 void BasicCommunication::onExitAllApplications(int reason)
 {
-    emit adapter->OnExitAllApplications(reason);
+    adapter->signal("OnExitAllApplications").arg(reason).send();
 }
 
 void BasicCommunication::onAwakeSDL()
 {
-    emit adapter->OnAwakeSDL();
+    adapter->signal("OnAwakeSDL").send();
 }
 
 void BasicCommunication::OnSystemRequest(int requestType, const QVariant &url,
@@ -177,28 +177,30 @@ void BasicCommunication::OnSystemRequest(int requestType, const QVariant &url,
 {
 // fileName is mandatory but we added default value to the signature of method
 // because of C++ rules
-    emit adapter->OnSystemRequest(requestType, url, fileType, offset, length,
-                                  timeout, fileName, appID);
+    adapter->signal("OnSystemRequest").arg(requestType).arg<Optional<QString> >(url)
+            .arg<Optional<int> >(fileType).arg<Optional<int> >(offset)
+            .arg<Optional<int> >(length).arg<Optional<int> >(timeout)
+            .arg(fileName).arg<Optional<QString> >(appID).send();
 }
 
 void BasicCommunication::onSystemInfoChanged(int language)
 {
-    emit adapter->OnSystemInfoChanged(language);
+    adapter->signal("OnSystemInfoChanged").arg(language).send();
 }
 
 void BasicCommunication::onIgnitionCycleOver()
 {
-    emit adapter->OnIgnitionCycleOver();
+    adapter->signal("OnIgnitionCycleOver").send();
 }
 
 void BasicCommunication::onDeactivateHMI(bool isDeactivated)
 {
-    emit adapter->OnDeactivateHMI(isDeactivated);
+    adapter->signal("OnDeactivateHMI").arg(isDeactivated).send();
 }
 
 void BasicCommunication::onEventChanged(int eventName, bool isActive)
 {
-    emit adapter->OnEventChanged(eventName, isActive);
+    adapter->signal("OnEventChanged").arg(eventName).arg(isActive).send();
 }
 
 void BasicCommunication::replyAllowDeviceToConnect(const QVariantMap& handle,

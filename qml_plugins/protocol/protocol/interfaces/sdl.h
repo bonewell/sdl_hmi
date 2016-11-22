@@ -38,21 +38,9 @@ class SDL;
 class SDLAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.SDL", SDL_INTROSPECTION)
+    ADAPTER_INFO(1000, "com.ford.sdl.hmi.SDL", SDL_INTROSPECTION)
     REGISTER_ADAPTER(SDLAdapter, SDL)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.SDL")
-
-signals:
-    void OnAllowSDLFunctionality(const Optional<DeviceInfo>& device,
-        bool allowed, int source);
-    void OnReceivedPolicyUpdate(const QString& policyfile);
-    void OnPolicyUpdate();
-    void OnAppPermissionConsent(const Optional<int>& appID,
-        const QList<PermissionItem>& consentedFunctions, int source);
-    void OnSystemError(int error);
-    void AddStatisticsInfo(int statisticType);
-    void OnDeviceStateChanged(int deviceState, const QString& deviceInternalId,
-        const Optional<DeviceInfo>& deviceId);
 
 private slots:
     void OnAppPermissionChanged(int appID, const Optional<bool>& isAppPermissionsRevoked,

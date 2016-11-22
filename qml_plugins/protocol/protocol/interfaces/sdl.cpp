@@ -120,40 +120,42 @@ void SDL::getURLS(const QJSValue &callback, int service)
 void SDL::onAllowSDLFunctionality(const QVariant &device, bool allowed, int source)
 {
     // device is optional parameter, but C++ rules denies using mandatory parameters after optional
-    emit adapter->OnAllowSDLFunctionality(device, allowed, source);
+    adapter->signal("OnAllowSDLFunctionality").arg<Optional<DeviceInfo> >(device)
+            .arg(allowed).arg(source).send();
 }
 
 void SDL::onReceivedPolicyUpdate(const QString &policyfile)
 {
-    emit adapter->OnReceivedPolicyUpdate(policyfile);
+    adapter->signal("OnReceivedPolicyUpdate").arg(policyfile).send();
 }
 
 void SDL::onPolicyUpdate()
 {
-    emit adapter->OnPolicyUpdate();
+    adapter->signal("OnPolicyUpdate").send();
 }
 
 void SDL::onAppPermissionConsent(const QVariant &appID,
     const QVariantList &consentedFunctions, int source)
 {
     // appID is optional parameter, but C++ rules denies using mandatory parameters after optional
-    emit adapter->OnAppPermissionConsent(appID,
-                                         multiple<PermissionItem>(consentedFunctions), source);
+    adapter->signal("OnAppPermissionConsent").arg<Optional<int> >(appID)
+            .arg(multiple<PermissionItem>(consentedFunctions)).arg(source).send();
 }
 
 void SDL::onSystemError(int error)
 {
-    emit adapter->OnSystemError(error);
+    adapter->signal("OnSystemError").arg(error).send();
 }
 
 void SDL::addStatisticsInfo(int statisticType)
 {
-    emit adapter->AddStatisticsInfo(statisticType);
+    adapter->signal("AddStatisticsInfo").arg(statisticType).send();
 }
 
 void SDL::onDeviceStateChanged(int deviceState, const QString &deviceInternalId,
     const QVariant &deviceId)
 {
-    emit adapter->OnDeviceStateChanged(deviceState, deviceInternalId, deviceId);
+    adapter->signal("OnDeviceStateChanged").arg(deviceState).arg(deviceInternalId)
+            .arg<Optional<DeviceInfo> >(deviceId).send();
 }
 

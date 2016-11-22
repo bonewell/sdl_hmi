@@ -270,35 +270,35 @@ void UI::replyIsReady(const QVariantMap& handle, bool available)
 
 void UI::onCommand(int cmdID, int appID)
 {
-    emit adapter->OnCommand(cmdID, appID);
+    adapter->signal("OnCommand").arg(cmdID).arg(appID).send();
 }
 
 void UI::onSystemContext(int systemContext, const QVariant &appID)
 {
-    emit adapter->OnSystemContext(systemContext, appID);
+    adapter->signal("OnSystemContext").arg(systemContext).arg(appID).send();
 }
 
 void UI::onLanguageChange(int language)
 {
-    emit adapter->OnLanguageChange(language);
+    adapter->signal("OnLanguageChange").arg(language).send();
 }
 
 void UI::onDriverDistraction(int state)
 {
-    emit adapter->OnDriverDistraction(state);
+    adapter->signal("OnDriverDistraction").arg(state).send();
 }
 
 void UI::onKeyboardInput(int event, const QVariant &data)
 {
-    emit adapter->OnKeyboardInput(event, data);
+    adapter->signal("OnKeyboardInput").arg(event).arg(data).send();
 }
 
 void UI::onTouchEvent(int type, const QVariantList &event)
 {
-    emit adapter->OnTouchEvent(type, multiple<TouchEvent>(event));
+    adapter->signal("OnTouchEvent").arg(type).arg(multiple<TouchEvent>(event)).send();
 }
 
 void UI::onResetTimeout(int appID, const QString &methodName)
 {
-    emit adapter->OnResetTimeout(appID, methodName);
+    adapter->signal("OnResetTimeout").arg(appID).arg(methodName).send();
 }

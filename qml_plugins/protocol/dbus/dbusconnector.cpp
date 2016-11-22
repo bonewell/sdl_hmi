@@ -12,7 +12,8 @@ DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
 {
 }
 
-void DBus::init(const QString& name) {
+void DBus::init(int uid, const QString& name) {
+    Q_UNUSED(uid);
     name_ = name;
     QDBusConnection::sessionBus().registerObject("/", object_);
 }

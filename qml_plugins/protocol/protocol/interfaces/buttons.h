@@ -31,17 +31,9 @@ class Buttons;
 class ButtonsAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.Buttons", BUTTONS_INTROSPECTION)
+    ADAPTER_INFO(200, "com.ford.sdl.hmi.Buttons", BUTTONS_INTROSPECTION)
     REGISTER_ADAPTER(ButtonsAdapter, Buttons)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.Buttons")
-
-signals:
-    void OnButtonEvent(int name, int mode,
-                       const Optional<int>& customButtonID,
-                       const Optional<int>& appID);
-    void OnButtonPress(int name, int mode,
-                       const Optional<int>& customButtonID,
-                       const Optional<int>& appID);
 
 public slots:
     void GetCapabilities(const Message& message);

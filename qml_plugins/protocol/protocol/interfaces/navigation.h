@@ -80,13 +80,9 @@ class Navigation;
 class NavigationAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.Navigation", NAVIGATION_INTROSPECTION)
+    ADAPTER_INFO(800, "com.ford.sdl.hmi.Navigation", NAVIGATION_INTROSPECTION)
     REGISTER_ADAPTER(NavigationAdapter, Navigation)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.Navigation")
-
-signals:
-    void OnTBTClientState(int state);
-    void OnWayPointChange(const QList<LocationDetails>& wayPoints);
 
 public slots:
     void IsReady(const Message& message);

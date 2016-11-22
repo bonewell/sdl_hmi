@@ -109,10 +109,10 @@ void Navigation::replyGetWayPoints(const QVariantMap &handle, int appID,
 
 void Navigation::onTBTClientState(int state)
 {
-    emit adapter->OnTBTClientState(state);
+    adapter->signal("OnTBTClientState").arg(state).send();
 }
 
 void Navigation::onWayPointChange(const QVariantList &wayPoints)
 {
-    emit adapter->OnWayPointChange(multiple<LocationDetails>(wayPoints));
+    adapter->signal("OnWayPointChange").arg(multiple<LocationDetails>(wayPoints)).send();
 }

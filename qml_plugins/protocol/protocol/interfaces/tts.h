@@ -68,14 +68,9 @@ class TTS;
 class TTSAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.TTS", TTS_INTROSPECTION)
+    ADAPTER_INFO(300, "com.ford.sdl.hmi.TTS", TTS_INTROSPECTION)
     REGISTER_ADAPTER(TTSAdapter, TTS)
-
-signals:
-    void Started();
-    void Stopped();
-    void OnLanguageChange(int language);
-    void OnResetTimeout(int appID, const QString& methodName);
+    CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.TTS")
 
 public slots:
     void GetCapabilities(const Message& message);

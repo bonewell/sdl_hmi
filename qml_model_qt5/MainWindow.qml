@@ -334,8 +334,6 @@ Rectangle {
         dataContainer.hmiNavigationAvailable = true
         dataContainer.hmiVehicleInfoAvailable = true
         dataContainer.hmiUIAvailable = true
-        sdlBasicCommunication.onReady()
-        dataContainer.driverDistractionState = Common.DriverDistractionState.DD_OFF
     }
 
     /*

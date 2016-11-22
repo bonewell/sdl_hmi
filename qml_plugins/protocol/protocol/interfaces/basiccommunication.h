@@ -118,31 +118,9 @@ class BasicCommunication;
 class BasicCommunicationAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.BasicCommunication", BASICCOMMUNICATION_INTROSPECTION)
+    ADAPTER_INFO(600, "com.ford.sdl.hmi.BasicCommunication", BASICCOMMUNICATION_INTROSPECTION)
     REGISTER_ADAPTER(BasicCommunicationAdapter, BasicCommunication)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.BasicCommunication")
-
-signals:
-    void OnReady();
-    void OnStartDeviceDiscovery();
-    void OnUpdateDeviceList();
-    void OnPhoneCall(bool isActive);
-    void OnEmergencyEvent(bool enabled);
-    void OnDeviceChosen(const DeviceInfo& deviceInfo);
-    void OnFindApplications(const Optional<DeviceInfo>& deviceInfo);
-    void OnAppActivated(int appID);
-    void OnAppDeactivated(int appID);
-    void OnExitApplication(int reason, int appID);
-    void OnExitAllApplications(int reason);
-    void OnAwakeSDL();
-    void OnSystemRequest(int requestType, const Optional<QString>& url,
-        const Optional<int>& fileType, const Optional<int>& offset,
-        const Optional<int>& length, const Optional<int>& timeout,
-        const QString& fileName, const Optional<QString>& appID);
-    void OnSystemInfoChanged(int language);
-    void OnIgnitionCycleOver();
-    void OnDeactivateHMI(bool isDeactivated);
-    void OnEventChanged(int eventName, bool isActive);
 
 public slots:
     void UpdateAppList(const QList<HMIApplication>& applications, const Message& message);

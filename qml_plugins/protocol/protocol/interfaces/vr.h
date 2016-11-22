@@ -77,14 +77,9 @@ class VR;
 class VRAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.VR", VR_INTROSPECTION)
+    ADAPTER_INFO(500, "com.ford.sdl.hmi.VR", VR_INTROSPECTION)
     REGISTER_ADAPTER(VRAdapter, VR)
-
-signals:
-    void Started();
-    void Stopped();
-    void OnCommand(int cmdID, int appID);
-    void OnLanguageChange(int language);
+    CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.VR")
 
 public slots:
     void IsReady(const Message& message);

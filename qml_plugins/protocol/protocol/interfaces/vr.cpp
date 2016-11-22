@@ -100,20 +100,20 @@ void VR::replyGetCapabilities(const QVariantMap& handle, const QVariant &vrCapab
 
 void VR::started()
 {
-    emit adapter->Started();
+    adapter->signal("Started").send();
 }
 
 void VR::stopped()
 {
-    emit adapter->Stopped();
+    adapter->signal("Stopped").send();
 }
 
 void VR::onCommand(int cmdID, int appID)
 {
-    emit adapter->OnCommand(cmdID, appID);
+    adapter->signal("OnCommand").arg(cmdID).arg(appID).send();
 }
 
 void VR::onLanguageChange(int language)
 {
-    emit adapter->OnLanguageChange(language);
+    adapter->signal("OnLanguageChange").arg(language).send();
 }

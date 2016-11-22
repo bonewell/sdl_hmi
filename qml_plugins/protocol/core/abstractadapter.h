@@ -13,9 +13,10 @@
 #include "core/handle.h"
 #include "core/signal.h"
 
-#define ADAPTER_INFO(Name, Introspection) \
+#define ADAPTER_INFO(Uid, Name, Introspection) \
     ADAPTER_INFORMATION(Name, Introspection) \
 private: \
+    virtual int uid() { return Uid; } \
     virtual QString name() { return Name; }
 
 #define REGISTER_ADAPTER(Adapter, Item) \
@@ -58,6 +59,7 @@ public:
 
 protected:
     virtual bool isConnected() { return false; }
+    virtual int uid() { return 0; }
     virtual QString name() { return ""; }
     virtual QString serviceName() { return ""; }
     virtual QString interfaceName() { return ""; }

@@ -1337,125 +1337,125 @@ void VehicleInfo::replyUnsubscribeMyKey(const QVariantMap &handle, const QVarian
 
 void VehicleInfo::onGpsData(const QVariantMap &gps)
 {
-    emit adapter->OnGpsData(single<GPSData>(gps));
+    adapter->signal("OnGpsData").arg(single<GPSData>(gps)).send();
 }
 
 void VehicleInfo::onSpeed(double speed)
 {
-    emit adapter->OnSpeed(speed);
+    adapter->signal("OnSpeed").arg(speed).send();
 }
 
 void VehicleInfo::onRpm(int rpm)
 {
-    emit adapter->OnRpm(rpm);
+    adapter->signal("OnRpm").arg(rpm).send();
 }
 
 void VehicleInfo::onFuelLevel(double fuelLevel)
 {
-    emit adapter->OnFuelLevel(fuelLevel);
+    adapter->signal("OnFuelLevel").arg(fuelLevel).send();
 }
 
 void VehicleInfo::onFuelLevelState(int fuelLevel_State)
 {
-    emit adapter->OnFuelLevelState(fuelLevel_State);
+    adapter->signal("OnFuelLevelState").arg(fuelLevel_State).send();
 }
 
 void VehicleInfo::onInstantFuelConsumption(double instantFuelConsumption)
 {
-    emit adapter->OnInstantFuelConsumption(instantFuelConsumption);
+    adapter->signal("OnInstantFuelConsumption").arg(instantFuelConsumption).send();
 }
 
 void VehicleInfo::onExternalTemperature(double externalTemperature)
 {
-    emit adapter->OnExternalTemperature(externalTemperature);
+    adapter->signal("OnExternalTemperature").arg(externalTemperature).send();
 }
 
 void VehicleInfo::onVin(const QString &vin)
 {
-    emit adapter->OnVin(vin);
+    adapter->signal("OnVin").arg(vin).send();
 }
 
 void VehicleInfo::onPrndl(int prndl)
 {
-    emit adapter->OnPrndl(prndl);
+    adapter->signal("OnPrndl").arg(prndl).send();
 }
 
 void VehicleInfo::onTirePressure(const QVariantMap &tirePressure)
 {
-    emit adapter->OnTirePressure(single<TireStatus>(tirePressure));
+    adapter->signal("OnTirePressure").arg(single<TireStatus>(tirePressure)).send();
 }
 
 void VehicleInfo::onOdometer(int odometer)
 {
-    emit adapter->OnOdometer(odometer);
+    adapter->signal("OnOdometer").arg(odometer).send();
 }
 
 void VehicleInfo::onBeltStatus(const QVariantMap &beltStatus)
 {
-    emit adapter->OnBeltStatus(single<BeltStatus>(beltStatus));
+    adapter->signal("OnBeltStatus").arg(single<BeltStatus>(beltStatus)).send();
 }
 
 void VehicleInfo::onBodyInformation(const QVariantMap &bodyInformation)
 {
-    emit adapter->OnBodyInformation(single<BodyInformation>(bodyInformation));
+    adapter->signal("OnBodyInformation").arg(single<BodyInformation>(bodyInformation)).send();
 }
 
 void VehicleInfo::onDeviceStatus(const QVariantMap &deviceStatus)
 {
-    emit adapter->OnDeviceStatus(single<DeviceStatus>(deviceStatus));
+    adapter->signal("OnDeviceStatus").arg(single<DeviceStatus>(deviceStatus)).send();
 }
 
 void VehicleInfo::onDriverBraking(int driverBraking)
 {
-    emit adapter->OnDriverBraking(driverBraking);
+    adapter->signal("OnDriverBraking").arg(driverBraking).send();
 }
 
 void VehicleInfo::onWiperStatus(int wiperStatus)
 {
-    emit adapter->OnWiperStatus(wiperStatus);
+    adapter->signal("OnWiperStatus").arg(wiperStatus).send();
 }
 
 void VehicleInfo::onHeadLampStatus(const QVariantMap &headLampStatus)
 {
-    emit adapter->OnHeadLampStatus(single<HeadLampStatus>(headLampStatus));
+    adapter->signal("OnHeadLampStatus").arg(single<HeadLampStatus>(headLampStatus)).send();
 }
 
 void VehicleInfo::onEngineTorque(double engineTorque)
 {
-    emit adapter->OnEngineTorque(engineTorque);
+    adapter->signal("OnEngineTorque").arg(engineTorque).send();
 }
 
 void VehicleInfo::onAccPedalPosition(double accPedalPosition)
 {
-    emit adapter->OnAccPedalPosition(accPedalPosition);
+    adapter->signal("OnAccPedalPosition").arg(accPedalPosition).send();
 }
 
 void VehicleInfo::onSteeringWheelAngle(double steeringWheelAngle)
 {
-    emit adapter->OnSteeringWheelAngle(steeringWheelAngle);
+    adapter->signal("OnSteeringWheelAngle").arg(steeringWheelAngle).send();
 }
 
 void VehicleInfo::onECallInfo(const QVariantMap &eCallInfo)
 {
-    emit adapter->OnECallInfo(single<ECallInfo>(eCallInfo));
+    adapter->signal("OnECallInfo").arg(single<ECallInfo>(eCallInfo)).send();
 }
 
 void VehicleInfo::onAirbagStatus(const QVariantMap &airbagStatus)
 {
-    emit adapter->OnAirbagStatus(single<AirbagStatus>(airbagStatus));
+    adapter->signal("OnAirbagStatus").arg(single<AirbagStatus>(airbagStatus)).send();
 }
 
 void VehicleInfo::onEmergencyEvent(const QVariantMap &emergencyEvent)
 {
-    emit adapter->OnEmergencyEvent(single<EmergencyEvent>(emergencyEvent));
+    adapter->signal("OnEmergencyEvent").arg(single<EmergencyEvent>(emergencyEvent)).send();
 }
 
 void VehicleInfo::onClusterModeStatus(const QVariantMap &clusterModeStatus)
 {
-    emit adapter->OnClusterModeStatus(single<ClusterModeStatus>(clusterModeStatus));
+    adapter->signal("OnClusterModeStatus").arg(single<ClusterModeStatus>(clusterModeStatus)).send();
 }
 
 void VehicleInfo::onMyKey(const QVariantMap &myKey)
 {
-    emit adapter->OnMyKey(single<MyKey>(myKey));
+    adapter->signal("OnMyKey").arg(single<MyKey>(myKey)).send();
 }

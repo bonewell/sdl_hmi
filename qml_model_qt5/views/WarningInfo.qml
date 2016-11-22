@@ -128,6 +128,8 @@ Rectangle {
                 onClicked: {
                     console.log("WarningInfo OkButton - on clicked enter");
                     warningInfo.visible = false
+                    sdlBasicCommunication.onReady()
+                    dataContainer.driverDistractionState = Common.DriverDistractionState.DD_OFF
                 }
             }
         }

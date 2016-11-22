@@ -524,35 +524,9 @@ class VehicleInfo;
 class VehicleInfoAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO("com.ford.sdl.hmi.VehicleInfo", VEHICLEINFO_INTROSPECTION)
+    ADAPTER_INFO(100, "com.ford.sdl.hmi.VehicleInfo", VEHICLEINFO_INTROSPECTION)
     REGISTER_ADAPTER(VehicleInfoAdapter, VehicleInfo)
-
-signals:
-    void OnGpsData(const GPSData& gps);
-    void OnSpeed(double speed);
-    void OnRpm(int rpm);
-    void OnFuelLevel(double fuelLevel);
-    void OnFuelLevelState(int fuelLevel_State);
-    void OnInstantFuelConsumption(double instantFuelConsumption);
-    void OnExternalTemperature(double externalTemperature);
-    void OnVin(const QString& vin);
-    void OnPrndl(int prndl);
-    void OnTirePressure(const TireStatus& tirePressure);
-    void OnOdometer(int odometer);
-    void OnBeltStatus(const BeltStatus& beltStatus);
-    void OnBodyInformation(const BodyInformation& bodyInformation);
-    void OnDeviceStatus(const DeviceStatus& deviceStatus);
-    void OnDriverBraking(int driverBraking);
-    void OnWiperStatus(int wiperStatus);
-    void OnHeadLampStatus(const HeadLampStatus& headLampStatus);
-    void OnEngineTorque(double engineTorque);
-    void OnAccPedalPosition(double accPedalPosition);
-    void OnSteeringWheelAngle(double steeringWheelAngle);
-    void OnECallInfo(const ECallInfo& eCallInfo);
-    void OnAirbagStatus(const AirbagStatus& airbagStatus);
-    void OnEmergencyEvent(const EmergencyEvent& emergencyEvent);
-    void OnClusterModeStatus(const ClusterModeStatus& clusterModeStatus);
-    void OnMyKey(const MyKey& myKey);
+    CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.VehicleInfo")
 
 public slots:
     void IsReady(const Message& message);
