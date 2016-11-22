@@ -12,7 +12,8 @@ DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
 {
 }
 
-void DBus::init() {
+void DBus::init(const QString& name) {
+    name_ = name;
     QDBusConnection::sessionBus().registerObject("/", object_);
 }
 
@@ -45,6 +46,13 @@ void DBus::sendError(Message &message, const QString &name, const QString &text)
 {
     QDBusMessage error = message.createErrorReply(name, text);
     QDBusConnection::sessionBus().send(error);
+}
+
+void DBus::sendSignal(const QString &name, const QVariantList &arguments)
+{
+    QDBusMessage signal = QDBusMessage::createSignal("/", name_, name);
+    signal.setArguments(arguments);
+    QDBusConnection::sessionBus().send(signal);
 }
 
 Watcher *DBus::call(const QString &name, const QVariantList &input)

@@ -9,7 +9,7 @@ AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
 
 void AbstractAdapter::init()
 {
-    impl_.init();
+    impl_.init(name());
     if (isConnected()) {
         impl_.connect(serviceName(), interfaceName());
     }
@@ -64,6 +64,11 @@ Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
     CourierCallback func)
 {
     return *new Courier(name, callback, func, impl_);
+}
+
+Signal& AbstractAdapter::signal(const QString& name)
+{
+    return *new Signal(name, impl_);
 }
 
 void AbstractAdapter::sendError(Handle handle, const QString& error, const QString& text)

@@ -11,9 +11,12 @@
 #include "core/courier.h"
 #include "core/connector.h"
 #include "core/handle.h"
+#include "core/signal.h"
 
 #define ADAPTER_INFO(Name, Introspection) \
-    ADAPTER_INFORMATION(Name, Introspection)
+    ADAPTER_INFORMATION(Name, Introspection) \
+private: \
+    virtual QString name() { return Name; }
 
 #define REGISTER_ADAPTER(Adapter, Item) \
 public: \
@@ -51,9 +54,11 @@ public:
     void init();
     void sendError(Handle handle, const QString& error, const QString& text);
     void sendResult(Handle handle);
+    Signal& signal(const QString& name);
 
 protected:
     virtual bool isConnected() { return false; }
+    virtual QString name() { return ""; }
     virtual QString serviceName() { return ""; }
     virtual QString interfaceName() { return ""; }
     Slave& invoke(const QString& name, const Message& message);

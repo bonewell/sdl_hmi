@@ -113,7 +113,7 @@ void BasicCommunicationAdapter::OnPutFile(const Optional<int> &offset,
 
 void BasicCommunication::onReady()
 {
-    emit adapter->OnReady();
+    adapter->signal("OnReady").send();
 }
 
 void BasicCommunication::onStartDeviceDiscovery()

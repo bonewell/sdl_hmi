@@ -43,6 +43,7 @@ set(SOURCES
   core/courier.cpp
   core/optional.cpp
   core/slave.cpp
+  core/signal.cpp
   protocol/interfaces/buttons.cpp
   protocol/interfaces/tts.cpp
   protocol/interfaces/vr.cpp
@@ -64,6 +65,7 @@ elseif(${TRANSPORT} STREQUAL "websocket")
   list(APPEND SOURCES
     websocket/websocketconnector.cpp
     websocket/websocketwatcher.cpp
+    websocket/inbox.cpp
   )
   add_definitions(-DWEBSOCKET)
 endif()
