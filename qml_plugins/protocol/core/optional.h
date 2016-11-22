@@ -5,8 +5,11 @@
 #include <QString>
 #include <QMetaType>
 #include <QJSValue>
+#include <QVariant>
+#ifdef DBUS
 #include <QtDBus/QDBusMetaType>
 #include <QtDBus/QDBusArgument>
+#endif
 
 void register_optional();
 
@@ -55,6 +58,7 @@ Optional<T>::operator QVariant() const
     return var;
 }
 
+#ifdef DBUS
 template<typename T>
 inline QDBusArgument &operator<<(QDBusArgument &arg, const Optional<T> &value) {
     arg.beginStructure();
@@ -70,6 +74,7 @@ inline const QDBusArgument &operator>>(const QDBusArgument &arg, Optional<T> &va
     arg.endStructure();
     return arg;
 }
+#endif
 
 template<typename T>
 inline const QVariant &operator>>(const QVariant &argument, Optional<T> &value) {

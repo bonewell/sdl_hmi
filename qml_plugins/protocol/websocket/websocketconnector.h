@@ -1,8 +1,6 @@
 #ifndef WEBSOCKETCONNECTOR_H
 #define WEBSOCKETCONNECTOR_H
 
-#include <QtDBus/QDBusAbstractAdaptor>
-
 #include "core/privateinterface.h"
 
 class QWebSocket;

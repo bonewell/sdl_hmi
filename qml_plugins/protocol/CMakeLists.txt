@@ -38,6 +38,7 @@ set(library_name ${CMAKE_SHARED_LIBRARY_PREFIX}${target}${CMAKE_SHARED_LIBRARY_S
 set(CMAKE_AUTOMOC ON)
 set(SOURCES
   protocol_plugin.cc
+  core/service.cpp
   core/abstractadapter.cpp
   core/courier.cpp
   core/optional.cpp

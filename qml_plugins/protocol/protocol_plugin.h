@@ -35,11 +35,9 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_PROTOCOL_PLUGIN_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_PROTOCOL_PLUGIN_H_
 
-#include <QtDBus/QDBusContext>
-
 #include <QtQml/QQmlExtensionPlugin>
 
-class ProtocolPlugin : public QQmlExtensionPlugin, public QDBusContext {
+class ProtocolPlugin : public QQmlExtensionPlugin {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 

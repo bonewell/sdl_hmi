@@ -6,8 +6,8 @@
 #include <QString>
 #include <QObject>
 #include <QtQml/QQmlParserStatus>
-
 #include "core/slave.h"
+#include "core/context.h"
 #include "core/courier.h"
 #include "core/connector.h"
 #include "core/handle.h"
@@ -73,7 +73,7 @@ private:
     QMap<int, Slave*> msgs_;
 };
 
-class AbstractItem : public QObject, public QQmlParserStatus
+class AbstractItem : public QObject, public QQmlParserStatus, public Context
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)

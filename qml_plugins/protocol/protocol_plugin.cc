@@ -37,14 +37,9 @@
 #ifdef ENABLE_LOG
 #  include <log4cxx/logger.h>
 #  include <log4cxx/propertyconfigurator.h>
-#endif  // ENABLE_LOG
+#endif
 
-#include <QtCore/QString>
-#include <QtDBus/QDBusConnection>
 #include <QtQml/qqml.h>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlListReference>
-#include <QtQml/QQmlEngine>
 #include "protocol/interfaces/buttons.h"
 #include "protocol/interfaces/tts.h"
 #include "protocol/interfaces/vr.h"
@@ -53,66 +48,17 @@
 #include "protocol/interfaces/ui.h"
 #include "protocol/interfaces/vehicleinfo.h"
 #include "protocol/interfaces/sdl.h"
+#include "core/service.h"
 
 #ifdef ENABLE_LOG
 log4cxx::LoggerPtr logger_ = log4cxx::LoggerPtr(
-                              log4cxx::Logger::getLogger("DBusPlugin"));
+    log4cxx::Logger::getLogger("ProtocolPlugin"));
 #endif  // ENABLE_LOG
 
 void ProtocolPlugin::registerTypes(const char *uri) {
 #ifdef ENABLE_LOG
   log4cxx::PropertyConfigurator::configure("log4cxx.properties");
 #endif  // ENABLE_LOG
-
-  register_optional();
-
-  register_struct<ButtonCapabilities>();
-  register_struct<PresetBankCapabilities>();
-  register_struct<TTSChunk>();
-  register_struct<Image>();
-  register_struct<TextFieldStruct>();
-  register_struct<SoftButton>();
-  register_struct<Turn>();
-  register_struct<MenuParams>();
-  register_struct<Choice>();
-  register_struct<VrHelpItem>();
-  register_struct<TimeFormat>();
-  register_struct<KeyboardProperties>();
-  register_struct<TextField>();
-  register_struct<ImageResolution>();
-  register_struct<ImageField>();
-  register_struct<TouchEventCapabilities>();
-  register_struct<ScreenParams>();
-  register_struct<DisplayCapabilities>();
-  register_struct<AudioPassThruCapabilities>();
-  register_struct<SoftButtonCapabilities>();
-  register_struct<HMICapabilities>();
-  register_struct<TouchCoord>();
-  register_struct<TouchEvent>();
-  register_struct<VehicleType>();
-  register_struct<DIDResult>();
-  register_struct<GPSData>();
-  register_struct<SingleTireStatus>();
-  register_struct<TireStatus>();
-  register_struct<BeltStatus>();
-  register_struct<BodyInformation>();
-  register_struct<HMIApplication>();
-  register_struct<DeviceInfo>();
-  register_struct<DeviceStatus>();
-  register_struct<HeadLampStatus>();
-  register_struct<ECallInfo>();
-  register_struct<AirbagStatus>();
-  register_struct<EmergencyEvent>();
-  register_struct<ClusterModeStatus>();
-  register_struct<MyKey>();
-  register_struct<VehicleDataResult>();
-  register_struct<PermissionItem>();
-  register_struct<UserFriendlyMessage>();
-  register_struct<ServiceInfo>();
-  register_struct<DateTime>();
-  register_struct<OASISAddress>();
-  register_struct<Coordinate>();
-  register_struct<LocationDetails>();
 
   // @uri sdl.core.api
   qmlRegisterType<Buttons>(uri, 1, 0, "Buttons");
@@ -124,5 +70,5 @@ void ProtocolPlugin::registerTypes(const char *uri) {
   qmlRegisterType<VehicleInfo>(uri, 1, 0, "VehicleInfo");
   qmlRegisterType<SDL>(uri, 1, 0, "SDL");
 
-  QDBusConnection::sessionBus().registerService("com.ford.sdl.hmi");
+  Service("com.ford.sdl.hmi").run();
 }

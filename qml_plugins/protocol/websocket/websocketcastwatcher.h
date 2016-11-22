@@ -1,13 +1,11 @@
 #ifndef WEBSOCKETCASTWATCHER_H
 #define WEBSOCKETCASTWATCHER_H
 
-#include <QtDBus/QDBusArgument>
-
 template<typename T>
 inline T cast_watcher(const QVariant& var) {
-    QDBusArgument a = var.value<QDBusArgument>();
+//    QDBusArgument a = var.value<QDBusArgument>();
     T value;
-    a >> value;
+//    a >> value;
     return value;
 }
 

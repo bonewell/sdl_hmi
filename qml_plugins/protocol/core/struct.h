@@ -1,11 +1,13 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_
 
+#ifdef DBUS
 #include <QtDBus/QDBusArgument>
+#include <QtDBus/QDBusMetaType>
+#endif
 #include <QMetaType>
 #include <QList>
 #include <QMetaType>
-#include <QtDBus/QDBusMetaType>
 #include <QJSValue>
 #include <QJSEngine>
 #include <QVariantMap>
@@ -21,12 +23,8 @@ operator QVariantMap() const { \
     return map; \
 }
 
-#define DECLARE_STRUCT(T) \
-Q_DECLARE_METATYPE(T) \
-Q_DECLARE_METATYPE(Optional<T>) \
-Q_DECLARE_METATYPE(QList<T>) \
-Q_DECLARE_METATYPE(Optional<QList<T> >) \
-\
+#ifdef DBUS
+#define DECLARE_STRUCT_DBUS(T) \
 inline QDBusArgument &operator<<(QDBusArgument &argument, const T &value) { \
     argument.beginStructure(); \
     Argument<QDBusArgument> a(argument); \
@@ -41,7 +39,18 @@ inline const QDBusArgument &operator>>(const QDBusArgument &argument, T &value) 
     value.extract(a); \
     argument.endStructure(); \
     return argument; \
-} \
+}
+#else
+#define DECLARE_STRUCT_DBUS(T)
+#endif
+
+#define DECLARE_STRUCT(T) \
+Q_DECLARE_METATYPE(T) \
+Q_DECLARE_METATYPE(Optional<T>) \
+Q_DECLARE_METATYPE(QList<T>) \
+Q_DECLARE_METATYPE(Optional<QList<T> >) \
+\
+DECLARE_STRUCT_DBUS(T) \
 \
 inline QVariantMap &operator<<(QVariantMap &argument, const T &value) { \
     Argument<QVariantMap> a(argument); \
@@ -65,10 +74,12 @@ inline QJSValue &operator<<(QJSValue &argument, const T &value) { \
 
 template<typename T>
 inline void register_struct() {
+#ifdef DBUS
     qDBusRegisterMetaType<T>();
     qDBusRegisterMetaType<QList<T> >();
     qDBusRegisterMetaType<Optional<T> >();
     qDBusRegisterMetaType<Optional<QList<T> > >();
+#endif
 }
 
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_

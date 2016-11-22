@@ -2,13 +2,16 @@
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ARGUMENT_H_
 
 #include <QString>
-#include <QDBusArgument>
+#ifdef DBUS
+#  include <QDBusArgument>
+#endif
 #include <QVariantMap>
 #include <QJSValue>
 
 template<class T>
 class Argument {};
 
+#ifdef DBUS
 template<>
 class Argument<QDBusArgument>
 {
@@ -38,6 +41,7 @@ public:
 private:
     const QDBusArgument& argument_;
 };
+#endif
 
 template<>
 class Argument<QVariantMap>
