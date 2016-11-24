@@ -1,7 +1,6 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ABSTRACTADAPTER_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ABSTRACTADAPTER_H_
 
-
 #include <QMap>
 #include <QString>
 #include <QObject>
@@ -41,6 +40,7 @@ public: \
     virtual void componentComplete() { \
         adapter = new Adapter(this, object_); \
         adapter->init(); \
+        adapter->saveSignals(metaObject_); \
     } \
 private: \
     AbstractAdapter* getAdapter() { return adapter; } \
@@ -56,6 +56,7 @@ public:
     void sendError(Handle handle, const QString& error, const QString& text);
     void sendResult(Handle handle);
     Signal& signal(const QString& name);
+    void saveSignals(const QMetaObject* metaObject);
 
 protected:
     virtual bool isConnected() { return false; }
@@ -75,8 +76,10 @@ private:
     inline QString createSlot(const QMetaMethod meta);
     inline QChar methodType(QMetaMethod::MethodType type) const;
     inline bool compare(const QMetaMethod& m1, const QMetaMethod& m2) const;
+    inline void saveSignal(const QMetaMethod& meta);
     PrivateAdapter impl_;
     QMap<QString, int> meta_;
+    QMap<QString, int> meta_signals_;
     QMap<int, Slave*> msgs_;
 };
 
@@ -88,7 +91,10 @@ class AbstractItem : public QObject, public QQmlParserStatus, public Context
 public:
     explicit AbstractItem(QObject *parent=0) : QObject(parent), object_(0) {}
     virtual ~AbstractItem() {}
-    virtual void classBegin() {}
+    virtual void classBegin()
+    {
+        metaObject_ = metaObject();
+    }
     Q_INVOKABLE void sendError(const QVariantMap& handle, const QString& code,
         const QString& text)
     {
@@ -101,6 +107,7 @@ public:
 protected:
     virtual AbstractAdapter* getAdapter() = 0;
     QObject *object_;
+    const QMetaObject* metaObject_;
 };
 
 #endif // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_ABSTRACTADAPTER_H_

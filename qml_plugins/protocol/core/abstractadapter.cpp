@@ -1,9 +1,10 @@
 #include "abstractadapter.h"
 
 #include <QMetaMethod>
+#include <QDebug>
 
 AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
-    Adaptor(object), impl_(item, object), meta_(), msgs_()
+    Adaptor(object), impl_(item, object), meta_(), meta_signals_(), msgs_()
 {
 }
 
@@ -18,6 +19,24 @@ void AbstractAdapter::init()
         QMetaMethod meta = mo->method(i);
         subscribe(meta);
         publish(meta);
+    }
+}
+
+void AbstractAdapter::saveSignals(const QMetaObject *metaObject)
+{
+    for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i) {
+        QMetaMethod meta = metaObject->method(i);
+        saveSignal(meta);
+    }
+}
+
+void AbstractAdapter::saveSignal(const QMetaMethod &meta)
+{
+    if (meta.methodType() == QMetaMethod::Method) {
+        QString name = meta.name();
+        name[0] = name[0].toUpper();
+        qDebug() << name << meta.parameterNames();
+        meta_signals_[name] = meta.methodIndex();
     }
 }
 
@@ -68,7 +87,8 @@ Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
 
 Signal& AbstractAdapter::signal(const QString& name)
 {
-    return *new Signal(name, impl_);
+    QMetaMethod meta = impl_.item()->metaObject()->method(meta_signals_[name]);
+    return *new Signal(name, meta, impl_);
 }
 
 void AbstractAdapter::sendError(Handle handle, const QString& error, const QString& text)

@@ -3,26 +3,34 @@
 
 #include <QString>
 #include <QVariant>
+#include <QList>
+#include <QByteArray>
+#include <QMetaMethod>
+
+typedef QList<QPair<QString, QVariant> > ArgumentsList;
 
 class PrivateInterface;
 
 class Signal
 {
 public:
-    Signal(const QString& name, PrivateInterface& impl);
+    Signal(const QString& name, const QMetaMethod& meta, PrivateInterface& impl);
     void send();
 
     template<typename T>
     Signal& arg(const T& value) {
         QVariant var = QVariant::fromValue(value);
-        arguments_ << var;
+        arguments_ << qMakePair(QString(names_[index_++]), var);
         return *this;
     }
 
 private:
-    QString name_;
+    const QString name_;
+    const QMetaMethod meta_;
     PrivateInterface& impl_;
-    QVariantList arguments_;
+    const QList<QByteArray> names_;
+    ArgumentsList arguments_;
+    int index_;
 };
 
 #endif // SIGNAL_H

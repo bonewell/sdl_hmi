@@ -78,13 +78,17 @@ void WebSocket::sendError(Message &message, const QString &name, const QString &
 {
 }
 
-void WebSocket::sendSignal(const QString &name, const QVariantList &arguments)
+void WebSocket::sendSignal(const QString &name, const ArgumentsList &arguments)
 {
+    QJsonObject params;
+    foreach (ArgumentsList::const_reference arg, arguments) {
+        params[arg.first] << arg.second;
+    }
     QJsonObject msg
     {
         {"jsonrpc", "2.0"},
-        {"method", component_name_ + "." + name}
-        // arguments here
+        {"method", component_name_ + "." + name},
+        {"params", params}
     };
     send(msg);
 }

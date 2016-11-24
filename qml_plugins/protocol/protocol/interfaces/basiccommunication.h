@@ -175,7 +175,7 @@ public:
     Q_INVOKABLE void onExitApplication(int reason, int appID);
     Q_INVOKABLE void onExitAllApplications(int reason);
     Q_INVOKABLE void onAwakeSDL();
-    Q_INVOKABLE void OnSystemRequest(int requestType, const QVariant& url = QVariant(),
+    Q_INVOKABLE void onSystemRequest(int requestType, const QVariant& url = QVariant(),
         const QVariant& fileType = QVariant(), const QVariant& offset = QVariant(),
         const QVariant& length = QVariant(), const QVariant& timeout = QVariant(),
         const QString& fileName = "", const QVariant& appID = QVariant());

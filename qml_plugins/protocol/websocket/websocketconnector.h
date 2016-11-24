@@ -5,12 +5,13 @@
 
 #include <QObject>
 
-class QWebSocket;
-class QByteArray;
+#define ADAPTER_INFORMATION(Name, Introspection) // UNUSED
 
 typedef QObject Adaptor;
+typedef QList<QPair<QString, QVariant> > ArgumentsList;
 
-#define ADAPTER_INFORMATION(Name, Introspection) // UNUSED
+class QWebSocket;
+class QByteArray;
 
 class WebSocket : public QObject, public PrivateInterface
 {
@@ -25,7 +26,7 @@ public:
     virtual void setDelayedReply(Message& message);
     virtual void sendReply(Message& message, const QVariantList& output);
     virtual void sendError(Message& message, const QString& name, const QString& text);
-    virtual void sendSignal(const QString& name, const QVariantList& arguments);
+    virtual void sendSignal(const QString& name, const ArgumentsList& arguments);
     virtual Watcher* call(const QString& name, const QVariantList& input);
     virtual QObject* item() { return item_; }
 private slots:

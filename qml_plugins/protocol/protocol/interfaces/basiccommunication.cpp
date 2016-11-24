@@ -171,7 +171,7 @@ void BasicCommunication::onAwakeSDL()
     adapter->signal("OnAwakeSDL").send();
 }
 
-void BasicCommunication::OnSystemRequest(int requestType, const QVariant &url,
+void BasicCommunication::onSystemRequest(int requestType, const QVariant &url,
     const QVariant &fileType, const QVariant &offset, const QVariant &length,
     const QVariant &timeout, const QString &fileName, const QVariant &appID)
 {

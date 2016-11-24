@@ -49,10 +49,14 @@ void DBus::sendError(Message &message, const QString &name, const QString &text)
     QDBusConnection::sessionBus().send(error);
 }
 
-void DBus::sendSignal(const QString &name, const QVariantList &arguments)
+void DBus::sendSignal(const QString &name, const ArgumentsList &arguments)
 {
     QDBusMessage signal = QDBusMessage::createSignal("/", name_, name);
-    signal.setArguments(arguments);
+    QVariantList list;
+    foreach (ArgumentsList::const_reference arg, arguments) {
+        list << arg.second;
+    }
+    signal.setArguments(list);
     QDBusConnection::sessionBus().send(signal);
 }
 

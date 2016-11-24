@@ -275,7 +275,8 @@ void UI::onCommand(int cmdID, int appID)
 
 void UI::onSystemContext(int systemContext, const QVariant &appID)
 {
-    adapter->signal("OnSystemContext").arg(systemContext).arg(appID).send();
+    adapter->signal("OnSystemContext").arg(systemContext)
+            .arg<Optional<int> >(appID).send();
 }
 
 void UI::onLanguageChange(int language)
@@ -290,7 +291,7 @@ void UI::onDriverDistraction(int state)
 
 void UI::onKeyboardInput(int event, const QVariant &data)
 {
-    adapter->signal("OnKeyboardInput").arg(event).arg(data).send();
+    adapter->signal("OnKeyboardInput").arg(event).arg<Optional<QString> >(data).send();
 }
 
 void UI::onTouchEvent(int type, const QVariantList &event)

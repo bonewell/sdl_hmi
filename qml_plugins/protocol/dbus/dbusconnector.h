@@ -5,13 +5,14 @@
 
 #include "core/privateinterface.h"
 
-class QDBusInterface;
-
-typedef QDBusAbstractAdaptor Adaptor;
-
 #define ADAPTER_INFORMATION(Name, Introspection) \
     Q_CLASSINFO("D-Bus Interface", Name) \
     Q_CLASSINFO("D-Bus Introspection", Introspection)
+
+typedef QDBusAbstractAdaptor Adaptor;
+typedef QList<QPair<QString, QVariant> > ArgumentsList;
+
+class QDBusInterface;
 
 class DBus : public PrivateInterface
 {
@@ -24,7 +25,7 @@ public:
     virtual void setDelayedReply(Message& message);
     virtual void sendReply(Message& message, const QVariantList& output);
     virtual void sendError(Message& message, const QString& name, const QString& text);
-    virtual void sendSignal(const QString& name, const QVariantList& arguments);
+    virtual void sendSignal(const QString& name, const ArgumentsList &arguments);
     virtual Watcher* call(const QString& name, const QVariantList& input);
     virtual QObject* item() { return item_; }
 private:
