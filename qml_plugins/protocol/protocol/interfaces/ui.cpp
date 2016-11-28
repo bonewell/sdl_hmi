@@ -167,8 +167,8 @@ void UI::replyGetCapabilities(const QVariantMap& handle,
     const QVariantMap &audioPassThruCapabilities, int hmiZoneCapabilities,
     const QVariant &softButtonCapabilities, const QVariant &hmiCapabilities)
 {
-    adapter->reply(handle).out(single<DisplayCapabilities>(displayCapabilities))
-            .out(single<AudioPassThruCapabilities>(audioPassThruCapabilities))
+    adapter->reply(handle).out<DisplayCapabilities>(displayCapabilities)
+            .out<AudioPassThruCapabilities>(audioPassThruCapabilities)
             .out(hmiZoneCapabilities)
             .out<Optional<QList<SoftButtonCapabilities> > >(softButtonCapabilities)
             .out<Optional<HMICapabilities> >(hmiCapabilities).send();
@@ -239,7 +239,7 @@ void UI::onKeyboardInput(int event, const QVariant &data)
 
 void UI::onTouchEvent(int type, const QVariantList &event)
 {
-    adapter->signal("OnTouchEvent").arg(type).arg(multiple<TouchEvent>(event)).send();
+    adapter->signal("OnTouchEvent").arg(type).arg<QList<TouchEvent> >(event).send();
 }
 
 void UI::onResetTimeout(int appID, const QString &methodName)

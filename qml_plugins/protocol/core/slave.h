@@ -8,6 +8,7 @@
 
 #include "core/message.h"
 #include "core/handle.h"
+#include "core/convert.h"
 
 class PrivateInterface;
 
@@ -33,6 +34,17 @@ public:
         output_ << var;
         return *this;
     }
+
+    template<typename T>
+    Slave& out(const QVariantMap& value) {
+        return out(single<T>(value));
+    }
+
+    template<typename T>
+    Slave& out(const QVariantList& value) {
+        return out(multiple<typename T::value_type>(value));
+    }
+
     void run();
     void send();
     void error(const QString& name, const QString& text);

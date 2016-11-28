@@ -120,7 +120,7 @@ void BasicCommunication::onEmergencyEvent(bool enabled)
 
 void BasicCommunication::onDeviceChosen(const QVariantMap &deviceInfo)
 {
-    adapter->signal("OnDeviceChosen").arg(single<DeviceInfo>(deviceInfo)).send();
+    adapter->signal("OnDeviceChosen").arg<DeviceInfo>(deviceInfo).send();
 }
 
 void BasicCommunication::onFindApplications(const QVariant &deviceInfo)

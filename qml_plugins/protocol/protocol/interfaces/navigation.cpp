@@ -103,5 +103,5 @@ void Navigation::onTBTClientState(int state)
 
 void Navigation::onWayPointChange(const QVariantList &wayPoints)
 {
-    adapter->signal("OnWayPointChange").arg(multiple<LocationDetails>(wayPoints)).send();
+    adapter->signal("OnWayPointChange").arg<QList<LocationDetails> >(wayPoints).send();
 }

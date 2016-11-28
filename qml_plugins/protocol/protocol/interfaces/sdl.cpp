@@ -139,7 +139,7 @@ void SDL::onAppPermissionConsent(const QVariant &appID,
 {
     // appID is optional parameter, but C++ rules denies using mandatory parameters after optional
     adapter->signal("OnAppPermissionConsent").arg<Optional<int> >(appID)
-            .arg(multiple<PermissionItem>(consentedFunctions)).arg(source).send();
+            .arg<QList<PermissionItem> >(consentedFunctions).arg(source).send();
 }
 
 void SDL::onSystemError(int error)
@@ -158,4 +158,3 @@ void SDL::onDeviceStateChanged(int deviceState, const QString &deviceInternalId,
     adapter->signal("OnDeviceStateChanged").arg(deviceState).arg(deviceInternalId)
             .arg<Optional<DeviceInfo> >(deviceId).send();
 }
-

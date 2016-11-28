@@ -7,6 +7,8 @@
 #include <QByteArray>
 #include <QMetaMethod>
 
+#include "core/convert.h"
+
 typedef QList<QPair<QString, QVariant> > ArgumentsList;
 
 class PrivateInterface;
@@ -22,6 +24,16 @@ public:
         QVariant var = QVariant::fromValue(value);
         arguments_ << qMakePair(QString(names_[index_++]), var);
         return *this;
+    }
+
+    template<typename T>
+    Signal& arg(const QVariantMap& value) {
+        return arg(single<T>(value));
+    }
+
+    template<typename T>
+    Signal& arg(const QVariantList& value) {
+        return arg(multiple<typename T::value_type>(value));
     }
 
 private:
