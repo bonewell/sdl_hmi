@@ -528,6 +528,7 @@ class VehicleInfoAdapter : public AbstractAdapter
     REGISTER_ADAPTER(VehicleInfoAdapter, VehicleInfo)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.VehicleInfo")
 
+// Incoming requests
 public slots:
     void IsReady(const Message& message);
     void GetVehicleType(const Message& message);
@@ -612,90 +613,6 @@ public slots:
     void UnsubscribeEmergencyEvent(const Message& message);
     void UnsubscribeClusterModeStatus(const Message& message);
     void UnsubscribeMyKey(const Message& message);
-
-public:
-    void ReplyIsReady(const Handle& handle, bool available);
-    void ReplyGetVehicleType(const Handle& handle, const VehicleType& vehicleType);
-    void ReplyReadDID(const Handle& handle, const QList<DIDResult>& didResult);
-    void ReplyGetDTCs(const Handle& handle, int ecuHeader, const Optional<QStringList>& dtc);
-    void ReplyDiagnosticMessage(const Handle& handle, const QList<int>& messageDataResult);
-    void ReplyGetGpsData(const Handle& handle, const GPSData& gps);
-    void ReplyGetSpeed(const Handle& handle, double speed);
-    void ReplyGetRpm(const Handle& handle, int rpm);
-    void ReplyGetFuelLevel(const Handle& handle, double fuelLevel);
-    void ReplyGetFuelLevelState(const Handle& handle, int fuelLevel_State);
-    void ReplyGetInstantFuelConsumption(const Handle& handle, double instantFuelConsumption);
-    void ReplyGetExternalTemperature(const Handle& handle, double externalTemperature);
-    void ReplyGetVin(const Handle& handle, const QString& vin);
-    void ReplyGetPrndl(const Handle& handle, int prndl);
-    void ReplyGetTirePressure(const Handle& handle, const TireStatus& tirePressure);
-    void ReplyGetOdometer(const Handle& handle, int odometer);
-    void ReplyGetBeltStatus(const Handle& handle, const BeltStatus& beltStatus);
-    void ReplyGetBodyInformation(const Handle& handle, const BodyInformation& bodyInformation);
-    void ReplyGetDeviceStatus(const Handle& handle, const DeviceStatus& deviceStatus);
-    void ReplyGetDriverBraking(const Handle& handle, int driverBraking);
-    void ReplyGetWiperStatus(const Handle& handle, int wiperStatus);
-    void ReplyGetHeadLampStatus(const Handle& handle, const HeadLampStatus& headLampStatus);
-    void ReplyGetEngineTorque(const Handle& handle, double engineTorque);
-    void ReplyGetAccPedalPosition(const Handle& handle, double accPedalPosition);
-    void ReplyGetSteeringWheelAngle(const Handle& handle, double steeringWheelAngle);
-    void ReplyGetECallInfo(const Handle& handle, const ECallInfo& eCallInfo);
-    void ReplyGetAirbagStatus(const Handle& handle, const AirbagStatus& airbagStatus);
-    void ReplyGetEmergencyEvent(const Handle& handle, const EmergencyEvent& emergencyEvent);
-    void ReplyGetClusterModeStatus(const Handle& handle, const ClusterModeStatus& clusterModeStatus);
-    void ReplyGetMyKey(const Handle& handle, const MyKey& myKey);
-    void ReplySubscribeGps(const Handle& handle, const VehicleDataResult& gps);
-    void ReplySubscribeSpeed(const Handle& handle, const VehicleDataResult& speed);
-    void ReplySubscribeRpm(const Handle& handle, const VehicleDataResult& rpm);
-    void ReplySubscribeFuelLevel(const Handle& handle, const VehicleDataResult& fuelLevel);
-    void ReplySubscribeFuelLevel_State(const Handle& handle, const VehicleDataResult& fuelLevel_State);
-    void ReplySubscribeInstantFuelConsumption(const Handle& handle, const VehicleDataResult& instantFuelConsumption);
-    void ReplySubscribeExternalTemperature(const Handle& handle, const VehicleDataResult& externalTemperature);
-    void ReplySubscribeVin(const Handle& handle, const QString& vin);
-    void ReplySubscribePrndl(const Handle& handle, const VehicleDataResult& prndl);
-    void ReplySubscribeTirePressure(const Handle& handle, const VehicleDataResult& tirePressure);
-    void ReplySubscribeOdometer(const Handle& handle, const VehicleDataResult& odometer);
-    void ReplySubscribeBeltStatus(const Handle& handle, const VehicleDataResult& beltStatus);
-    void ReplySubscribeBodyInformation(const Handle& handle, const VehicleDataResult& bodyInformation);
-    void ReplySubscribeDeviceStatus(const Handle& handle, const VehicleDataResult& deviceStatus);
-    void ReplySubscribeDriverBraking(const Handle& handle, const VehicleDataResult& driverBraking);
-    void ReplySubscribeWiperStatus(const Handle& handle, const VehicleDataResult& wiperStatus);
-    void ReplySubscribeHeadLampStatus(const Handle& handle, const VehicleDataResult& headLampStatus);
-    void ReplySubscribeEngineTorque(const Handle& handle, const VehicleDataResult& engineTorque);
-    void ReplySubscribeAccPedalPosition(const Handle& handle, const VehicleDataResult& accPedalPosition);
-    void ReplySubscribeSteeringWheelAngle(const Handle& handle, const VehicleDataResult& steeringWheelAngle);
-    void ReplySubscribeECallInfo(const Handle& handle, const VehicleDataResult& eCallInfo);
-    void ReplySubscribeAirbagStatus(const Handle& handle, const VehicleDataResult& airbagStatus);
-    void ReplySubscribeEmergencyEvent(const Handle& handle, const VehicleDataResult& emergencyEvent);
-    void ReplySubscribeClusterModeStatus(const Handle& handle, const VehicleDataResult& clusterModeStatus);
-    void ReplySubscribeMyKey(const Handle& handle, const VehicleDataResult& myKey);
-    void ReplyUnsubscribeGps(const Handle& handle, const VehicleDataResult& gps);
-    void ReplyUnsubscribeSpeed(const Handle& handle, const VehicleDataResult& speed);
-    void ReplyUnsubscribeRpm(const Handle& handle, const VehicleDataResult& rpm);
-    void ReplyUnsubscribeFuelLevel(const Handle& handle, const VehicleDataResult& fuelLevel);
-    void ReplyUnsubscribeFuelLevel_State(const Handle& handle, const VehicleDataResult& fuelLevel_State);
-    void ReplyUnsubscribeInstantFuelConsumption(const Handle& handle, const VehicleDataResult& instantFuelConsumption);
-    void ReplyUnsubscribeExternalTemperature(const Handle& handle, const VehicleDataResult& externalTemperature);
-    void ReplyUnsubscribeVin(const Handle& handle, const QString& vin);
-    void ReplyUnsubscribePrndl(const Handle& handle, const VehicleDataResult& prndl);
-    void ReplyUnsubscribeTirePressure(const Handle& handle, const VehicleDataResult& tirePressure);
-    void ReplyUnsubscribeOdometer(const Handle& handle, const VehicleDataResult& odometer);
-    void ReplyUnsubscribeBeltStatus(const Handle& handle, const VehicleDataResult& beltStatus);
-    void ReplyUnsubscribeBodyInformation(const Handle& handle, const VehicleDataResult& bodyInformation);
-    void ReplyUnsubscribeDeviceStatus(const Handle& handle, const VehicleDataResult& deviceStatus);
-    void ReplyUnsubscribeDriverBraking(const Handle& handle, const VehicleDataResult& driverBraking);
-    void ReplyUnsubscribeWiperStatus(const Handle& handle, const VehicleDataResult& wiperStatus);
-    void ReplyUnsubscribeHeadLampStatus(const Handle& handle, const VehicleDataResult& headLampStatus);
-    void ReplyUnsubscribeEngineTorque(const Handle& handle, const VehicleDataResult& engineTorque);
-    void ReplyUnsubscribeAccPedalPosition(const Handle& handle, const VehicleDataResult& accPedalPosition);
-    void ReplyUnsubscribeSteeringWheelAngle(const Handle& handle, const VehicleDataResult& steeringWheelAngle);
-    void ReplyUnsubscribeECallInfo(const Handle& handle, const VehicleDataResult& eCallInfo);
-    void ReplyUnsubscribeAirbagStatus(const Handle& handle, const VehicleDataResult& airbagStatus);
-    void ReplyUnsubscribeEmergencyEvent(const Handle& handle, const VehicleDataResult& emergencyEvent);
-    void ReplyUnsubscribeClusterModeStatus(const Handle& handle, const VehicleDataResult& clusterModeStatus);
-    void ReplyUnsubscribeMyKey(const Handle& handle, const VehicleDataResult& myKey);
-
-private slots:
 };
 
 class VehicleInfo : public AbstractItem
@@ -704,6 +621,7 @@ class VehicleInfo : public AbstractItem
     CONNECT_ADAPTER(VehicleInfo, VehicleInfoAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void onGpsData(const QVariantMap& gps);
     Q_INVOKABLE void onSpeed(double speed);
     Q_INVOKABLE void onRpm(int rpm);
@@ -730,6 +648,7 @@ public:
     Q_INVOKABLE void onClusterModeStatus(const QVariantMap& clusterModeStatus);
     Q_INVOKABLE void onMyKey(const QVariantMap& myKey);
 
+// Outcoming responses
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
     Q_INVOKABLE void replyGetVehicleType(const QVariantMap& handle,
         const QVariantMap& vehicleType);
@@ -814,8 +733,6 @@ public:
     Q_INVOKABLE void replyUnsubscribeEmergencyEvent(const QVariantMap& handle, const QVariantMap& emergencyEvent);
     Q_INVOKABLE void replyUnsubscribeClusterModeStatus(const QVariantMap& handle, const QVariantMap& clusterModeStatus);
     Q_INVOKABLE void replyUnsubscribeMyKey(const QVariantMap& handle, const QVariantMap& myKey);
-
-signals:
 };
 
 #endif // VEHICLEINFO_H

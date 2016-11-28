@@ -52,24 +52,6 @@ void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
     invoke("GetSystemInfo", message).run();
 }
 
-void BasicCommunicationAdapter::ReplyAllowDeviceToConnect(const Handle& handle,
-                                                          bool allow)
-{
-    reply(handle).out(allow).send();
-}
-
-void BasicCommunicationAdapter::ReplyMixingAudioSupported(const Handle& handle,
-    bool attenuatedSupported)
-{
-    reply(handle).out(attenuatedSupported).send();
-}
-
-void BasicCommunicationAdapter::ReplyGetSystemInfo(const Handle& handle,
-    const QString &ccpu_version, int language, const QString &wersCountryCode)
-{
-    reply(handle).out(ccpu_version).out(language).out(wersCountryCode).send();
-}
-
 void BasicCommunicationAdapter::OnResumeAudioSource(int appID)
 {
     emit qml->onResumeAudioSource(appID);
@@ -206,17 +188,17 @@ void BasicCommunication::onEventChanged(int eventName, bool isActive)
 void BasicCommunication::replyAllowDeviceToConnect(const QVariantMap& handle,
                                                    bool allow)
 {
-    adapter->ReplyAllowDeviceToConnect(handle, allow);
+    adapter->reply(handle).out(allow).send();
 }
 
 void BasicCommunication::replyMixingAudioSupported(const QVariantMap& handle,
                                                    bool attenuatedSupported)
 {
-    adapter->ReplyMixingAudioSupported(handle, attenuatedSupported);
+    adapter->reply(handle).out(attenuatedSupported).send();
 }
 
 void BasicCommunication::replyGetSystemInfo(const QVariantMap& handle,
     const QString &ccpu_version, int language, const QString &wersCountryCode)
 {
-    adapter->ReplyGetSystemInfo(handle, ccpu_version, language, wersCountryCode);
+    adapter->reply(handle).out(ccpu_version).out(language).out(wersCountryCode).send();
 }

@@ -145,68 +145,6 @@ void UIAdapter::ClosePopUp(const Optional<QString> &methodName, const Message &m
     invoke("ClosePopUp", message).in(methodName).run();
 }
 
-void UIAdapter::ReplyAlert(const Handle& handle,
-                           const Optional<int> &tryAgainTime)
-{
-    reply(handle).out(tryAgainTime).send();
-}
-
-void UIAdapter::ReplyPerformInteraction(const Handle& handle,
-    const Optional<int> &choiceID, const Optional<QString> &manualTextEntry)
-{
-    reply(handle).out(choiceID).out(manualTextEntry).send();
-}
-
-void UIAdapter::ReplyGetCapabilities(const Handle& handle,
-    const DisplayCapabilities &displayCapabilities,
-    const AudioPassThruCapabilities &audioPassThruCapabilities,
-    int hmiZoneCapabilities,
-    const Optional<QList<SoftButtonCapabilities> > &softButtonCapabilities,
-    const Optional<HMICapabilities> &hmiCapabilities)
-{
-    reply(handle).out(displayCapabilities).out(audioPassThruCapabilities)
-        .out(hmiZoneCapabilities).out(softButtonCapabilities)
-            .out(hmiCapabilities).send();
-}
-
-void UIAdapter::ReplyGetSupportedLanguages(const Handle& handle,
-                                           const QList<int> &languages)
-{
-    reply(handle).out(languages).send();
-}
-
-void UIAdapter::ReplyGetLanguage(const Handle& handle, int language)
-{
-    reply(handle).out(language).send();
-}
-
-void UIAdapter::ReplySetDisplayLayout(const Handle& handle,
-    const Optional<DisplayCapabilities> &displayCapabilities,
-    const Optional<QList<ButtonCapabilities> > &buttonCapabilities,
-    const Optional<QList<SoftButtonCapabilities> > &softButtonCapabilities,
-    const Optional<PresetBankCapabilities> &presetBankCapabilities)
-{
-    reply(handle).out(displayCapabilities).out(buttonCapabilities)
-            .out(softButtonCapabilities).out(presetBankCapabilities).send();
-}
-
-void UIAdapter::ReplyShowCustomForm(const Handle& handle,
-                                    const Optional<QString> &info)
-{
-    reply(handle).out(info).send();
-}
-
-void UIAdapter::ReplySlider(const Handle& handle,
-                            const Optional<int> &sliderPosition)
-{
-    reply(handle).out(sliderPosition).send();
-}
-
-void UIAdapter::ReplyIsReady(const Handle& handle, bool available)
-{
-    reply(handle).out(available).send();
-}
-
 void UIAdapter::OnRecordStart(int appID)
 {
     emit qml->onRecordStart(appID);
@@ -214,13 +152,14 @@ void UIAdapter::OnRecordStart(int appID)
 
 void UI::replyAlert(const QVariantMap& handle, const QVariant &tryAgainTime)
 {
-    adapter->ReplyAlert(handle, tryAgainTime);
+    adapter->reply(handle).out<Optional<int> >(tryAgainTime).send();
 }
 
 void UI::replyPerformInteraction(const QVariantMap& handle,
     const QVariant &choiceID, const QVariant &manualTextEntry)
 {
-    adapter->ReplyPerformInteraction(handle, choiceID, manualTextEntry);
+    adapter->reply(handle).out<Optional<int> >(choiceID)
+            .out<Optional<QString> >(manualTextEntry).send();
 }
 
 void UI::replyGetCapabilities(const QVariantMap& handle,
@@ -228,20 +167,22 @@ void UI::replyGetCapabilities(const QVariantMap& handle,
     const QVariantMap &audioPassThruCapabilities, int hmiZoneCapabilities,
     const QVariant &softButtonCapabilities, const QVariant &hmiCapabilities)
 {
-    adapter->ReplyGetCapabilities(handle, single<DisplayCapabilities>(displayCapabilities),
-        single<AudioPassThruCapabilities>(audioPassThruCapabilities),
-                                  hmiZoneCapabilities, softButtonCapabilities, hmiCapabilities);
+    adapter->reply(handle).out(single<DisplayCapabilities>(displayCapabilities))
+            .out(single<AudioPassThruCapabilities>(audioPassThruCapabilities))
+            .out(hmiZoneCapabilities)
+            .out<Optional<QList<SoftButtonCapabilities> > >(softButtonCapabilities)
+            .out<Optional<HMICapabilities> >(hmiCapabilities).send();
 }
 
 void UI::replyGetSupportedLanguages(const QVariantMap& handle,
                                     const QList<int> &languages)
 {
-    adapter->ReplyGetSupportedLanguages(handle, languages);
+    adapter->reply(handle).out(languages).send();
 }
 
 void UI::replyGetLanguage(const QVariantMap& handle, int language)
 {
-    adapter->ReplyGetLanguage(handle, language);
+    adapter->reply(handle).out(language).send();
 }
 
 void UI::replySetDisplayLayout(const QVariantMap& handle,
@@ -249,23 +190,25 @@ void UI::replySetDisplayLayout(const QVariantMap& handle,
     const QVariant &buttonCapabilities, const QVariant &softButtonCapabilities,
     const QVariant &presetBankCapabilities)
 {
-    adapter->ReplySetDisplayLayout(handle, displayCapabilities, buttonCapabilities,
-                                   softButtonCapabilities, presetBankCapabilities);
+    adapter->reply(handle).out<Optional<DisplayCapabilities> >(displayCapabilities)
+            .out<Optional<QList<ButtonCapabilities> > >(buttonCapabilities)
+            .out<Optional<QList<SoftButtonCapabilities> > >(softButtonCapabilities)
+            .out<Optional<PresetBankCapabilities> >(presetBankCapabilities).send();
 }
 
 void UI::replyShowCustomForm(const QVariantMap& handle, const QVariant &info)
 {
-    adapter->ReplyShowCustomForm(handle, info);
+    adapter->reply(handle).out<Optional<QString> >(info).send();
 }
 
 void UI::replySlider(const QVariantMap &handle, const QVariant &sliderPosition)
 {
-    adapter->ReplySlider(handle, sliderPosition);
+    adapter->reply(handle).out<Optional<int> >(sliderPosition).send();
 }
 
 void UI::replyIsReady(const QVariantMap& handle, bool available)
 {
-    adapter->ReplyIsReady(handle, available);
+    adapter->reply(handle).out(available).send();
 }
 
 void UI::onCommand(int cmdID, int appID)

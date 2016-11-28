@@ -85,26 +85,15 @@ void NavigationAdapter::UnsubscribeWayPoints(const Message &message)
     invoke("UnsubscribeWayPoints", message).run();
 }
 
-void NavigationAdapter::ReplyIsReady(const Handle& handle, bool available)
-{
-    reply(handle).out(available).send();
-}
-
-void NavigationAdapter::ReplyGetWayPoints(const Handle &handle, int appID,
-    const Optional<LocationDetails> &wayPoints)
-{
-    reply(handle).out(appID).out(wayPoints).send();
-}
-
 void Navigation::replyIsReady(const QVariantMap& handle, bool available)
 {
-    adapter->ReplyIsReady(handle, available);
+    adapter->reply(handle).out(available).send();
 }
 
 void Navigation::replyGetWayPoints(const QVariantMap &handle, int appID,
     const QVariant &wayPoints)
 {
-    adapter->ReplyGetWayPoints(handle, appID, wayPoints);
+    adapter->reply(handle).out(appID).out<Optional<LocationDetails> >(wayPoints).send();
 }
 
 void Navigation::onTBTClientState(int state)

@@ -55,6 +55,7 @@ public:
     void init();
     void sendError(Handle handle, const QString& error, const QString& text);
     void sendResult(Handle handle);
+    Slave& reply(const Handle &handle);
     Signal& signal(const QString& name);
     void saveSignals(const QMetaObject* metaObject);
 
@@ -65,7 +66,6 @@ protected:
     virtual QString serviceName() { return ""; }
     virtual QString interfaceName() { return ""; }
     Slave& invoke(const QString& name, const Message& message);
-    Slave& reply(Handle handle);
     Courier& request(const QString &name, const QJSValue& callback,
                      CourierCallback func);
 

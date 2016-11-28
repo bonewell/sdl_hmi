@@ -84,6 +84,7 @@ class NavigationAdapter : public AbstractAdapter
     REGISTER_ADAPTER(NavigationAdapter, Navigation)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.Navigation")
 
+// Incoming requests
 public slots:
     void IsReady(const Message& message);
     void SendLocation(int appID, const Optional<double>& longitudeDegrees,
@@ -109,14 +110,10 @@ public slots:
     void SubscribeWayPoints(const Message& message);
     void UnsubscribeWayPoints(const Message& message);
 
+// Incoming nofitications
 private slots:
     void OnAudioDataStreaming(bool available);
     void OnVideoDataStreaming(bool available);
-
-public:
-    void ReplyIsReady(const Handle& handle, bool available);
-    void ReplyGetWayPoints(const Handle& handle, int appID,
-        const Optional<LocationDetails>& wayPoints);
 };
 
 class Navigation : public AbstractItem
@@ -125,13 +122,16 @@ class Navigation : public AbstractItem
     CONNECT_ADAPTER(Navigation, NavigationAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void onTBTClientState(int state);
     Q_INVOKABLE void onWayPointChange(const QVariantList& wayPoints);
 
+// Outcoming responses
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
     Q_INVOKABLE void replyGetWayPoints(const QVariantMap& handle, int appID,
         const QVariant& wayPoints = QVariant());
 
+// Incoming notifications
 signals:
     void onAudioDataStreaming(bool available);
     void onVideoDataStreaming(bool available);

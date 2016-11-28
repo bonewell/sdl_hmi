@@ -46,49 +46,25 @@ void TTSAdapter::SetGlobalProperties(const Optional<QList<TTSChunk> > &helpPromp
     invoke("SetGlobalProperties", message).in(helpPrompt).in(timeoutPrompt).in(appID).run();
 }
 
-void TTSAdapter::ReplyGetCapabilities(const Handle& handle,
-    const QList<int> &speechCapabilities,
-    const QList<int> &prerecordedSpeechCapabilities)
-{
-    reply(handle).out(speechCapabilities).out(prerecordedSpeechCapabilities).send();
-}
-
-void TTSAdapter::ReplyIsReady(const Handle& handle, bool available)
-{
-    reply(handle).out(available).send();
-}
-
-void TTSAdapter::ReplyGetSupportedLanguages(const Handle &handle,
-    const QList<int> &languages)
-{
-    reply(handle).out(languages).send();
-}
-
-void TTSAdapter::ReplyGetLanguage(const Handle& handle, int language)
-{
-    reply(handle).out(language).send();
-}
-
 void TTS::replyGetCapabilities(const QVariantMap& handle, const QList<int> &speechCapabilities,
     const QList<int> &prerecordedSpeechCapabilities)
 {
-    adapter->ReplyGetCapabilities(handle, speechCapabilities,
-                                  prerecordedSpeechCapabilities);
+    adapter->reply(handle).out(speechCapabilities).out(prerecordedSpeechCapabilities).send();
 }
 
 void TTS::replyIsReady(const QVariantMap& handle, bool available)
 {
-    adapter->ReplyIsReady(handle, available);
+    adapter->reply(handle).out(available).send();
 }
 
 void TTS::replyGetSupportedLanguages(const QVariantMap& handle, const QList<int> &languages)
 {
-    adapter->ReplyGetSupportedLanguages(handle, languages);
+    adapter->reply(handle).out(languages).send();
 }
 
 void TTS::replyGetLanguage(const QVariantMap& handle, int language)
 {
-    adapter->ReplyGetLanguage(handle, language);
+    adapter->reply(handle).out(language).send();
 }
 
 void TTS::started()

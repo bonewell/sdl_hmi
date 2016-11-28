@@ -42,6 +42,7 @@ class SDLAdapter : public AbstractAdapter
     REGISTER_ADAPTER(SDLAdapter, SDL)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.SDL")
 
+// Incoming notifications
 private slots:
     void OnAppPermissionChanged(int appID, const Optional<bool>& isAppPermissionsRevoked,
         const Optional<QList<PermissionItem> >& appRevokedPermissions,
@@ -51,6 +52,7 @@ private slots:
     void OnSDLConsentNeeded(const DeviceInfo& device);
     void OnStatusUpdate(int status);
 
+// Outcoming requests
 public:
     void ActivateApp(const QJSValue& callback, int appID);
     void GetUserFriendlyMessage(const QJSValue& callback,
@@ -67,6 +69,7 @@ class SDL : public AbstractItem
     CONNECT_ADAPTER(SDL, SDLAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void onAllowSDLFunctionality(const QVariant& device,
         bool allowed, int source);
     Q_INVOKABLE void onReceivedPolicyUpdate(const QString& policyfile);
@@ -78,6 +81,7 @@ public:
     Q_INVOKABLE void onDeviceStateChanged(int deviceState,
         const QString& deviceInternalId, const QVariant& deviceId = QVariant());
 
+// Outcoming requests
     Q_INVOKABLE void activateApp(const QJSValue& callback, int appID);
     Q_INVOKABLE void getUserFriendlyMessage(const QJSValue& callback,
         const QStringList& messageCodes, const QVariant& language = QVariant());
@@ -87,6 +91,7 @@ public:
     Q_INVOKABLE void getStatusUpdate(const QJSValue& callback);
     Q_INVOKABLE void getURLS(const QJSValue& callback, int service);
 
+// Incoming notifications
 signals:
     void onAppPermissionChanged(int appID, const QVariant& isAppPermissionsRevoked,
         const QVariant& appRevokedPermissions, const QVariant& appRevoked,

@@ -81,6 +81,7 @@ class VRAdapter : public AbstractAdapter
     REGISTER_ADAPTER(VRAdapter, VR)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.VR")
 
+// Incoming requests
 public slots:
     void IsReady(const Message& message);
     void AddCommand(int cmdID, const QStringList& vrCommands, int type,
@@ -96,16 +97,6 @@ public slots:
     void GetSupportedLanguages(const Message& message);
     void GetLanguage(const Message& message);
     void GetCapabilities(const Message& message);
-
-public:
-    void ReplyIsReady(const Handle& handle, bool available);
-    void ReplyPerformInteraction(const Handle& handle,
-                                 const Optional<int>& choiceID);
-    void ReplyGetSupportedLanguages(const Handle& handle,
-                                    const QList<int>& languages);
-    void ReplyGetLanguage(const Handle& handle, int language);
-    void ReplyGetCapabilities(const Handle& handle,
-                              const Optional<QList<int> >& vrCapabilities);
 };
 
 class VR : public AbstractItem
@@ -114,11 +105,13 @@ class VR : public AbstractItem
     CONNECT_ADAPTER(VR, VRAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void started();
     Q_INVOKABLE void stopped();
     Q_INVOKABLE void onCommand(int cmdID, int appID);
     Q_INVOKABLE void onLanguageChange(int language);
 
+// Outcoming responses
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
     Q_INVOKABLE void replyPerformInteraction(const QVariantMap& handle,
         const QVariant& choiceID = QVariant());

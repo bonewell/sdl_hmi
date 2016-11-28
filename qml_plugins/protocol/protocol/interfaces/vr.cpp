@@ -48,54 +48,29 @@ void VRAdapter::GetCapabilities(const Message &message)
     invoke("GetCapabilities", message).run();
 }
 
-void VRAdapter::ReplyIsReady(const Handle& handle, bool available)
-{
-    reply(handle).out(available).send();
-}
-
-void VRAdapter::ReplyPerformInteraction(const Handle& handle, const Optional<int> &choiceID)
-{
-    reply(handle).out(choiceID).send();
-}
-
-void VRAdapter::ReplyGetSupportedLanguages(const Handle& handle, const QList<int> &languages)
-{
-    reply(handle).out(languages).send();
-}
-
-void VRAdapter::ReplyGetLanguage(const Handle& handle, int language)
-{
-    reply(handle).out(language).send();
-}
-
-void VRAdapter::ReplyGetCapabilities(const Handle& handle, const Optional<QList<int> > &vrCapabilities)
-{
-    reply(handle).out(vrCapabilities).send();
-}
-
 void VR::replyIsReady(const QVariantMap& handle, bool available)
 {
-    adapter->ReplyIsReady(handle, available);
+    adapter->reply(handle).out(available).send();
 }
 
 void VR::replyPerformInteraction(const QVariantMap& handle, const QVariant &choiceID)
 {
-    adapter->ReplyPerformInteraction(handle, choiceID);
+    adapter->reply(handle).out<Optional<int> >(choiceID).send();
 }
 
 void VR::replyGetSupportedLanguages(const QVariantMap& handle, const QList<int> &languages)
 {
-    adapter->ReplyGetSupportedLanguages(handle, languages);
+    adapter->reply(handle).out(languages).send();
 }
 
 void VR::replyGetLanguage(const QVariantMap& handle, int language)
 {
-    adapter->ReplyGetLanguage(handle, language);
+    adapter->reply(handle).out(language).send();
 }
 
 void VR::replyGetCapabilities(const QVariantMap& handle, const QVariant &vrCapabilities)
 {
-    adapter->ReplyGetCapabilities(handle, vrCapabilities);
+    adapter->reply(handle).out<Optional<QList<int> > >(vrCapabilities).send();
 }
 
 void VR::started()

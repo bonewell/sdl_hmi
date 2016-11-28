@@ -72,6 +72,7 @@ class TTSAdapter : public AbstractAdapter
     REGISTER_ADAPTER(TTSAdapter, TTS)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.TTS")
 
+// Incoming requests
 public slots:
     void GetCapabilities(const Message& message);
     void IsReady(const Message& message);
@@ -86,14 +87,6 @@ public slots:
     void SetGlobalProperties(const Optional<QList<TTSChunk> >& helpPrompt,
         const Optional<QList<TTSChunk> >& timeoutPrompt, int appID,
         const Message& message);
-
-public:
-    void ReplyGetCapabilities(const Handle& handle,
-        const QList<int>& speechCapabilities,
-        const QList<int>& prerecordedSpeechCapabilities);
-    void ReplyIsReady(const Handle& handle, bool available);
-    void ReplyGetSupportedLanguages(const Handle& handle, const QList<int>& languages);
-    void ReplyGetLanguage(const Handle& handle, int language);
 };
 
 class TTS : public AbstractItem
@@ -102,11 +95,13 @@ class TTS : public AbstractItem
     CONNECT_ADAPTER(TTS, TTSAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void started();
     Q_INVOKABLE void stopped();
     Q_INVOKABLE void onLanguageChange(int language);
     Q_INVOKABLE void onResetTimeout(int appID, const QString& methodName);
 
+// Outcoming responses
     Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QList<int>& speechCapabilities,
         const QList<int>& prerecordedSpeechCapabilities);

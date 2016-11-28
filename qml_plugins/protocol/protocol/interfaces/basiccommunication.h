@@ -122,6 +122,7 @@ class BasicCommunicationAdapter : public AbstractAdapter
     REGISTER_ADAPTER(BasicCommunicationAdapter, BasicCommunication)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.BasicCommunication")
 
+// Incoming requests
 public slots:
     void UpdateAppList(const QList<HMIApplication>& applications, const Message& message);
     void UpdateDeviceList(const QList<DeviceInfo>& deviceList, const Message& message);
@@ -136,12 +137,7 @@ public slots:
         const Message& message);
     void GetSystemInfo(const Message& message);
 
-public:
-    void ReplyAllowDeviceToConnect(const Handle& handle, bool allow);
-    void ReplyMixingAudioSupported(const Handle& handle, bool attenuatedSupported);
-    void ReplyGetSystemInfo(const Handle& handle, const QString& ccpu_version,
-                            int language, const QString& wersCountryCode);
-
+// Incoming notifications
 private slots:
     void OnResumeAudioSource(int appID);
     void OnSDLPersistenceComplete();
@@ -163,6 +159,7 @@ class BasicCommunication : public AbstractItem
     CONNECT_ADAPTER(BasicCommunication, BasicCommunicationAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void onReady();
     Q_INVOKABLE void onStartDeviceDiscovery();
     Q_INVOKABLE void onUpdateDeviceList();
@@ -184,12 +181,14 @@ public:
     Q_INVOKABLE void onDeactivateHMI(bool isDeactivated);
     Q_INVOKABLE void onEventChanged(int eventName, bool isActive);
 
+// Outcoming responses
     Q_INVOKABLE void replyAllowDeviceToConnect(const QVariantMap& handle, bool allow);
     Q_INVOKABLE void replyMixingAudioSupported(const QVariantMap& handle,
                                                bool attenuatedSupported);
     Q_INVOKABLE void replyGetSystemInfo(const QVariantMap& handle,
         const QString& ccpu_version, int language, const QString& wersCountryCode);
 
+// Incoming notifications
 signals:
     void onResumeAudioSource(int appID);
     void onSDLPersistenceComplete();

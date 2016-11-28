@@ -404,935 +404,457 @@ void VehicleInfoAdapter::UnsubscribeMyKey(const Message &message)
     invoke("UnsubscribeMyKey", message).run();
 }
 
-void VehicleInfoAdapter::ReplyIsReady(const Handle &handle, bool available)
-{
-    reply(handle).out(available).send();
-}
-
-void VehicleInfoAdapter::ReplyGetVehicleType(const Handle &handle,
-    const VehicleType &vehicleType)
-{
-    reply(handle).out(vehicleType).send();
-}
-
-void VehicleInfoAdapter::ReplyReadDID(const Handle &handle,
-    const QList<DIDResult> &didResult)
-{
-    reply(handle).out(didResult).send();
-}
-
-void VehicleInfoAdapter::ReplyGetDTCs(const Handle &handle, int ecuHeader,
-    const Optional<QStringList> &dtc)
-{
-    reply(handle).out(ecuHeader).out(dtc).send();
-}
-
-void VehicleInfoAdapter::ReplyDiagnosticMessage(const Handle &handle,
-    const QList<int> &messageDataResult)
-{
-    reply(handle).out(messageDataResult).send();
-}
-
-void VehicleInfoAdapter::ReplyGetGpsData(const Handle &handle, const GPSData &gps)
-{
-    reply(handle).out(gps).send();
-}
-
-void VehicleInfoAdapter::ReplyGetSpeed(const Handle &handle, double speed)
-{
-    reply(handle).out(speed).send();
-}
-
-void VehicleInfoAdapter::ReplyGetRpm(const Handle &handle, int rpm)
-{
-    reply(handle).out(rpm).send();
-}
-
-void VehicleInfoAdapter::ReplyGetFuelLevel(const Handle &handle, double fuelLevel)
-{
-    reply(handle).out(fuelLevel).send();
-}
-
-void VehicleInfoAdapter::ReplyGetFuelLevelState(const Handle &handle, int fuelLevel_State)
-{
-    reply(handle).out(fuelLevel_State).send();
-}
-
-void VehicleInfoAdapter::ReplyGetInstantFuelConsumption(const Handle &handle,
-    double instantFuelConsumption)
-{
-    reply(handle).out(instantFuelConsumption).send();
-}
-
-void VehicleInfoAdapter::ReplyGetExternalTemperature(const Handle &handle,
-    double externalTemperature)
-{
-    reply(handle).out(externalTemperature).send();
-}
-
-void VehicleInfoAdapter::ReplyGetVin(const Handle &handle, const QString &vin)
-{
-    reply(handle).out(vin).send();
-}
-
-void VehicleInfoAdapter::ReplyGetPrndl(const Handle &handle, int prndl)
-{
-    reply(handle).out(prndl).send();
-}
-
-void VehicleInfoAdapter::ReplyGetTirePressure(const Handle &handle,
-    const TireStatus &tirePressure)
-{
-    reply(handle).out(tirePressure).send();
-}
-
-void VehicleInfoAdapter::ReplyGetOdometer(const Handle &handle, int odometer)
-{
-    reply(handle).out(odometer).send();
-}
-
-void VehicleInfoAdapter::ReplyGetBeltStatus(const Handle &handle,
-    const BeltStatus &beltStatus)
-{
-    reply(handle).out(beltStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyGetBodyInformation(const Handle &handle,
-    const BodyInformation &bodyInformation)
-{
-    reply(handle).out(bodyInformation).send();
-}
-
-void VehicleInfoAdapter::ReplyGetDeviceStatus(const Handle &handle,
-    const DeviceStatus &deviceStatus)
-{
-    reply(handle).out(deviceStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyGetDriverBraking(const Handle &handle, int driverBraking)
-{
-    reply(handle).out(driverBraking).send();
-}
-
-void VehicleInfoAdapter::ReplyGetWiperStatus(const Handle &handle, int wiperStatus)
-{
-    reply(handle).out(wiperStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyGetHeadLampStatus(const Handle &handle,
-    const HeadLampStatus &headLampStatus)
-{
-    reply(handle).out(headLampStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyGetEngineTorque(const Handle &handle, double engineTorque)
-{
-    reply(handle).out(engineTorque).send();
-}
-
-void VehicleInfoAdapter::ReplyGetAccPedalPosition(const Handle &handle,
-    double accPedalPosition)
-{
-    reply(handle).out(accPedalPosition).send();
-}
-
-void VehicleInfoAdapter::ReplyGetSteeringWheelAngle(const Handle &handle,
-    double steeringWheelAngle)
-{
-    reply(handle).out(steeringWheelAngle).send();
-}
-
-void VehicleInfoAdapter::ReplyGetAirbagStatus(const Handle &handle,
-    const AirbagStatus &airbagStatus)
-{
-    reply(handle).out(airbagStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyGetEmergencyEvent(const Handle &handle,
-    const EmergencyEvent &emergencyEvent)
-{
-    reply(handle).out(emergencyEvent).send();
-}
-
-void VehicleInfoAdapter::ReplyGetClusterModeStatus(const Handle &handle,
-    const ClusterModeStatus &clusterModeStatus)
-{
-    reply(handle).out(clusterModeStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyGetMyKey(const Handle &handle, const MyKey &myKey)
-{
-    reply(handle).out(myKey).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeGps(const Handle &handle,
-    const VehicleDataResult &gps)
-{
-    reply(handle).out(gps).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeSpeed(const Handle &handle,
-    const VehicleDataResult &speed)
-{
-    reply(handle).out(speed).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeRpm(const Handle &handle,
-    const VehicleDataResult &rpm)
-{
-    reply(handle).out(rpm).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeFuelLevel(const Handle &handle,
-    const VehicleDataResult &fuelLevel)
-{
-    reply(handle).out(fuelLevel).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeFuelLevel_State(const Handle &handle,
-    const VehicleDataResult &fuelLevel_State)
-{
-    reply(handle).out(fuelLevel_State).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeInstantFuelConsumption(const Handle &handle,
-    const VehicleDataResult &instantFuelConsumption)
-{
-    reply(handle).out(instantFuelConsumption).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeExternalTemperature(const Handle &handle,
-    const VehicleDataResult &externalTemperature)
-{
-    reply(handle).out(externalTemperature).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeVin(const Handle &handle,
-    const QString &vin)
-{
-    reply(handle).out(vin).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribePrndl(const Handle &handle,
-    const VehicleDataResult &prndl)
-{
-    reply(handle).out(prndl).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeTirePressure(const Handle &handle,
-    const VehicleDataResult &tirePressure)
-{
-    reply(handle).out(tirePressure).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeOdometer(const Handle &handle,
-    const VehicleDataResult &odometer)
-{
-    reply(handle).out(odometer).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeBeltStatus(const Handle &handle,
-    const VehicleDataResult &beltStatus)
-{
-    reply(handle).out(beltStatus).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeBodyInformation(const Handle &handle,
-    const VehicleDataResult &bodyInformation)
-{
-    reply(handle).out(bodyInformation).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeDeviceStatus(const Handle &handle,
-    const VehicleDataResult &deviceStatus)
-{
-    reply(handle).out(deviceStatus).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeDriverBraking(const Handle &handle,
-    const VehicleDataResult &driverBraking)
-{
-    reply(handle).out(driverBraking).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeWiperStatus(const Handle &handle,
-    const VehicleDataResult &wiperStatus)
-{
-    reply(handle).out(wiperStatus).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeHeadLampStatus(const Handle &handle,
-    const VehicleDataResult &headLampStatus)
-{
-    reply(handle).out(headLampStatus).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeEngineTorque(const Handle &handle,
-    const VehicleDataResult &engineTorque)
-{
-    reply(handle).out(engineTorque).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeAccPedalPosition(const Handle &handle,
-    const VehicleDataResult &accPedalPosition)
-{
-    reply(handle).out(accPedalPosition).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeSteeringWheelAngle(const Handle &handle,
-    const VehicleDataResult &steeringWheelAngle)
-{
-    reply(handle).out(steeringWheelAngle).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeECallInfo(const Handle &handle,
-    const VehicleDataResult &eCallInfo)
-{
-    reply(handle).out(eCallInfo).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeAirbagStatus(const Handle &handle,
-    const VehicleDataResult &airbagStatus)
-{
-    reply(handle).out(airbagStatus).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeEmergencyEvent(const Handle &handle,
-    const VehicleDataResult &emergencyEvent)
-{
-    reply(handle).out(emergencyEvent).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeClusterModeStatus(const Handle &handle,
-    const VehicleDataResult &clusterModeStatus)
-{
-    reply(handle).out(clusterModeStatus).send();
-}
-
-void VehicleInfoAdapter::ReplySubscribeMyKey(const Handle &handle,
-    const VehicleDataResult &myKey)
-{
-    reply(handle).out(myKey).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeGps(const Handle &handle,
-    const VehicleDataResult &gps)
-{
-    reply(handle).out(gps).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeSpeed(const Handle &handle,
-    const VehicleDataResult &speed)
-{
-    reply(handle).out(speed).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeRpm(const Handle &handle,
-    const VehicleDataResult &rpm)
-{
-    reply(handle).out(rpm).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeFuelLevel(const Handle &handle,
-    const VehicleDataResult &fuelLevel)
-{
-    reply(handle).out(fuelLevel).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeFuelLevel_State(const Handle &handle,
-    const VehicleDataResult &fuelLevel_State)
-{
-    reply(handle).out(fuelLevel_State).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeInstantFuelConsumption(const Handle &handle,
-    const VehicleDataResult &instantFuelConsumption)
-{
-    reply(handle).out(instantFuelConsumption).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeExternalTemperature(const Handle &handle,
-    const VehicleDataResult &externalTemperature)
-{
-    reply(handle).out(externalTemperature).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeVin(const Handle &handle,
-    const QString &vin)
-{
-    reply(handle).out(vin).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribePrndl(const Handle &handle,
-    const VehicleDataResult &prndl)
-{
-    reply(handle).out(prndl).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeTirePressure(const Handle &handle,
-    const VehicleDataResult &tirePressure)
-{
-    reply(handle).out(tirePressure).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeOdometer(const Handle &handle,
-    const VehicleDataResult &odometer)
-{
-    reply(handle).out(odometer).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeBeltStatus(const Handle &handle,
-    const VehicleDataResult &beltStatus)
-{
-    reply(handle).out(beltStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeBodyInformation(const Handle &handle,
-    const VehicleDataResult &bodyInformation)
-{
-    reply(handle).out(bodyInformation).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeDeviceStatus(const Handle &handle,
-    const VehicleDataResult &deviceStatus)
-{
-    reply(handle).out(deviceStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeDriverBraking(const Handle &handle,
-    const VehicleDataResult &driverBraking)
-{
-    reply(handle).out(driverBraking).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeWiperStatus(const Handle &handle,
-    const VehicleDataResult &wiperStatus)
-{
-    reply(handle).out(wiperStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeHeadLampStatus(const Handle &handle,
-    const VehicleDataResult &headLampStatus)
-{
-    reply(handle).out(headLampStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeEngineTorque(const Handle &handle,
-    const VehicleDataResult &engineTorque)
-{
-    reply(handle).out(engineTorque).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeAccPedalPosition(const Handle &handle,
-    const VehicleDataResult &accPedalPosition)
-{
-    reply(handle).out(accPedalPosition).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeSteeringWheelAngle(const Handle &handle,
-    const VehicleDataResult &steeringWheelAngle)
-{
-    reply(handle).out(steeringWheelAngle).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeECallInfo(const Handle &handle,
-    const VehicleDataResult &eCallInfo)
-{
-    reply(handle).out(eCallInfo).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeAirbagStatus(const Handle &handle,
-    const VehicleDataResult &airbagStatus)
-{
-    reply(handle).out(airbagStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeEmergencyEvent(const Handle &handle,
-    const VehicleDataResult &emergencyEvent)
-{
-    reply(handle).out(emergencyEvent).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeClusterModeStatus(const Handle &handle,
-    const VehicleDataResult &clusterModeStatus)
-{
-    reply(handle).out(clusterModeStatus).send();
-}
-
-void VehicleInfoAdapter::ReplyUnsubscribeMyKey(const Handle &handle,
-    const VehicleDataResult &myKey)
-{
-    reply(handle).out(myKey).send();
-}
-
 void VehicleInfo::replyIsReady(const QVariantMap &handle, bool available)
 {
-    adapter->ReplyIsReady(handle, available);
+    adapter->reply(handle).out(available).send();
 }
 
 void VehicleInfo::replyGetVehicleType(const QVariantMap &handle,
     const QVariantMap &vehicleType)
 {
-    adapter->ReplyGetVehicleType(handle, single<VehicleType>(vehicleType));
+    adapter->reply(handle).out(single<VehicleType>(vehicleType)).send();
 }
 
 void VehicleInfo::replyReadDID(const QVariantMap &handle, const QVariantList &didResult)
 {
-    adapter->ReplyReadDID(handle, multiple<DIDResult>(didResult));
+    adapter->reply(handle).out(multiple<DIDResult>(didResult)).send();
 }
 
 void VehicleInfo::replyGetDTCs(const QVariantMap &handle, int ecuHeader, const QVariant &dtc)
 {
-    adapter->ReplyGetDTCs(handle, ecuHeader, dtc);
+    adapter->reply(handle).out(ecuHeader).out<Optional<QStringList> >(dtc).send();
 }
 
 void VehicleInfo::replyDiagnosticMessage(const QVariantMap &handle,
     const QList<int> &messageDataResult)
 {
-    adapter->ReplyDiagnosticMessage(handle, messageDataResult);
+    adapter->reply(handle).out(messageDataResult).send();
 }
 
 void VehicleInfo::replyGetGpsData(const QVariantMap &handle, const QVariantMap &gps)
 {
-    adapter->ReplyGetGpsData(handle, single<GPSData>(gps));
+    adapter->reply(handle).out(single<GPSData>(gps)).send();
 }
 
 void VehicleInfo::replyGetSpeed(const QVariantMap &handle, double speed)
 {
-    adapter->ReplyGetSpeed(handle, speed);
+    adapter->reply(handle).out(speed).send();
 }
 
 void VehicleInfo::replyGetRpm(const QVariantMap &handle, int rpm)
 {
-    adapter->ReplyGetRpm(handle, rpm);
+    adapter->reply(handle).out(rpm).send();
 }
 
 void VehicleInfo::replyGetFuelLevel(const QVariantMap &handle, double fuelLevel)
 {
-    adapter->ReplyGetFuelLevel(handle, fuelLevel);
+    adapter->reply(handle).out(fuelLevel).send();
 }
 
 void VehicleInfo::replyGetFuelLevelState(const QVariantMap &handle, int fuelLevel_State)
 {
-    adapter->ReplyGetFuelLevelState(handle, fuelLevel_State);
+    adapter->reply(handle).out(fuelLevel_State).send();
 }
 
 void VehicleInfo::replyGetInstantFuelConsumption(const QVariantMap &handle,
     double instantFuelConsumption)
 {
-    adapter->ReplyGetInstantFuelConsumption(handle, instantFuelConsumption);
+    adapter->reply(handle).out(instantFuelConsumption).send();
 }
 
 void VehicleInfo::replyGetExternalTemperature(const QVariantMap &handle,
     double externalTemperature)
 {
-    adapter->ReplyGetExternalTemperature(handle, externalTemperature);
+    adapter->reply(handle).out(externalTemperature).send();
 }
 
 void VehicleInfo::replyGetVin(const QVariantMap &handle, const QString &vin)
 {
-    adapter->ReplyGetVin(handle, vin);
+    adapter->reply(handle).out(vin).send();
 }
 
 void VehicleInfo::replyGetPrndl(const QVariantMap &handle, int prndl)
 {
-    adapter->ReplyGetPrndl(handle, prndl);
+    adapter->reply(handle).out(prndl).send();
 }
 
 void VehicleInfo::replyGetTirePressure(const QVariantMap &handle,
     const QVariantMap &tirePressure)
 {
-    adapter->ReplyGetTirePressure(handle, single<TireStatus>(tirePressure));
+    adapter->reply(handle).out(single<TireStatus>(tirePressure)).send();
 }
 
 void VehicleInfo::replyGetOdometer(const QVariantMap &handle, int odometer)
 {
-    adapter->ReplyGetOdometer(handle, odometer);
+    adapter->reply(handle).out(odometer).send();
 }
 
 void VehicleInfo::replyGetBeltStatus(const QVariantMap &handle,
     const QVariantMap &beltStatus)
 {
-    adapter->ReplyGetBeltStatus(handle, single<BeltStatus>(beltStatus));
+    adapter->reply(handle).out(single<BeltStatus>(beltStatus)).send();
 }
 
 void VehicleInfo::replyGetBodyInformation(const QVariantMap &handle,
     const QVariantMap &bodyInformation)
 {
-    adapter->ReplyGetBodyInformation(handle, single<BodyInformation>(bodyInformation));
+    adapter->reply(handle).out(single<BodyInformation>(bodyInformation)).send();
 }
 
 void VehicleInfo::replyGetDeviceStatus(const QVariantMap &handle,
     const QVariantMap &deviceStatus)
 {
-    adapter->ReplyGetDeviceStatus(handle, single<DeviceStatus>(deviceStatus));
+    adapter->reply(handle).out(single<DeviceStatus>(deviceStatus)).send();
 }
 
 void VehicleInfo::replyGetDriverBraking(const QVariantMap &handle, int driverBraking)
 {
-    adapter->ReplyGetDriverBraking(handle, driverBraking);
+    adapter->reply(handle).out(driverBraking).send();
 }
 
 void VehicleInfo::replyGetWiperStatus(const QVariantMap &handle, int wiperStatus)
 {
-    adapter->ReplyGetWiperStatus(handle, wiperStatus);
+    adapter->reply(handle).out(wiperStatus).send();
 }
 
 void VehicleInfo::replyGetHeadLampStatus(const QVariantMap &handle,
     const QVariantMap &headLampStatus)
 {
-    adapter->ReplyGetHeadLampStatus(handle, single<HeadLampStatus>(headLampStatus));
+    adapter->reply(handle).out(single<HeadLampStatus>(headLampStatus)).send();
 }
 
 void VehicleInfo::replyGetEngineTorque(const QVariantMap &handle, double engineTorque)
 {
-    adapter->ReplyGetEngineTorque(handle, engineTorque);
+    adapter->reply(handle).out(engineTorque).send();
 }
 
 void VehicleInfo::replyGetAccPedalPosition(const QVariantMap &handle,
     double accPedalPosition)
 {
-    adapter->ReplyGetAccPedalPosition(handle, accPedalPosition);
+    adapter->reply(handle).out(accPedalPosition).send();
 }
 
 void VehicleInfo::replyGetSteeringWheelAngle(const QVariantMap &handle,
     double steeringWheelAngle)
 {
-    adapter->ReplyGetSteeringWheelAngle(handle, steeringWheelAngle);
+    adapter->reply(handle).out(steeringWheelAngle).send();
 }
 
 void VehicleInfo::replyGetECallInfo(const QVariantMap &handle,
     const QVariantMap &eCallInfo)
 {
-    adapter->ReplyGetECallInfo(handle, single<ECallInfo>(eCallInfo));
+    adapter->reply(handle).out(single<ECallInfo>(eCallInfo)).send();
 }
 
 void VehicleInfo::replyGetAirbagStatus(const QVariantMap &handle,
     const QVariantMap &airbagStatus)
 {
-    adapter->ReplyGetAirbagStatus(handle, single<AirbagStatus>(airbagStatus));
+    adapter->reply(handle).out(single<AirbagStatus>(airbagStatus)).send();
 }
 
 void VehicleInfo::replyGetEmergencyEvent(const QVariantMap &handle,
     const QVariantMap &emergencyEvent)
 {
-    adapter->ReplyGetEmergencyEvent(handle, single<EmergencyEvent>(emergencyEvent));
+    adapter->reply(handle).out(single<EmergencyEvent>(emergencyEvent)).send();
 }
 
 void VehicleInfo::replyGetClusterModeStatus(const QVariantMap &handle,
     const QVariantMap &clusterModeStatus)
 {
-    adapter->ReplyGetClusterModeStatus(handle, single<ClusterModeStatus>(clusterModeStatus));
+    adapter->reply(handle).out(single<ClusterModeStatus>(clusterModeStatus)).send();
 }
 
 void VehicleInfo::replyGetMyKey(const QVariantMap &handle, const QVariantMap &myKey)
 {
-    adapter->ReplyGetMyKey(handle, single<MyKey>(myKey));
+    adapter->reply(handle).out(single<MyKey>(myKey)).send();
 }
 
 void VehicleInfo::replySubscribeGps(const QVariantMap &handle, const QVariantMap &gps)
 {
-    adapter->ReplySubscribeGps(handle, single<VehicleDataResult>(gps));
+    adapter->reply(handle).out(single<VehicleDataResult>(gps)).send();
 }
 
 void VehicleInfo::replySubscribeSpeed(const QVariantMap &handle, const QVariantMap &speed)
 {
-    adapter->ReplySubscribeSpeed(handle, single<VehicleDataResult>(speed));
+    adapter->reply(handle).out(single<VehicleDataResult>(speed)).send();
 }
 
 void VehicleInfo::replySubscribeRpm(const QVariantMap &handle, const QVariantMap &rpm)
 {
-    adapter->ReplySubscribeRpm(handle, single<VehicleDataResult>(rpm));
+    adapter->reply(handle).out(single<VehicleDataResult>(rpm)).send();
 }
 
 void VehicleInfo::replySubscribeFuelLevel(const QVariantMap &handle,
     const QVariantMap &fuelLevel)
 {
-    adapter->ReplySubscribeFuelLevel(handle, single<VehicleDataResult>(fuelLevel));
+    adapter->reply(handle).out(single<VehicleDataResult>(fuelLevel)).send();
 }
 
 void VehicleInfo::replySubscribeFuelLevel_State(const QVariantMap &handle,
     const QVariantMap &fuelLevel_State)
 {
-    adapter->ReplySubscribeFuelLevel_State(handle, single<VehicleDataResult>(fuelLevel_State));
+    adapter->reply(handle).out(single<VehicleDataResult>(fuelLevel_State)).send();
 }
 
 void VehicleInfo::replySubscribeInstantFuelConsumption(const QVariantMap &handle,
     const QVariantMap &instantFuelConsumption)
 {
-    adapter->ReplySubscribeInstantFuelConsumption(handle,
-        single<VehicleDataResult>(instantFuelConsumption));
+    adapter->reply(handle).out(single<VehicleDataResult>(instantFuelConsumption)).send();
 }
 
 void VehicleInfo::replySubscribeExternalTemperature(const QVariantMap &handle,
     const QVariantMap &externalTemperature)
 {
-    adapter->ReplySubscribeExternalTemperature(handle,
-        single<VehicleDataResult>(externalTemperature));
+    adapter->reply(handle).out(single<VehicleDataResult>(externalTemperature)).send();
 }
 
 void VehicleInfo::replySubscribeVin(const QVariantMap &handle, const QString &vin)
 {
-    adapter->ReplySubscribeVin(handle, vin);
+    adapter->reply(handle).out(vin).send();
 }
 
 void VehicleInfo::replySubscribePrndl(const QVariantMap &handle, const QVariantMap &prndl)
 {
-    adapter->ReplySubscribePrndl(handle, single<VehicleDataResult>(prndl));
+    adapter->reply(handle).out(single<VehicleDataResult>(prndl)).send();
 }
 
 void VehicleInfo::replySubscribeTirePressure(const QVariantMap &handle,
     const QVariantMap &tirePressure)
 {
-    adapter->ReplySubscribeTirePressure(handle, single<VehicleDataResult>(tirePressure));
+    adapter->reply(handle).out(single<VehicleDataResult>(tirePressure)).send();
 }
 
 void VehicleInfo::replySubscribeOdometer(const QVariantMap &handle,
     const QVariantMap &odometer)
 {
-    adapter->ReplySubscribeOdometer(handle, single<VehicleDataResult>(odometer));
+    adapter->reply(handle).out(single<VehicleDataResult>(odometer)).send();
 }
 
 void VehicleInfo::replySubscribeBeltStatus(const QVariantMap &handle,
     const QVariantMap &beltStatus)
 {
-    adapter->ReplySubscribeBeltStatus(handle, single<VehicleDataResult>(beltStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(beltStatus)).send();
 }
 
 void VehicleInfo::replySubscribeBodyInformation(const QVariantMap &handle,
     const QVariantMap &bodyInformation)
 {
-    adapter->ReplySubscribeBodyInformation(handle, single<VehicleDataResult>(bodyInformation));
+    adapter->reply(handle).out(single<VehicleDataResult>(bodyInformation)).send();
 }
 
 void VehicleInfo::replySubscribeDeviceStatus(const QVariantMap &handle,
     const QVariantMap &deviceStatus)
 {
-    adapter->ReplySubscribeDeviceStatus(handle, single<VehicleDataResult>(deviceStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(deviceStatus)).send();
 }
 
 void VehicleInfo::replySubscribeDriverBraking(const QVariantMap &handle,
     const QVariantMap &driverBraking)
 {
-    adapter->ReplySubscribeDriverBraking(handle, single<VehicleDataResult>(driverBraking));
+    adapter->reply(handle).out(single<VehicleDataResult>(driverBraking)).send();
 }
 
 void VehicleInfo::replySubscribeWiperStatus(const QVariantMap &handle,
     const QVariantMap &wiperStatus)
 {
-    adapter->ReplySubscribeWiperStatus(handle, single<VehicleDataResult>(wiperStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(wiperStatus)).send();
 }
 
 void VehicleInfo::replySubscribeHeadLampStatus(const QVariantMap &handle,
     const QVariantMap &headLampStatus)
 {
-    adapter->ReplySubscribeHeadLampStatus(handle,
-        single<VehicleDataResult>(headLampStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(headLampStatus)).send();
 }
 
 void VehicleInfo::replySubscribeEngineTorque(const QVariantMap &handle,
     const QVariantMap &engineTorque)
 {
-    adapter->ReplySubscribeEngineTorque(handle, single<VehicleDataResult>(engineTorque));
+    adapter->reply(handle).out(single<VehicleDataResult>(engineTorque)).send();
 }
 
 void VehicleInfo::replySubscribeAccPedalPosition(const QVariantMap &handle,
     const QVariantMap &accPedalPosition)
 {
-    adapter->ReplySubscribeAccPedalPosition(handle,
-        single<VehicleDataResult>(accPedalPosition));
+    adapter->reply(handle).out(single<VehicleDataResult>(accPedalPosition)).send();
 }
 
 void VehicleInfo::replySubscribeSteeringWheelAngle(const QVariantMap &handle,
     const QVariantMap &steeringWheelAngle)
 {
-    adapter->ReplySubscribeSteeringWheelAngle(handle,
-        single<VehicleDataResult>(steeringWheelAngle));
+    adapter->reply(handle).out(single<VehicleDataResult>(steeringWheelAngle)).send();
 }
 
 void VehicleInfo::replySubscribeECallInfo(const QVariantMap &handle,
     const QVariantMap &eCallInfo)
 {
-    adapter->ReplySubscribeECallInfo(handle, single<VehicleDataResult>(eCallInfo));
+    adapter->reply(handle).out(single<VehicleDataResult>(eCallInfo)).send();
 }
 
 void VehicleInfo::replySubscribeAirbagStatus(const QVariantMap &handle,
     const QVariantMap &airbagStatus)
 {
-    adapter->ReplySubscribeAirbagStatus(handle, single<VehicleDataResult>(airbagStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(airbagStatus)).send();
 }
 
 void VehicleInfo::replySubscribeEmergencyEvent(const QVariantMap &handle,
     const QVariantMap &emergencyEvent)
 {
-    adapter->ReplySubscribeEmergencyEvent(handle, single<VehicleDataResult>(emergencyEvent));
+    adapter->reply(handle).out(single<VehicleDataResult>(emergencyEvent)).send();
 }
 
 void VehicleInfo::replySubscribeClusterModeStatus(const QVariantMap &handle,
     const QVariantMap &clusterModeStatus)
 {
-    adapter->ReplySubscribeClusterModeStatus(handle,
-        single<VehicleDataResult>(clusterModeStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(clusterModeStatus)).send();
 }
 
 void VehicleInfo::replySubscribeMyKey(const QVariantMap &handle, const QVariantMap &myKey)
 {
-    adapter->ReplySubscribeMyKey(handle, single<VehicleDataResult>(myKey));
+    adapter->reply(handle).out(single<VehicleDataResult>(myKey)).send();
 }
 
 void VehicleInfo::replyUnsubscribeGps(const QVariantMap &handle, const QVariantMap &gps)
 {
-    adapter->ReplyUnsubscribeGps(handle, single<VehicleDataResult>(gps));
+    adapter->reply(handle).out(single<VehicleDataResult>(gps)).send();
 }
 
 void VehicleInfo::replyUnsubscribeSpeed(const QVariantMap &handle, const QVariantMap &speed)
 {
-    adapter->ReplyUnsubscribeSpeed(handle, single<VehicleDataResult>(speed));
+    adapter->reply(handle).out(single<VehicleDataResult>(speed)).send();
 }
 
 void VehicleInfo::replyUnsubscribeRpm(const QVariantMap &handle, const QVariantMap &rpm)
 {
-    adapter->ReplyUnsubscribeRpm(handle, single<VehicleDataResult>(rpm));
+    adapter->reply(handle).out(single<VehicleDataResult>(rpm)).send();
 }
 
 void VehicleInfo::replyUnsubscribeFuelLevel(const QVariantMap &handle,
     const QVariantMap &fuelLevel)
 {
-    adapter->ReplyUnsubscribeFuelLevel(handle, single<VehicleDataResult>(fuelLevel));
+    adapter->reply(handle).out(single<VehicleDataResult>(fuelLevel)).send();
 }
 
 void VehicleInfo::replyUnsubscribeFuelLevel_State(const QVariantMap &handle,
     const QVariantMap &fuelLevel_State)
 {
-    adapter->ReplyUnsubscribeFuelLevel_State(handle,
-        single<VehicleDataResult>(fuelLevel_State));
+    adapter->reply(handle).out(single<VehicleDataResult>(fuelLevel_State)).send();
 }
 
 void VehicleInfo::replyUnsubscribeInstantFuelConsumption(const QVariantMap &handle,
     const QVariantMap &instantFuelConsumption)
 {
-    adapter->ReplyUnsubscribeInstantFuelConsumption(handle,
-        single<VehicleDataResult>(instantFuelConsumption));
+    adapter->reply(handle).out(single<VehicleDataResult>(instantFuelConsumption)).send();
 }
 
 void VehicleInfo::replyUnsubscribeExternalTemperature(const QVariantMap &handle,
     const QVariantMap &externalTemperature)
 {
-    adapter->ReplyUnsubscribeExternalTemperature(handle,
-        single<VehicleDataResult>(externalTemperature));
+    adapter->reply(handle).out(single<VehicleDataResult>(externalTemperature)).send();
 }
 
 void VehicleInfo::replyUnsubscribeVin(const QVariantMap &handle, const QString &vin)
 {
-    adapter->ReplyUnsubscribeVin(handle, vin);
+    adapter->reply(handle).out(vin).send();
 }
 
 void VehicleInfo::replyUnsubscribePrndl(const QVariantMap &handle, const QVariantMap &prndl)
 {
-    adapter->ReplyUnsubscribePrndl(handle, single<VehicleDataResult>(prndl));
+    adapter->reply(handle).out(single<VehicleDataResult>(prndl)).send();
 }
 
 void VehicleInfo::replyUnsubscribeTirePressure(const QVariantMap &handle,
     const QVariantMap &tirePressure)
 {
-    adapter->ReplyUnsubscribeTirePressure(handle, single<VehicleDataResult>(tirePressure));
+    adapter->reply(handle).out(single<VehicleDataResult>(tirePressure)).send();
 }
 
 void VehicleInfo::replyUnsubscribeOdometer(const QVariantMap &handle,
     const QVariantMap &odometer)
 {
-    adapter->ReplyUnsubscribeOdometer(handle, single<VehicleDataResult>(odometer));
+    adapter->reply(handle).out(single<VehicleDataResult>(odometer)).send();
 }
 
 void VehicleInfo::replyUnsubscribeBeltStatus(const QVariantMap &handle,
     const QVariantMap &beltStatus)
 {
-    adapter->ReplyUnsubscribeBeltStatus(handle, single<VehicleDataResult>(beltStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(beltStatus)).send();
 }
 
 void VehicleInfo::replyUnsubscribeBodyInformation(const QVariantMap &handle,
     const QVariantMap &bodyInformation)
 {
-    adapter->ReplyUnsubscribeBodyInformation(handle,
-        single<VehicleDataResult>(bodyInformation));
+    adapter->reply(handle).out(single<VehicleDataResult>(bodyInformation)).send();
 }
 
 void VehicleInfo::replyUnsubscribeDeviceStatus(const QVariantMap &handle,
     const QVariantMap &deviceStatus)
 {
-    adapter->ReplyUnsubscribeDeviceStatus(handle, single<VehicleDataResult>(deviceStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(deviceStatus)).send();
 }
 
 void VehicleInfo::replyUnsubscribeDriverBraking(const QVariantMap &handle,
     const QVariantMap &driverBraking)
 {
-    adapter->ReplyUnsubscribeDriverBraking(handle, single<VehicleDataResult>(driverBraking));
+    adapter->reply(handle).out(single<VehicleDataResult>(driverBraking)).send();
 }
 
 void VehicleInfo::replyUnsubscribeWiperStatus(const QVariantMap &handle,
     const QVariantMap &wiperStatus)
 {
-    adapter->ReplyUnsubscribeWiperStatus(handle, single<VehicleDataResult>(wiperStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(wiperStatus)).send();
 }
 
 void VehicleInfo::replyUnsubscribeHeadLampStatus(const QVariantMap &handle,
     const QVariantMap &headLampStatus)
 {
-    adapter->ReplyUnsubscribeHeadLampStatus(handle,
-        single<VehicleDataResult>(headLampStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(headLampStatus)).send();
 }
 
 void VehicleInfo::replyUnsubscribeEngineTorque(const QVariantMap &handle,
     const QVariantMap &engineTorque)
 {
-    adapter->ReplyUnsubscribeEngineTorque(handle,
-        single<VehicleDataResult>(engineTorque));
+    adapter->reply(handle).out(single<VehicleDataResult>(engineTorque)).send();
 }
 
 void VehicleInfo::replyUnsubscribeAccPedalPosition(const QVariantMap &handle,
     const QVariantMap &accPedalPosition)
 {
-    adapter->ReplyUnsubscribeAccPedalPosition(handle,
-        single<VehicleDataResult>(accPedalPosition));
+    adapter->reply(handle).out(single<VehicleDataResult>(accPedalPosition)).send();
 }
 
 void VehicleInfo::replyUnsubscribeSteeringWheelAngle(const QVariantMap &handle,
     const QVariantMap &steeringWheelAngle)
 {
-    adapter->ReplyUnsubscribeSteeringWheelAngle(handle,
-        single<VehicleDataResult>(steeringWheelAngle));
+    adapter->reply(handle).out(single<VehicleDataResult>(steeringWheelAngle)).send();
 }
 
 void VehicleInfo::replyUnsubscribeECallInfo(const QVariantMap &handle,
     const QVariantMap &eCallInfo)
 {
-    adapter->ReplyUnsubscribeECallInfo(handle, single<VehicleDataResult>(eCallInfo));
+    adapter->reply(handle).out(single<VehicleDataResult>(eCallInfo)).send();
 }
 
 void VehicleInfo::replyUnsubscribeAirbagStatus(const QVariantMap &handle,
     const QVariantMap &airbagStatus)
 {
-    adapter->ReplyUnsubscribeAirbagStatus(handle,
-        single<VehicleDataResult>(airbagStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(airbagStatus)).send();
 }
 
 void VehicleInfo::replyUnsubscribeEmergencyEvent(const QVariantMap &handle,
     const QVariantMap &emergencyEvent)
 {
-    adapter->ReplyUnsubscribeEmergencyEvent(handle,
-        single<VehicleDataResult>(emergencyEvent));
+    adapter->reply(handle).out(single<VehicleDataResult>(emergencyEvent)).send();
 }
 
 void VehicleInfo::replyUnsubscribeClusterModeStatus(const QVariantMap &handle,
     const QVariantMap &clusterModeStatus)
 {
-    adapter->ReplyUnsubscribeClusterModeStatus(handle,
-        single<VehicleDataResult>(clusterModeStatus));
+    adapter->reply(handle).out(single<VehicleDataResult>(clusterModeStatus)).send();
 }
 
 void VehicleInfo::replyUnsubscribeMyKey(const QVariantMap &handle, const QVariantMap &myKey)
 {
-    adapter->ReplyUnsubscribeMyKey(handle, single<VehicleDataResult>(myKey));
+    adapter->reply(handle).out(single<VehicleDataResult>(myKey)).send();
 }
 
 void VehicleInfo::onGpsData(const QVariantMap &gps)

@@ -215,6 +215,7 @@ class UIAdapter : public AbstractAdapter
     REGISTER_ADAPTER(UIAdapter, UI)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.UI")
 
+// Incoming requests
 public slots:
     void Alert(const QList<TextFieldStruct>& alertStrings, int duration,
         const Optional<QList<SoftButton> >& softButtons,
@@ -265,28 +266,7 @@ public slots:
     void IsReady(const Message& message);
     void ClosePopUp(const Optional<QString>& methodName, const Message& message);
 
-public:
-    void ReplyAlert(const Handle& handle, const Optional<int>& tryAgainTime);
-    void ReplyPerformInteraction(const Handle& handle,
-        const Optional<int>& choiceID, const Optional<QString>& manualTextEntry);
-    void ReplyGetCapabilities(const Handle& handle,
-        const DisplayCapabilities& displayCapabilities,
-        const AudioPassThruCapabilities& audioPassThruCapabilities,
-        int hmiZoneCapabilities,
-        const Optional<QList<SoftButtonCapabilities> >& softButtonCapabilities,
-        const Optional<HMICapabilities>& hmiCapabilities);
-    void ReplyGetSupportedLanguages(const Handle& handle,
-                                    const QList<int>& languages);
-    void ReplyGetLanguage(const Handle& handle, int language);
-    void ReplySetDisplayLayout(const Handle& handle,
-        const Optional<DisplayCapabilities>& displayCapabilities,
-        const Optional<QList<ButtonCapabilities> >& buttonCapabilities,
-        const Optional<QList<SoftButtonCapabilities> >& softButtonCapabilities,
-        const Optional<PresetBankCapabilities>& presetBankCapabilities);
-    void ReplyShowCustomForm(const Handle& handle, const Optional<QString>& info);
-    void ReplySlider(const Handle& handle, const Optional<int>& sliderPosition);
-    void ReplyIsReady(const Handle& handle, bool available);
-
+// Incoming notifications
 private slots:
     void OnRecordStart(int appID);
 };
@@ -297,6 +277,7 @@ class UI : public AbstractItem
     CONNECT_ADAPTER(UI, UIAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void onCommand(int cmdID, int appID);
     Q_INVOKABLE void onSystemContext(int systemContext, const QVariant& appID = QVariant());
     Q_INVOKABLE void onLanguageChange(int language);
@@ -305,6 +286,7 @@ public:
     Q_INVOKABLE void onTouchEvent(int type, const QVariantList& event);
     Q_INVOKABLE void onResetTimeout(int appID, const QString& methodName);
 
+// Outcoming responses
     Q_INVOKABLE void replyAlert(const QVariantMap& handle,
                                 const QVariant& tryAgainTime = QVariant());
     Q_INVOKABLE void replyPerformInteraction(const QVariantMap& handle,
@@ -329,6 +311,7 @@ public:
                                  const QVariant& sliderPosition = QVariant());
     Q_INVOKABLE void replyIsReady(const QVariantMap& handle, bool available);
 
+// Incoming notifications
 signals:
     void onRecordStart(int appID);
 };

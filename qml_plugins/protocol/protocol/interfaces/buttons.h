@@ -35,14 +35,11 @@ class ButtonsAdapter : public AbstractAdapter
     REGISTER_ADAPTER(ButtonsAdapter, Buttons)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.Buttons")
 
+// Incoming requests
 public slots:
     void GetCapabilities(const Message& message);
 
-public:
-    void ReplyGetCapabilities(const Handle& handle,
-        const QList<ButtonCapabilities>& capabilities,
-        const Optional<PresetBankCapabilities>& presetBankCapabilities);
-
+// Incoming notifications
 private slots:
     void OnButtonSubscription(int name, bool isSubscribed, int appID);
 };
@@ -53,6 +50,7 @@ class Buttons : public AbstractItem
     CONNECT_ADAPTER(Buttons, ButtonsAdapter)
 
 public:
+// Outcoming notifications
     Q_INVOKABLE void onButtonEvent(int name, int mode,
                                    const QVariant& customButtonID = QVariant(),
                                    const QVariant& appID = QVariant());
@@ -60,10 +58,12 @@ public:
                                    const QVariant& customButtonID = QVariant(),
                                    const QVariant& appID = QVariant());
 
+// Outcoming responses
     Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QVariantList& capabilities,
         const QVariant& presetBankCapabilities = QVariant());
 
+// Incoming notifications
 signals:
     void onButtonSubscription(int name, bool isSubscribed, int appID);
 };

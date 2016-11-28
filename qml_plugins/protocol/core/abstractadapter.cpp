@@ -72,7 +72,7 @@ Slave& AbstractAdapter::invoke(const QString& name, const Message &message)
     return *s;
 }
 
-Slave& AbstractAdapter::reply(Handle handle)
+Slave& AbstractAdapter::reply(const Handle& handle)
 {
     Slave& s = *q_check_ptr(msgs_.take(handle.uid));
     s.out(handle.code).out(handle.message); // no effect for error
