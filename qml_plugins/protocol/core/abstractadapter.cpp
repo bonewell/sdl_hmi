@@ -1,7 +1,6 @@
 #include "abstractadapter.h"
 
 #include <QMetaMethod>
-#include <QDebug>
 
 AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
     Adaptor(object), impl_(item, object), meta_(), meta_signals_(), msgs_()
@@ -35,8 +34,9 @@ void AbstractAdapter::saveSignal(const QMetaMethod &meta)
     if (meta.methodType() == QMetaMethod::Method) {
         QString name = meta.name();
         name[0] = name[0].toUpper();
-        qDebug() << name << meta.parameterNames();
-        meta_signals_[name] = meta.methodIndex();
+        if (!meta_signals_.contains(name)) {
+            meta_signals_.insert(name, meta.methodIndex());
+        }
     }
 }
 
