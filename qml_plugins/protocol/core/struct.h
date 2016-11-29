@@ -44,6 +44,26 @@ inline const QDBusArgument &operator>>(const QDBusArgument &argument, T &value) 
 #define DECLARE_STRUCT_DBUS(T)
 #endif
 
+#ifdef WEBSOCKET
+#define DECLARE_STRUCT_WEBSOCKET(T) \
+inline QJsonValue &operator<<(QJsonValue &argument, const T &value) { \
+    QJsonObject object; \
+    Argument<QJsonObject> a(object); \
+    value.pack(a); \
+    argument = object; \
+    return argument; \
+} \
+\
+inline const QJsonValue &operator>>(const QJsonValue &argument, T &value) { \
+    const QJsonObject& object = argument.toObject(); \
+    Argument<const QJsonObject> a(object); \
+    value.extract(a); \
+    return argument; \
+}
+#else
+#define DECLARE_STRUCT_WEBSOCKET(T)
+#endif
+
 #define DECLARE_STRUCT(T) \
 Q_DECLARE_METATYPE(T) \
 Q_DECLARE_METATYPE(Optional<T>) \
@@ -51,6 +71,7 @@ Q_DECLARE_METATYPE(QList<T>) \
 Q_DECLARE_METATYPE(Optional<QList<T> >) \
 \
 DECLARE_STRUCT_DBUS(T) \
+DECLARE_STRUCT_WEBSOCKET(T) \
 \
 inline QVariantMap &operator<<(QVariantMap &argument, const T &value) { \
     Argument<QVariantMap> a(argument); \

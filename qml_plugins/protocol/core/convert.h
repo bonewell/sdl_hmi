@@ -4,6 +4,8 @@
 #include <QVariant>
 #include <QJSValue>
 #include <QJSEngine>
+#include <QJsonValue>
+#include <QJsonArray>
 #include "core/optional.h"
 
 template<typename T>
@@ -182,4 +184,89 @@ inline QJSValue &operator<<(QJSValue &argument, const QList<T> &value) {
     return argument;
 }
 
+template<typename T>
+inline QJsonValue &operator<<(QJsonValue &argument, const T &value) {
+    argument = QJsonValue(value);
+    return argument;
+}
+
+inline QJsonValue &operator<<(QJsonValue &argument, const QStringList &value) {
+    QJsonArray array;
+    foreach (const QString& item, value) {
+        array << QJsonValue(item);
+    }
+    argument = array;
+    return argument;
+}
+
+template<typename T>
+inline QJsonValue &operator<<(QJsonValue &argument, const QList<T> &value) {
+    QJsonArray array;
+    foreach (const T& item, value) {
+        QJsonValue element;
+        element << item;
+        array << element;
+    }
+    argument = array;
+    return argument;
+}
+
+template<typename T>
+inline T signle(const QJsonObject& input) {
+    T output;
+    input >> output;
+    return output;
+}
+
+template<typename T>
+inline const QJsonValue &operator>>(const QJsonValue &argument, T &value) {
+    value = single<T>(argument.toObject());
+    return argument;
+}
+
+template<>
+inline const QJsonValue &operator>>(const QJsonValue &argument, int &value) {
+    value = argument.toInt();
+    return argument;
+}
+
+template<>
+inline const QJsonValue &operator>>(const QJsonValue &argument, bool &value) {
+    value = argument.toBool();
+    return argument;
+}
+
+template<>
+inline const QJsonValue &operator>>(const QJsonValue &argument, double &value) {
+    value = argument.toDouble();
+    return argument;
+}
+
+template<>
+inline const QJsonValue &operator>>(const QJsonValue &argument, QString &value) {
+    value = argument.toString();
+    return argument;
+}
+
+template<>
+inline const QJsonValue &operator>>(const QJsonValue &argument, QStringList &value) {
+    const QJsonArray& array = argument.toArray();
+    foreach (const QJsonValue& item, array) {
+        QString element;
+        item >> element;
+        value.append(element);
+    }
+    return argument;
+}
+
+template<typename T>
+inline const QJsonValue &operator>>(const QJsonValue &argument, QList<T> &value) {
+    const QJsonArray& array = argument.toArray();
+    foreach (const QJsonValue& item, array) {
+        T element;
+        item >> element;
+        value.append(element);
+    }
+    return argument;
+}
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_CONVERT_H_

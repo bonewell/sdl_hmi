@@ -5,6 +5,10 @@
 #ifdef DBUS
 #  include <QDBusArgument>
 #endif
+#ifdef WEBSOCKET
+#  include <QJsonObject>
+#  include "core/optional.h"
+#endif
 #include <QVariantMap>
 #include <QJSValue>
 
@@ -40,6 +44,48 @@ public:
     }
 private:
     const QDBusArgument& argument_;
+};
+#endif
+
+#ifdef WEBSOCKET
+template<>
+class Argument<QJsonObject>
+{
+public:
+    explicit Argument(QJsonObject& argument) : argument_(argument) {}
+    template<typename T>
+    Argument& set(const QString& name, const T &value) {
+        QJsonValue element;
+        element << value;
+        argument_[name] = element;
+        return *this;
+    }
+private:
+    QJsonObject& argument_;
+};
+
+template<>
+class Argument<const QJsonObject>
+{
+public:
+    explicit Argument(const QJsonObject& argument) : argument_(argument) {}
+    template<typename T>
+    const Argument& get(const QString& name, T& value) const {
+        if (argument_.contains(name)) {
+            argument_[name] >> value;
+        }
+        return *this;
+    }
+    template<typename T>
+    const Argument& get(const QString& name, Optional<T>& value) const {
+        if (argument_.contains(name)) {
+            value.presence = true;
+            argument_[name] >> value.value;
+        }
+        return *this;
+    }
+private:
+    const QJsonObject& argument_;
 };
 #endif
 

@@ -82,7 +82,9 @@ void WebSocket::sendSignal(const QString &name, const ArgumentsList &arguments)
 {
     QJsonObject params;
     foreach (ArgumentsList::const_reference arg, arguments) {
-        params[arg.first] << arg.second;
+        QJsonValue item;
+        item << arg.second;
+        params[arg.first] = item;
     }
     QJsonObject msg
     {

@@ -10,6 +10,9 @@
 #include <QtDBus/QDBusMetaType>
 #include <QtDBus/QDBusArgument>
 #endif
+#ifdef WEBSOCKET
+#include <QJsonValue>
+#endif
 
 void register_optional();
 
@@ -72,6 +75,16 @@ inline const QDBusArgument &operator>>(const QDBusArgument &arg, Optional<T> &va
     arg.beginStructure();
     arg >> value.presence >> value.value;
     arg.endStructure();
+    return arg;
+}
+#endif
+
+#ifdef WEBSOCKET
+template<typename T>
+inline QJsonValue &operator<<(QJsonValue &arg, const Optional<T> &value) {
+    if (value.presence) {
+        arg << value.value;
+    }
     return arg;
 }
 #endif
