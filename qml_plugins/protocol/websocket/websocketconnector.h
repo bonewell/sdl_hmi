@@ -26,7 +26,7 @@ public:
     virtual void sendReply(Message& request, const Message& response);
     virtual void sendError(Message& request, const QString& name, const QString& text);
     virtual void sendSignal(const QString& name, const Message& message);
-    virtual Watcher* call(const QString& name, const QVariantList& input);
+    virtual Watcher* call(const QString& name, const Message &request);
     virtual QObject* item() { return item_; }
 private slots:
     void checkin();

@@ -93,9 +93,9 @@ void WebSocket::sendSignal(const QString &name, const Message &message)
     send(msg);
 }
 
-Watcher *WebSocket::call(const QString &name, const QVariantList &input)
+Watcher *WebSocket::call(const QString &name, const Message &request)
 {
-    return new WebSocketWatcher(name, input);
+    return new WebSocketWatcher(name, request.arguments());
 }
 
 void WebSocket::received(const QString &data)

@@ -7,8 +7,6 @@
 class Watcher;
 class QString;
 
-typedef QList<QPair<QString, QVariant> > ArgumentsList;
-
 class PrivateInterface
 {
 public:
@@ -21,7 +19,7 @@ public:
     virtual void sendReply(Message& request, const Message& response) = 0;
     virtual void sendError(Message& request, const QString& name, const QString& text) = 0;
     virtual void sendSignal(const QString& name, const Message& message) = 0;
-    virtual Watcher* call(const QString& name, const QVariantList& input) = 0;
+    virtual Watcher* call(const QString& name, const Message& request) = 0;
     virtual QObject* item() = 0;
 };
 

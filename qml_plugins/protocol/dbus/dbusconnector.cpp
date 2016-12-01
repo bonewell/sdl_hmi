@@ -57,7 +57,7 @@ void DBus::sendSignal(const QString &name, const Message &message)
     QDBusConnection::sessionBus().send(signal);
 }
 
-Watcher *DBus::call(const QString &name, const QVariantList &input)
+Watcher *DBus::call(const QString &name, const Message &request)
 {
-    return new DBusWatcher(name, input, interface_);
+    return new DBusWatcher(name, request.arguments(), interface_);
 }

@@ -1,9 +1,10 @@
 #include "websocketwatcher.h"
 
 #include <QVariantList>
+#include <QJsonObject>
 
 WebSocketWatcher::WebSocketWatcher(const QString& name,
-                                   const QVariantList& input) : Watcher()
+                                   const QJsonObject &input) : Watcher()
 {
 }
 

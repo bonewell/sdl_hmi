@@ -3,16 +3,16 @@
 #include "core/watcher.h"
 #include "core/connector.h"
 
-Courier::Courier(const QString &name, const QJSValue &callback,
+Courier::Courier(const QMetaMethod &meta, const QJSValue &callback,
                  CourierCallback func, PrivateInterface &impl)
-    : name_(name), impl_(impl), callback_(callback),
-      input_(), watcher_(0), func_(func), index_(0)
+    : meta_(meta), impl_(impl), callback_(callback),
+      request_(), names_(meta_.parameterNames()), watcher_(0), func_(func), index_(0)
 {
 }
 
 void Courier::call()
 {
-    watcher_ = impl_.call(name_, input_);
+    watcher_ = impl_.call(name(), request_);
     connect(watcher_, SIGNAL(finished()), this, SLOT(response()));
 }
 
@@ -27,4 +27,11 @@ void Courier::invoke()
     callback_.call(output_);
     watcher_->deleteLater();
     this->deleteLater();
+}
+
+QString Courier::name() const
+{
+    QString name = QString::fromLatin1(meta_.name());
+    name[0] = name[0].toUpper();
+    return name;
 }

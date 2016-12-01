@@ -3,11 +3,13 @@
 
 #include "core/watcher.h"
 
+class QJsonObject;
+
 class WebSocketWatcher : public Watcher
 {
     Q_OBJECT
 public:
-    WebSocketWatcher(const QString& name, const QVariantList& input);
+    WebSocketWatcher(const QString& name, const QJsonObject& input);
     virtual QVariantList output();
 private:
 };

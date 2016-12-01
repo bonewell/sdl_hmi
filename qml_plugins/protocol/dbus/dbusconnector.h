@@ -10,7 +10,6 @@
     Q_CLASSINFO("D-Bus Introspection", Introspection)
 
 typedef QDBusAbstractAdaptor Adaptor;
-typedef QList<QPair<QString, QVariant> > ArgumentsList;
 
 class QDBusInterface;
 
@@ -26,7 +25,7 @@ public:
     virtual void sendReply(Message& request, const Message &response);
     virtual void sendError(Message& request, const QString& name, const QString& text);
     virtual void sendSignal(const QString& name, const Message &message);
-    virtual Watcher* call(const QString& name, const QVariantList& input);
+    virtual Watcher* call(const QString& name, const Message& request);
     virtual QObject* item() { return item_; }
 private:
     QString name_;
