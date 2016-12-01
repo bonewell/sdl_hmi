@@ -11,4 +11,12 @@ void register_optional() {
     qDBusRegisterMetaType<Optional<double> >();
     qDBusRegisterMetaType<Optional<QList<double> > >();
 #endif
+    qRegisterMetaType<Optional<int> >();
+    qRegisterMetaType<Optional<QList<int> > >();
+    qRegisterMetaType<Optional<QString> >();
+    qRegisterMetaType<Optional<QStringList> >();
+    qRegisterMetaType<Optional<bool> >();
+    qRegisterMetaType<Optional<QList<bool> > >();
+    qRegisterMetaType<Optional<double> >();
+    qRegisterMetaType<Optional<QList<double> > >();
 }

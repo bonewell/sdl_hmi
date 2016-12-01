@@ -7,7 +7,17 @@
 
 class Message {
 public:
-    QByteArray reply(const QVariantList& output);
+    template<typename T>
+    Message& arg(const QString& name, const T& value) {
+        QJsonValue item;
+        item << value;
+        response_[name] = item;
+        return *this;
+    }
+
+    const QJsonObject& arguments() const {
+        return response_;
+    }
 private:
     QJsonObject response_;
 };

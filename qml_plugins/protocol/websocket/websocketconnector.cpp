@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QByteArray>
+#include <QDebug>
 
 #include "websocket/websocketwatcher.h"
 
@@ -34,7 +35,7 @@ void WebSocket::init(int uid, const QString &name)
 void WebSocket::connect(const QString &service, const QString &interface)
 {
     service_name_ = service;
-    interface_name_ = interface;
+    interface_name_ = interface.split(".").back();
     socket_->open(QUrl("ws://127.0.0.1:8087"));
 }
 
@@ -68,30 +69,27 @@ void WebSocket::setDelayedReply(Message &message)
 {
 }
 
-void WebSocket::sendReply(Message &message, const QVariantList &output)
+void WebSocket::sendReply(Message &request, const Message &response)
 {
     QByteArray data;// = QJsonDocument(message.toObject()).toJson();
     socket_->sendBinaryMessage(data);
 }
 
-void WebSocket::sendError(Message &message, const QString &name, const QString &text)
+void WebSocket::sendError(Message &request, const QString &name, const QString &text)
 {
 }
 
-void WebSocket::sendSignal(const QString &name, const ArgumentsList &arguments)
+void WebSocket::sendSignal(const QString &name, const Message &message)
 {
-    QJsonObject params;
-    foreach (ArgumentsList::const_reference arg, arguments) {
-        QJsonValue item;
-        item << arg.second;
-        params[arg.first] = item;
-    }
     QJsonObject msg
     {
         {"jsonrpc", "2.0"},
         {"method", component_name_ + "." + name},
-        {"params", params}
     };
+    const QJsonObject& params = message.arguments();
+    if (!params.empty()) {
+        msg["params"] = params;
+    }
     send(msg);
 }
 
@@ -116,6 +114,7 @@ void WebSocket::received(const QString &data)
 void WebSocket::send(const QJsonObject &json)
 {
     QByteArray data = QJsonDocument(json).toJson(QJsonDocument::Compact);
+    qDebug() << data;
     qint64 size = socket_->sendTextMessage(QString(data));
     if (size != data.size()) {
         qWarning() << "Message was sent no fully";

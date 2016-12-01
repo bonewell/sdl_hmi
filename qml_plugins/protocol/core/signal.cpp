@@ -15,5 +15,7 @@ void Signal::send()
 
 QString Signal::name() const
 {
-    return QString::fromLatin1(meta_.name());
+    QString name = QString::fromLatin1(meta_.name());
+    name[0] = name[0].toUpper();
+    return name;
 }

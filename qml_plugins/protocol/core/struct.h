@@ -101,6 +101,10 @@ inline void register_struct() {
     qDBusRegisterMetaType<Optional<T> >();
     qDBusRegisterMetaType<Optional<QList<T> > >();
 #endif
+    qRegisterMetaType<T>();
+    qRegisterMetaType<QList<T> >();
+    qRegisterMetaType<Optional<T> >();
+    qRegisterMetaType<Optional<QList<T> > >();
 }
 
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_STRUCT_H_

@@ -8,7 +8,6 @@
 #define ADAPTER_INFORMATION(Name, Introspection) // UNUSED
 
 typedef QObject Adaptor;
-typedef QList<QPair<QString, QVariant> > ArgumentsList;
 
 class QWebSocket;
 class QByteArray;
@@ -24,9 +23,9 @@ public:
     virtual void subscribe(const QString &name, QObject *adapter,
                            const QString &signature);
     virtual void setDelayedReply(Message& message);
-    virtual void sendReply(Message& message, const QVariantList& output);
-    virtual void sendError(Message& message, const QString& name, const QString& text);
-    virtual void sendSignal(const QString& name, const ArgumentsList& arguments);
+    virtual void sendReply(Message& request, const Message& response);
+    virtual void sendError(Message& request, const QString& name, const QString& text);
+    virtual void sendSignal(const QString& name, const Message& message);
     virtual Watcher* call(const QString& name, const QVariantList& input);
     virtual QObject* item() { return item_; }
 private slots:
