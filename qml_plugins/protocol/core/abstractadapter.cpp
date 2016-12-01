@@ -88,7 +88,7 @@ Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
 Signal& AbstractAdapter::signal(const QString& name)
 {
     QMetaMethod meta = impl_.item()->metaObject()->method(meta_signals_[name]);
-    return *new Signal(name, meta, impl_);
+    return *new Signal(meta, impl_);
 }
 
 void AbstractAdapter::sendError(Handle handle, const QString& error, const QString& text)

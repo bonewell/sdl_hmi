@@ -37,26 +37,23 @@ void DBus::setDelayedReply(Message &message)
     message.setDelayedReply(true);
 }
 
-void DBus::sendReply(Message &message, const QVariantList &output)
+void DBus::sendReply(Message &request, const Message &response)
 {
-    QDBusMessage response = message.createReply(output);
-    QDBusConnection::sessionBus().send(response);
+    QVariantList output = response.arguments();
+    QDBusMessage message = request.createReply(output);
+    QDBusConnection::sessionBus().send(message);
 }
 
-void DBus::sendError(Message &message, const QString &name, const QString &text)
+void DBus::sendError(Message &request, const QString &name, const QString &text)
 {
-    QDBusMessage error = message.createErrorReply(name, text);
+    QDBusMessage error = request.createErrorReply(name, text);
     QDBusConnection::sessionBus().send(error);
 }
 
-void DBus::sendSignal(const QString &name, const ArgumentsList &arguments)
+void DBus::sendSignal(const QString &name, const Message &message)
 {
     QDBusMessage signal = QDBusMessage::createSignal("/", name_, name);
-    QVariantList list;
-    foreach (ArgumentsList::const_reference arg, arguments) {
-        list << arg.second;
-    }
-    signal.setArguments(list);
+    signal.setArguments(message.arguments());
     QDBusConnection::sessionBus().send(signal);
 }
 

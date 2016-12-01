@@ -7,8 +7,9 @@
 Slave::Slave(const Handle& handle, const Message &message,
              const QMetaMethod& meta, PrivateInterface &impl)
     : handle_(handle), meta_(meta), request_(message), impl_(impl), index_(0),
-      names_(meta.parameterNames()), input_(), output_()
+      names_(meta.parameterNames()), input_(), response_()
 {
+    names_.removeAll("message");
     connect(this, SIGNAL(pass()), this, SLOT(sendReply()), Qt::QueuedConnection);
     connect(this, SIGNAL(fail(const QString&, const QString&)),
             this, SLOT(sendError(const QString&, const QString&)), Qt::QueuedConnection);
@@ -80,7 +81,7 @@ void Slave::error(const QString& name, const QString& text = QString())
 
 void Slave::sendReply()
 {
-    impl_.sendReply(request_, output_);
+    impl_.sendReply(request_, response_);
     this->deleteLater();
 }
 

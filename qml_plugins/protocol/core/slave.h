@@ -30,8 +30,7 @@ public:
 
     template<typename T>
     Slave& out(const T& value) {
-        QVariant var = QVariant::fromValue(value);
-        output_ << var;
+        response_.arg(names_[index_++], value);
         return *this;
     }
 
@@ -67,9 +66,9 @@ private:
     Message request_;
     PrivateInterface& impl_;
     int index_;
-    const QList<QByteArray> names_;
+    QList<QByteArray> names_;
     QVariantMap input_;
-    QVariantList output_;
+    Message response_;
 };
 
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_SLAVE_H_

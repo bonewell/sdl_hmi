@@ -8,21 +8,19 @@
 #include <QMetaMethod>
 
 #include "core/convert.h"
-
-typedef QList<QPair<QString, QVariant> > ArgumentsList;
+#include <core/message.h>
 
 class PrivateInterface;
 
 class Signal
 {
 public:
-    Signal(const QString& name, const QMetaMethod& meta, PrivateInterface& impl);
+    Signal(const QMetaMethod& meta, PrivateInterface& impl);
     void send();
 
     template<typename T>
     Signal& arg(const T& value) {
-        QVariant var = QVariant::fromValue(value);
-        arguments_ << qMakePair(QString(names_[index_++]), var);
+        message_.arg(names_[index_++], value);
         return *this;
     }
 
@@ -37,11 +35,11 @@ public:
     }
 
 private:
-    const QString name_;
+    inline QString name() const;
     const QMetaMethod meta_;
     PrivateInterface& impl_;
     const QList<QByteArray> names_;
-    ArgumentsList arguments_;
+    Message message_;
     int index_;
 };
 
