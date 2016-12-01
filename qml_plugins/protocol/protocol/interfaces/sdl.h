@@ -51,16 +51,6 @@ private slots:
         const Optional<QList<int> >& requestType);
     void OnSDLConsentNeeded(const DeviceInfo& device);
     void OnStatusUpdate(int status);
-
-// Outcoming requests
-public:
-    void ActivateApp(const QJSValue& callback, int appID);
-    void GetUserFriendlyMessage(const QJSValue& callback,
-        const QStringList& messageCodes, const Optional<int>& language);
-    void GetListOfPermissions(const QJSValue& callback, const Optional<int>& appID);
-    void UpdateSDL(const QJSValue& callback);
-    void GetStatusUpdate(const QJSValue& callback);
-    void GetURLS(const QJSValue& callback, int service);
 };
 
 class SDL : public AbstractItem

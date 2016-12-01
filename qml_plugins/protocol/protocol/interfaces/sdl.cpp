@@ -29,21 +29,9 @@ static void ReplyActivateApp(Courier &courier)
         .out<bool>().out<Optional<int> >().invoke();
 }
 
-void SDLAdapter::ActivateApp(const QJSValue &callback, int appID)
-{
-    request("ActivateApp", callback, ReplyActivateApp).in(appID).call();
-}
-
 static void ReplyGetUserFriendlyMessage(Courier &courier)
 {
     courier.out<Optional<QList<UserFriendlyMessage> > >().invoke();
-}
-
-void SDLAdapter::GetUserFriendlyMessage(const QJSValue &callback,
-    const QStringList &messageCodes, const Optional<int> &language)
-{
-    request("GetUserFriendlyMessage", callback, ReplyGetUserFriendlyMessage)
-            .in(messageCodes).in(language).call();
 }
 
 static void ReplyGetListOfPermissions(Courier &courier)
@@ -51,19 +39,9 @@ static void ReplyGetListOfPermissions(Courier &courier)
     courier.out<QList<PermissionItem> >().invoke();
 }
 
-void SDLAdapter::GetListOfPermissions(const QJSValue &callback, const Optional<int> &appID)
-{
-    request("GetListOfPermissions", callback, ReplyGetListOfPermissions).in(appID).call();
-}
-
 static void ReplyUpdateSDL(Courier &courier)
 {
     courier.out<int>().invoke();
-}
-
-void SDLAdapter::UpdateSDL(const QJSValue &callback)
-{
-    request("UpdateSDL", callback, ReplyUpdateSDL).call();
 }
 
 static void ReplyGetStatusUpdate(Courier &courier)
@@ -71,50 +49,43 @@ static void ReplyGetStatusUpdate(Courier &courier)
     courier.out<int>().invoke();
 }
 
-void SDLAdapter::GetStatusUpdate(const QJSValue &callback)
-{
-    request("GetStatusUpdate", callback, ReplyGetStatusUpdate).call();
-}
-
 static void ReplyGetURLS(Courier &courier)
 {
     courier.out<Optional<QList<ServiceInfo> > >().invoke();
 }
 
-void SDLAdapter::GetURLS(const QJSValue &callback, int service)
-{
-    request("GetURLS", callback, ReplyGetURLS).in(service).call();
-}
-
 void SDL::activateApp(const QJSValue &callback, int appID)
 {
-    adapter->ActivateApp(callback, appID);
+    adapter->request("ActivateApp", callback, ReplyActivateApp).in(appID).call();
 }
 
 void SDL::getUserFriendlyMessage(const QJSValue &callback,
     const QStringList &messageCodes, const QVariant &language)
 {
-    adapter->GetUserFriendlyMessage(callback, messageCodes, language);
+    adapter->request("GetUserFriendlyMessage", callback,
+                     ReplyGetUserFriendlyMessage)
+            .in(messageCodes).in<Optional<int> >(language).call();
 }
 
 void SDL::getListOfPermissions(const QJSValue &callback, const QVariant &appID)
 {
-    adapter->GetListOfPermissions(callback, appID);
+    adapter->request("GetListOfPermissions", callback,
+                     ReplyGetListOfPermissions).in<Optional<int> >(appID).call();
 }
 
 void SDL::updateSDL(const QJSValue &callback)
 {
-    adapter->UpdateSDL(callback);
+    adapter->request("UpdateSDL", callback, ReplyUpdateSDL).call();
 }
 
 void SDL::getStatusUpdate(const QJSValue &callback)
 {
-    adapter->GetStatusUpdate(callback);
+    adapter->request("GetStatusUpdate", callback, ReplyGetStatusUpdate).call();
 }
 
 void SDL::getURLS(const QJSValue &callback, int service)
 {
-    adapter->GetURLS(callback, service);
+    adapter->request("GetURLS", callback, ReplyGetURLS).in(service).call();
 }
 
 void SDL::onAllowSDLFunctionality(const QVariant &device, bool allowed, int source)
