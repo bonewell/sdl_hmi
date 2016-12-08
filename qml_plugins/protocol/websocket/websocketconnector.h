@@ -4,6 +4,8 @@
 #include "core/privateinterface.h"
 
 #include <QObject>
+#include <QMetaMethod>
+#include <QMap>
 
 #define ADAPTER_INFORMATION(Name, Introspection) // UNUSED
 
@@ -20,8 +22,7 @@ public:
     virtual ~WebSocket();
     virtual void init(int uid, const QString& name);
     virtual void connect(const QString& service, const QString& interface);
-    virtual void subscribe(const QString &name, QObject *adapter,
-                           const QString &signature);
+    virtual void subscribe(QObject *adapter, const QMetaMethod& meta);
     virtual void setDelayedReply(Message& message);
     virtual void sendReply(Message& request, const Message& response);
     virtual void sendError(Message& request, const QString& name, const QString& text);
@@ -33,17 +34,22 @@ private slots:
     void received(const QString& data);
     void process(const QJsonObject& json);
 private:
-    inline bool isCheckinSuccess(const QJsonObject& json);
+    typedef QPair<QObject*, QMetaMethod> Notification;
+    typedef QMap<QString, Notification> SubscribeList;
     inline int generateId();
+    inline QString name(const QMetaMethod &meta) const;
+    inline bool isCheckinSuccess(const QJsonObject& json);
+    inline bool isNotification(const QJsonObject& json) const;
+    inline void emitSignal(const QJsonObject& json) const;
+    inline bool invoke(const Notification& signal, const QJsonObject& json) const;
     void send(const QJsonObject& json);
     void doSubscribe();
     QString component_name_;
     QString service_name_;
     QString interface_name_;
     QObject *item_;
-    QObject *object_;
     QWebSocket *socket_;
-    QStringList subscribes_;
+    SubscribeList subscribes_;
     int id_start_;
     int id_range_;
     int request_id_;

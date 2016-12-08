@@ -40,7 +40,7 @@ public: \
     virtual void componentComplete() { \
         adapter = new Adapter(this, object_); \
         adapter->init(); \
-        adapter->saveSignals(metaObject_); \
+        adapter->initInvokables(metaObject_); \
     } \
 private: \
     AbstractAdapter* getAdapter() { return adapter; } \
@@ -57,7 +57,7 @@ public:
     void sendResult(Handle handle);
     Slave& reply(const Handle &handle);
     Signal& signal(const QString& name);
-    void saveSignals(const QMetaObject* metaObject);
+    void initInvokables(const QMetaObject* metaObject);
     Courier& request(const QString &name, const QJSValue& callback,
                      CourierCallback func);
 
@@ -73,13 +73,11 @@ private:
     inline void subscribe(const QMetaMethod& meta);
     inline void publish(const QMetaMethod& meta);
     inline Handle handle() const;
-    inline QString createSlot(const QMetaMethod meta);
-    inline QChar methodType(QMetaMethod::MethodType type) const;
     inline bool compare(const QMetaMethod& m1, const QMetaMethod& m2) const;
-    inline void saveSignal(const QMetaMethod& meta);
+    inline void saveInvokable(const QMetaMethod& meta);
     PrivateAdapter impl_;
     QMap<QString, int> meta_;
-    QMap<QString, int> meta_signals_;
+    QMap<QString, int> meta_item_;
     QMap<int, Slave*> msgs_;
 };
 

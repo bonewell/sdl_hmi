@@ -3,7 +3,7 @@
 #include <QMetaMethod>
 
 AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
-    Adaptor(object), impl_(item, object), meta_(), meta_signals_(), msgs_()
+    Adaptor(object), impl_(item, object), meta_(), meta_item_(), msgs_()
 {
 }
 
@@ -21,21 +21,22 @@ void AbstractAdapter::init()
     }
 }
 
-void AbstractAdapter::saveSignals(const QMetaObject *metaObject)
+void AbstractAdapter::initInvokables(const QMetaObject *metaObject)
 {
     for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i) {
         QMetaMethod meta = metaObject->method(i);
-        saveSignal(meta);
+        saveInvokable(meta);
     }
 }
 
-void AbstractAdapter::saveSignal(const QMetaMethod &meta)
+void AbstractAdapter::saveInvokable(const QMetaMethod &meta)
 {
-    if (meta.methodType() == QMetaMethod::Method) {
+    if (meta.methodType() == QMetaMethod::Method &&
+        meta.access() == QMetaMethod::Public) {
         QString name = meta.name();
         name[0] = name[0].toUpper();
-        if (!meta_signals_.contains(name)) {
-            meta_signals_.insert(name, meta.methodIndex());
+        if (!meta_item_.contains(name)) {
+            meta_item_.insert(name, meta.methodIndex());
         }
     }
 }
@@ -82,13 +83,13 @@ Slave& AbstractAdapter::reply(const Handle& handle)
 Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
     CourierCallback func)
 {
-    QMetaMethod meta = impl_.item()->metaObject()->method(meta_signals_[name]);
+    QMetaMethod meta = impl_.item()->metaObject()->method(meta_item_[name]);
     return *new Courier(meta, callback, func, impl_);
 }
 
 Signal& AbstractAdapter::signal(const QString& name)
 {
-    QMetaMethod meta = impl_.item()->metaObject()->method(meta_signals_[name]);
+    QMetaMethod meta = impl_.item()->metaObject()->method(meta_item_[name]);
     return *new Signal(meta, impl_);
 }
 
@@ -108,31 +109,11 @@ Handle AbstractAdapter::handle() const
     return Handle(++i);
 }
 
-QChar AbstractAdapter::methodType(QMetaMethod::MethodType type) const
-{
-    switch (type) {
-    case QMetaMethod::Method: return QChar(QMETHOD_CODE); break;
-    case QMetaMethod::Slot: return QChar(QSLOT_CODE); break;
-    case QMetaMethod::Signal: return QChar(QSIGNAL_CODE); break;
-    case QMetaMethod::Constructor:
-    default: return QChar(-1);
-    }
-    return QChar();
-}
-
 void AbstractAdapter::subscribe(const QMetaMethod &meta)
 {
     if (!isConnected()) return;
     if (meta.methodType() == QMetaMethod::Slot &&
         meta.access() == QMetaMethod::Private) {
-        QString name = QString::fromLatin1(meta.name());
-        impl_.subscribe(name, this, createSlot(meta));
+        impl_.subscribe(this, meta);
     }
-}
-
-QString AbstractAdapter::createSlot(const QMetaMethod meta)
-{
-    QString signature = QString::fromLatin1(meta.methodSignature());
-    QString code(methodType(meta.methodType()));
-    return code + signature;
 }

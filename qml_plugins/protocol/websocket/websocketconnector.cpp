@@ -4,13 +4,14 @@
 #include <QWebSocket>
 #include <QJsonDocument>
 #include <QJsonValue>
+#include <QJsonObject>
 #include <QByteArray>
 #include <QDebug>
 
 #include "websocket/websocketwatcher.h"
 
 WebSocket::WebSocket(QObject *item, QObject *object) : QObject(object),
-    item_(item), object_(object), id_start_(-1), id_range_(1000), request_id_(-1),
+    item_(item), id_start_(-1), id_range_(1000), request_id_(-1),
     checkin_id_(-1), unckeckin_id_(-1)
 {
     socket_ = new QWebSocket();
@@ -58,11 +59,9 @@ void WebSocket::checkin()
     send(msg);
 }
 
-void WebSocket::subscribe(const QString& name, QObject* adapter, const QString& signature)
+void WebSocket::subscribe(QObject* adapter, const QMetaMethod& meta)
 {
-    Q_UNUSED(adapter);
-    Q_UNUSED(signature);
-    subscribes_.append(interface_name_ + "." + name);
+    subscribes_[name(meta)] = qMakePair(adapter, meta);
 }
 
 void WebSocket::setDelayedReply(Message &message)
@@ -127,6 +126,9 @@ void WebSocket::process(const QJsonObject &json)
         request_id_ = id_start_ = json["result"].toInt();
         doSubscribe();
     }
+    if (isNotification(json)) {
+        emitSignal(json);
+    }
 }
 
 bool WebSocket::isCheckinSuccess(const QJsonObject &json)
@@ -135,12 +137,30 @@ bool WebSocket::isCheckinSuccess(const QJsonObject &json)
             json["result"].isDouble() && !json.contains("error");
 }
 
+bool WebSocket::isNotification(const QJsonObject &json) const
+{
+    return !json.contains("id");
+}
+
+void WebSocket::emitSignal(const QJsonObject &json) const
+{
+    QString name_notification = json["method"].toString();
+    SubscribeList::ConstIterator i = subscribes_.find(name_notification);
+    if (i != subscribes_.constEnd()) {
+        const Notification& signal = i.value();
+        if (!invoke(signal, json)) {
+            qWarning() << "Could not process notification";
+        }
+    }
+}
+
 void WebSocket::doSubscribe()
 {
-    foreach (const QString& name, subscribes_) {
+    QMapIterator<QString, Notification> i(subscribes_);
+    while (i.hasNext()) {
         QJsonObject params
         {
-            {"propertyName", name}
+            {"propertyName", i.key() }
         };
         QJsonObject msg
         {
@@ -150,7 +170,13 @@ void WebSocket::doSubscribe()
             {"params", params}
         };
         send(msg);
+        i.next();
     }
+}
+
+QString WebSocket::name(const QMetaMethod& meta) const
+{
+    return interface_name_ + "." + QString::fromLatin1(meta.name());
 }
 
 int WebSocket::generateId()
@@ -160,4 +186,29 @@ int WebSocket::generateId()
         request_id_ = id_start_;
     }
     return request_id_;
+}
+
+bool WebSocket::invoke(const Notification& signal, const QJsonObject& json) const
+{
+    const QMetaMethod& meta = signal.second;
+
+    const int kMaxArgs = 10;
+    QVector<QGenericArgument> args(kMaxArgs);
+
+    if (json.contains("params")) {
+        const QJsonObject& input = json.value("params").toObject();
+        int i = 0;
+        const QList<QByteArray>& params = meta.parameterNames();
+        foreach (const QByteArray& v, params) {
+            if (input.contains(v)) {
+                args[i++] = Q_ARG(QVariant, input[v]);
+            }
+        }
+    }
+
+    QObject* object = signal.first;
+    return meta.invoke(object, Qt::DirectConnection, args[0],
+                       args[1], args[2], args[3],
+                       args[4], args[5], args[6],
+                       args[7], args[8], args[9]);
 }

@@ -2,6 +2,7 @@
 #define DBUSCONNECTOR_H
 
 #include <QtDBus/QDBusAbstractAdaptor>
+#include <QMetaMethod>
 
 #include "core/privateinterface.h"
 
@@ -12,6 +13,8 @@
 typedef QDBusAbstractAdaptor Adaptor;
 
 class QDBusInterface;
+class QMetaMethod;
+class QChar;
 
 class DBus : public PrivateInterface
 {
@@ -19,8 +22,7 @@ public:
     DBus(QObject* item, QObject* object);
     virtual void init(int uid, const QString& name);
     virtual void connect(const QString& service, const QString& interface);
-    virtual void subscribe(const QString &name, QObject *adapter,
-                           const QString &signature);
+    virtual void subscribe(QObject *adapter, const QMetaMethod& meta);
     virtual void setDelayedReply(Message& message);
     virtual void sendReply(Message& request, const Message &response);
     virtual void sendError(Message& request, const QString& name, const QString& text);
@@ -28,6 +30,8 @@ public:
     virtual Watcher* call(const QString& name, const Message& request);
     virtual QObject* item() { return item_; }
 private:
+    inline QString createSlot(const QMetaMethod& meta);
+    inline QChar methodType(QMetaMethod::MethodType type) const;
     QString name_;
     QString service_name_;
     QString interface_name_;

@@ -26,10 +26,30 @@ void DBus::connect(const QString &service, const QString &interface)
                                     QDBusConnection::sessionBus(), item_);
 }
 
-void DBus::subscribe(const QString& name, QObject* adapter, const QString& signature)
+void DBus::subscribe(QObject* adapter, const QMetaMethod& meta)
 {
+    QString name = QString::fromLatin1(meta.name());
     QDBusConnection::sessionBus().connect(service_name_, "/", interface_name_,
-        name, adapter, signature.toStdString().c_str());
+        name, adapter, createSlot(meta).toStdString().c_str());
+}
+
+QChar DBus::methodType(QMetaMethod::MethodType type) const
+{
+    switch (type) {
+    case QMetaMethod::Method: return QChar(QMETHOD_CODE); break;
+    case QMetaMethod::Slot: return QChar(QSLOT_CODE); break;
+    case QMetaMethod::Signal: return QChar(QSIGNAL_CODE); break;
+    case QMetaMethod::Constructor:
+    default: return QChar(-1);
+    }
+    return QChar();
+}
+
+QString DBus::createSlot(const QMetaMethod& meta)
+{
+    QString signature = QString::fromLatin1(meta.methodSignature());
+    QString code(methodType(meta.methodType()));
+    return code + signature;
 }
 
 void DBus::setDelayedReply(Message &message)

@@ -6,6 +6,7 @@
 
 class Watcher;
 class QString;
+class QMetaMethod;
 
 class PrivateInterface
 {
@@ -13,8 +14,7 @@ public:
     virtual ~PrivateInterface() {}
     virtual void init(int uid, const QString& name) = 0;
     virtual void connect(const QString& service, const QString& interface) = 0;
-    virtual void subscribe(const QString &name, QObject *adapter,
-                           const QString &signature) = 0;
+    virtual void subscribe(QObject *adapter, const QMetaMethod &meta) = 0;
     virtual void setDelayedReply(Message& message) = 0;
     virtual void sendReply(Message& request, const Message& response) = 0;
     virtual void sendError(Message& request, const QString& name, const QString& text) = 0;
