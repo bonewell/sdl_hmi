@@ -4,6 +4,7 @@
 #include <QVariant>
 #include "core/message.h"
 
+class AbstractAdapter;
 class Watcher;
 class QString;
 class QMetaMethod;
@@ -12,6 +13,7 @@ class PrivateInterface
 {
 public:
     virtual ~PrivateInterface() {}
+    virtual void setAdapter(AbstractAdapter* adapter) = 0;
     virtual void init(int uid, const QString& name) = 0;
     virtual void connect(const QString& service, const QString& interface) = 0;
     virtual void subscribe(QObject *adapter, const QMetaMethod &meta) = 0;

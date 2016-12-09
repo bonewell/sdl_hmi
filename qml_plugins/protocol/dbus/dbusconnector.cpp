@@ -12,6 +12,11 @@ DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
 {
 }
 
+void DBus::setAdapter(AbstractAdapter *adapter)
+{
+    Q_UNUSED(adapter);
+}
+
 void DBus::init(int uid, const QString& name) {
     Q_UNUSED(uid);
     name_ = name;

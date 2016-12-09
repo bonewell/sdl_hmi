@@ -18,7 +18,8 @@ class Slave : public QObject
 
 public:
     Slave(const Handle& handle, const Message& message,
-          const QMetaMethod& meta, PrivateInterface &impl);
+          const QMetaMethod& meta, const QMetaMethod &reply_meta,
+          PrivateInterface &impl);
 
     template<typename T>
     Slave& in(const T& value) {
@@ -30,7 +31,8 @@ public:
 
     template<typename T>
     Slave& out(const T& value) {
-        response_.arg(names_[index_++], value);
+        QString name = QString(reply_names_[reply_index_++]);
+        response_.arg(name, value);
         return *this;
     }
 
@@ -45,6 +47,9 @@ public:
     }
 
     void run();
+#ifdef WEBSOCKET
+    void execute();
+#endif  // WEBSOCKET
     void send();
     void error(const QString& name, const QString& text);
     bool hasHandle() const;
@@ -63,10 +68,13 @@ private:
     bool invoke();
     const Handle handle_;
     const QMetaMethod meta_;
+    const QMetaMethod reply_meta_;
     Message request_;
     PrivateInterface& impl_;
     int index_;
+    int reply_index_;
     QList<QByteArray> names_;
+    QList<QByteArray> reply_names_;
     QVariantMap input_;
     Message response_;
 };

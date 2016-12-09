@@ -6,6 +6,7 @@
 WebSocketWatcher::WebSocketWatcher(const QString& name,
                                    const QJsonObject &input) : Watcher()
 {
+    //websocket->send();
 }
 
 QVariantList WebSocketWatcher::output()

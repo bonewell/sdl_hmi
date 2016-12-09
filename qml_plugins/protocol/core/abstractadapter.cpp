@@ -9,6 +9,7 @@ AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
 
 void AbstractAdapter::init()
 {
+    impl_.setAdapter(this);
     impl_.init(uid(), name());
     if (isConnected()) {
         impl_.connect(serviceName(), interfaceName());
@@ -65,8 +66,13 @@ Slave& AbstractAdapter::invoke(const QString& name, const Message &message)
 {
     Handle hdl = handle();
     QMetaMethod meta = impl_.item()->metaObject()->method(meta_[name]);
+    QString reply_name = name;
+    reply_name[0] = reply_name[0].toUpper();
+    reply_name = "Reply" + reply_name;
+    QMetaMethod reply_meta = impl_.item()->metaObject()->method(meta_item_[reply_name]);
     Q_ASSERT(meta.isValid());
-    Slave* s = new Slave(hdl, message, meta, impl_);
+    Q_ASSERT(reply_meta.isValid());
+    Slave* s = new Slave(hdl, message, meta, reply_meta, impl_);
     if (s->hasHandle()) {
         msgs_[hdl.uid] = s;
     }

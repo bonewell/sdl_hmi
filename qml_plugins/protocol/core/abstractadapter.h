@@ -60,6 +60,7 @@ public:
     void initInvokables(const QMetaObject* metaObject);
     Courier& request(const QString &name, const QJSValue& callback,
                      CourierCallback func);
+    Slave& invoke(const QString& name, const Message& message);
 
 protected:
     virtual bool isConnected() { return false; }
@@ -67,7 +68,6 @@ protected:
     virtual QString name() { return ""; }
     virtual QString serviceName() { return ""; }
     virtual QString interfaceName() { return ""; }
-    Slave& invoke(const QString& name, const Message& message);
 
 private:
     inline void subscribe(const QMetaMethod& meta);

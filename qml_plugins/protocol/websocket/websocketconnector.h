@@ -11,6 +11,7 @@
 
 typedef QObject Adaptor;
 
+class AbstractAdapter;
 class QWebSocket;
 class QByteArray;
 
@@ -20,6 +21,7 @@ class WebSocket : public QObject, public PrivateInterface
 public:
     WebSocket(QObject* item, QObject* object);
     virtual ~WebSocket();
+    virtual void setAdapter(AbstractAdapter* adapter);
     virtual void init(int uid, const QString& name);
     virtual void connect(const QString& service, const QString& interface);
     virtual void subscribe(QObject *adapter, const QMetaMethod& meta);
@@ -40,7 +42,10 @@ private:
     inline QString name(const QMetaMethod &meta) const;
     inline bool isCheckinSuccess(const QJsonObject& json);
     inline bool isNotification(const QJsonObject& json) const;
+    inline bool isError(const QJsonObject& json) const;
+    inline bool isResponse(const QJsonObject& json) const;
     inline void emitSignal(const QJsonObject& json) const;
+    inline void invokeMethod(const QJsonObject& json) const;
     inline bool invoke(const Notification& signal, const QJsonObject& json) const;
     void send(const QJsonObject& json);
     void doSubscribe();
@@ -50,6 +55,7 @@ private:
     QObject *item_;
     QWebSocket *socket_;
     SubscribeList subscribes_;
+    AbstractAdapter* adapter_;
     int id_start_;
     int id_range_;
     int request_id_;

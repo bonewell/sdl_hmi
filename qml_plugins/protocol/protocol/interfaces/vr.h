@@ -116,7 +116,7 @@ public:
     Q_INVOKABLE void replyPerformInteraction(const QVariantMap& handle,
         const QVariant& choiceID = QVariant());
     Q_INVOKABLE void replyGetSupportedLanguages(const QVariantMap& handle,
-                                                const QList<int>& Blanguages);
+                                                const QList<int>& languages);
     Q_INVOKABLE void replyGetLanguage(const QVariantMap& handle, int language);
     Q_INVOKABLE void replyGetCapabilities(const QVariantMap& handle,
         const QVariant& vrCapabilities = QVariant());

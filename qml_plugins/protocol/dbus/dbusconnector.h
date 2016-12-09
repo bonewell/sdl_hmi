@@ -12,6 +12,7 @@
 
 typedef QDBusAbstractAdaptor Adaptor;
 
+class AbstractAdapter;
 class QDBusInterface;
 class QMetaMethod;
 class QChar;
@@ -20,6 +21,7 @@ class DBus : public PrivateInterface
 {
 public:
     DBus(QObject* item, QObject* object);
+    virtual void setAdapter(AbstractAdapter* adapter);
     virtual void init(int uid, const QString& name);
     virtual void connect(const QString& service, const QString& interface);
     virtual void subscribe(QObject *adapter, const QMetaMethod& meta);

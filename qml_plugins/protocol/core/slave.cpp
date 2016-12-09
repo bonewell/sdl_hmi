@@ -1,15 +1,21 @@
 #include "slave.h"
 #include <QMetaMethod>
 #include <QtQuick/QQuickItem>
+#include <QJsonObject>
 
 #include "core/connector.h"
 
 Slave::Slave(const Handle& handle, const Message &message,
-             const QMetaMethod& meta, PrivateInterface &impl)
-    : handle_(handle), meta_(meta), request_(message), impl_(impl), index_(0),
-      names_(meta.parameterNames()), input_(), response_()
+             const QMetaMethod& meta, const QMetaMethod& reply_meta,
+             PrivateInterface &impl)
+    : handle_(handle), meta_(meta), reply_meta_(reply_meta),
+      request_(message), impl_(impl), index_(0), reply_index_(0),
+      names_(meta.parameterNames()), reply_names_(reply_meta.parameterNames()),
+      input_(), response_()
 {
-    names_.removeAll("message");
+    reply_names_.removeAll("handle");
+    reply_names_.push_front("message");
+    reply_names_.push_front("code");
     connect(this, SIGNAL(pass()), this, SLOT(sendReply()), Qt::QueuedConnection);
     connect(this, SIGNAL(fail(const QString&, const QString&)),
             this, SLOT(sendError(const QString&, const QString&)), Qt::QueuedConnection);
@@ -55,8 +61,9 @@ bool Slave::invoke()
     if (canSplit(kMaxArgs)) {
         foreach (const QByteArray& v, names_) {
             if (input_.contains(v)) {
-                args[i++] = Q_ARG(QVariant, input_[v]);
+                args[i] = Q_ARG(QVariant, input_[v]);
             }
+            ++i;
         }
     } else {
         args[i] = Q_ARG(QVariant, QVariant(input_));
@@ -96,3 +103,37 @@ std::string Slave::name() const
     QString name = QString::fromLatin1(meta_.name());
     return name.toStdString();
 }
+
+#ifdef WEBSOCKET
+void Slave::execute()
+{
+    const int kMaxArgs = 10;
+    QVector<QGenericArgument> args(kMaxArgs);
+
+    int i = 0;
+
+    QVariant hdl = QVariantMap(handle_);
+    if (hasHandle()) {
+        args[i++] = Q_ARG(QVariant, hdl);
+    }
+
+    const QJsonObject& input = request_.arguments();
+    index_ += names_.count();
+    if (canSplit(kMaxArgs)) {
+        foreach (const QByteArray& v, names_) {
+            if (input_.contains(v)) {
+                args[i] = Q_ARG(QVariant, input[v].toVariant());
+            }
+            ++i;
+        }
+    } else {
+        args[i] = Q_ARG(QVariant, QVariant(input.toVariantMap()));
+    }
+
+    QMetaObject::invokeMethod(impl_.item(), name().c_str(),
+                                     Qt::DirectConnection, args[0],
+                                     args[1], args[2], args[3],
+                                     args[4], args[5], args[6],
+                                     args[7], args[8], args[9]);
+}
+#endif  // WEBSOCKET
