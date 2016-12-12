@@ -1,13 +1,12 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_PRIVATEINTERFACE_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_PRIVATEINTERFACE_H_
 
-#include <QVariant>
-#include "core/message.h"
-
 class AbstractAdapter;
 class Watcher;
+class Message;
 class QString;
 class QMetaMethod;
+class QObject;
 
 class PrivateInterface
 {

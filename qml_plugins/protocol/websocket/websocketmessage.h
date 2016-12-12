@@ -6,10 +6,12 @@
 #include <QVariantList>
 
 #include "core/optional.h"
+#include "websocket/websocketcastwatcher.h"
 
 class Message {
 public:
     Message() : id_(0), name_("") {}
+    explicit Message(const QJsonObject& result) : response_(result) {}
     Message(int id, const QString& name) : id_(id), name_(name) {}
 
     template<typename T>
@@ -26,6 +28,11 @@ public:
             arg(name, value.value);
         }
         return *this;
+    }
+
+    template<typename T>
+    T arg(const QString& name) {
+        return cast_watcher<T>(response_[name]);
     }
 
     const QJsonObject& arguments() const {

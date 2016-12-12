@@ -24,34 +24,35 @@ void SDLAdapter::OnStatusUpdate(int status)
 
 static void ReplyActivateApp(Courier &courier)
 {
-    courier.out<bool>().out<Optional<DeviceInfo> >()
-        .out<bool>().out<bool>().out<Optional<QList<PermissionItem> > >()
-        .out<bool>().out<Optional<int> >().invoke();
+    courier.out<bool>("isSDLAllowe").out<Optional<DeviceInfo> >("device")
+        .out<bool>("isPermissionsConsentNeeded").out<bool>("isAppPermissionsRevoked")
+        .out<Optional<QList<PermissionItem> > >("appRevokedPermissions")
+        .out<bool>("isAppRevoked").out<Optional<int> >("priority").invoke();
 }
 
 static void ReplyGetUserFriendlyMessage(Courier &courier)
 {
-    courier.out<Optional<QList<UserFriendlyMessage> > >().invoke();
+    courier.out<Optional<QList<UserFriendlyMessage> > >("messages").invoke();
 }
 
 static void ReplyGetListOfPermissions(Courier &courier)
 {
-    courier.out<QList<PermissionItem> >().invoke();
+    courier.out<QList<PermissionItem> >("allowedFunctions").invoke();
 }
 
 static void ReplyUpdateSDL(Courier &courier)
 {
-    courier.out<int>().invoke();
+    courier.out<int>("result").invoke();
 }
 
 static void ReplyGetStatusUpdate(Courier &courier)
 {
-    courier.out<int>().invoke();
+    courier.out<int>("status").invoke();
 }
 
 static void ReplyGetURLS(Courier &courier)
 {
-    courier.out<Optional<QList<ServiceInfo> > >().invoke();
+    courier.out<Optional<QList<ServiceInfo> > >("urls").invoke();
 }
 
 void SDL::activateApp(const QJSValue &callback, int appID)

@@ -124,7 +124,21 @@ void WebSocket::sendSignal(const QString &name, const Message &message)
 
 Watcher *WebSocket::call(const QString &name, const Message &request)
 {
-    return new WebSocketWatcher(name, request.arguments());
+    int id = generateId();
+    QJsonObject msg
+    {
+        {"jsonrpc", "2.0"},
+        {"id", id},
+        {"method", component_name_ + "." + name}
+    };
+    const QJsonObject& params = request.arguments();
+    if (!params.empty()) {
+        msg["params"] = params;
+    }
+    WebSocketWatcher* watcher = new WebSocketWatcher();
+    watchers_[id] = watcher;
+    send(msg);
+    return watcher;
 }
 
 void WebSocket::received(const QString &data)
@@ -156,17 +170,15 @@ void WebSocket::process(const QJsonObject &json)
     if (isCheckinSuccess(json)) {
         request_id_ = id_start_ = json["result"].toInt();
         doSubscribe();
-    }
-    if (isNotification(json)) {
+    } else if (isNotification(json)) {
         emitSignal(json);
     } else if (isResponse(json)) {
-
+        invokeCallback(json);
     } else if (isError(json)) {
-
+        processError(json);
     } else {
         invokeMethod(json);
     }
-
 }
 
 bool WebSocket::isCheckinSuccess(const QJsonObject &json)
@@ -271,6 +283,20 @@ bool WebSocket::invoke(const Notification& signal, const QJsonObject& json) cons
                        args[1], args[2], args[3],
                        args[4], args[5], args[6],
                        args[7], args[8], args[9]);
+}
+
+void WebSocket::invokeCallback(const QJsonObject &json)
+{
+    int id = json["id"].toInt();
+    WebSocketWatcher* watcher = watchers_.take(id);
+    const QJsonObject& result = json["result"].toObject();
+    watcher->response(result);
+}
+
+void WebSocket::processError(const QJsonObject &json) const
+{
+    // TODO: get id message to remove watcher
+    qDebug() << json;
 }
 
 void WebSocket::setAdapter(AbstractAdapter *adapter)

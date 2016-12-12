@@ -3,13 +3,17 @@
 #include <QVariantList>
 #include <QJsonObject>
 
-WebSocketWatcher::WebSocketWatcher(const QString& name,
-                                   const QJsonObject &input) : Watcher()
+WebSocketWatcher::WebSocketWatcher() : Watcher()
 {
-    //websocket->send();
 }
 
-QVariantList WebSocketWatcher::output()
+Message WebSocketWatcher::response()
 {
-    return QVariantList();
+    return Message(output_);
+}
+
+void WebSocketWatcher::response(const QJsonObject &value)
+{
+    output_ = value;
+    emit finished();
 }

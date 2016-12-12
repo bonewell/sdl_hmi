@@ -7,7 +7,6 @@
 #include <QVariant>
 #include <QMetaMethod>
 
-#include "core/castwatcher.h"
 #include "core/message.h"
 
 class Courier;
@@ -33,8 +32,8 @@ public:
     }
 
     template<typename T>
-    Courier& out() {
-        T value = cast_watcher<T>(response_[index_++]);
+    Courier& out(const QString& name) {
+        T value = response_.arg<T>(name);
         QJSValue var(callback_);
         var << value;
         output_ << var;
@@ -51,7 +50,7 @@ private:
     QJSValue callback_;
     Message request_;
     QList<QByteArray> names_;
-    QVariantList response_;
+    Message response_;
     QJSValueList output_;
     Watcher* watcher_;
     CourierCallback func_;

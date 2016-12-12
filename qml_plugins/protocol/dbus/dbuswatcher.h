@@ -12,7 +12,7 @@ class DBusWatcher : public Watcher
 public:
     DBusWatcher(const QString& name, const QVariantList& input,
                 QDBusInterface *interface);
-    virtual QVariantList output();
+    virtual Message response();
 private:
     QDBusPendingCallWatcher *watcher_;
 };

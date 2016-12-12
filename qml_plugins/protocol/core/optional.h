@@ -87,6 +87,16 @@ inline QJsonValue &operator<<(QJsonValue &arg, const Optional<T> &value) {
     }
     return arg;
 }
+
+template<typename T>
+inline const QJsonValue &operator>>(const QJsonValue &arg, Optional<T> &value) {
+    value.presence = !arg.isUndefined() && !arg.isNull();
+    if (value.presence) {
+        arg >> value.value;
+    }
+    return arg;
+}
+
 #endif
 
 template<typename T>

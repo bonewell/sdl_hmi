@@ -15,6 +15,8 @@ class AbstractAdapter;
 class QWebSocket;
 class QByteArray;
 
+class WebSocketWatcher;
+
 class WebSocket : public QObject, public PrivateInterface
 {
     Q_OBJECT
@@ -47,6 +49,8 @@ private:
     inline void emitSignal(const QJsonObject& json) const;
     inline void invokeMethod(const QJsonObject& json) const;
     inline bool invoke(const Notification& signal, const QJsonObject& json) const;
+    inline void invokeCallback(const QJsonObject& json);
+    inline void processError(const QJsonObject& json) const;
     void send(const QJsonObject& json);
     void doSubscribe();
     QString component_name_;
@@ -61,6 +65,7 @@ private:
     int request_id_;
     int checkin_id_;
     int unckeckin_id_;
+    QMap<int, WebSocketWatcher*> watchers_;
 signals:
     void jsonReceived(const QJsonObject& json);
 };

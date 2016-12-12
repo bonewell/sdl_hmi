@@ -1,17 +1,19 @@
 #ifndef WEBSOCKETWATCHER_H
 #define WEBSOCKETWATCHER_H
 
-#include "core/watcher.h"
+#include <QJsonObject>
 
-class QJsonObject;
+#include "core/watcher.h"
 
 class WebSocketWatcher : public Watcher
 {
     Q_OBJECT
 public:
-    WebSocketWatcher(const QString& name, const QJsonObject& input);
-    virtual QVariantList output();
+    WebSocketWatcher();
+    virtual Message response();
+    void response(const QJsonObject &value);
 private:
+    QJsonObject output_;
 };
 
 #endif  // WEBSOCKETWATCHER_H

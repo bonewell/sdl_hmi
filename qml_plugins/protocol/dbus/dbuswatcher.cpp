@@ -13,8 +13,8 @@ DBusWatcher::DBusWatcher(const QString& name, const QVariantList& input,
     connect(watcher_, SIGNAL(finished(QDBusPendingCallWatcher*)), SIGNAL(finished()));
 }
 
-QVariantList DBusWatcher::output()
+Message DBusWatcher::response()
 {
     QDBusMessage reply = watcher_->reply();
-    return reply.arguments();
+    return Message(reply.arguments());
 }

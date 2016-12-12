@@ -6,7 +6,8 @@
 Courier::Courier(const QMetaMethod &meta, const QJSValue &callback,
                  CourierCallback func, PrivateInterface &impl)
     : meta_(meta), impl_(impl), callback_(callback),
-      request_(), names_(meta_.parameterNames()), watcher_(0), func_(func), index_(0)
+      request_(), names_(meta_.parameterNames()), response_(), output_(),
+      watcher_(0), func_(func), index_(0)
 {
     names_.removeAll("callback");
 }
@@ -19,7 +20,7 @@ void Courier::call()
 
 void Courier::response()
 {
-    response_ = watcher_->output();
+    response_ = watcher_->response();
     func_(*this);
 }
 
