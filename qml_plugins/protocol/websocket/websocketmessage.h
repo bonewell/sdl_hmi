@@ -5,50 +5,47 @@
 #include <QJsonObject>
 #include <QVariantList>
 
+#include "core/abstractmessage.h"
 #include "core/optional.h"
 #include "websocket/websocketcastwatcher.h"
 
-class Message {
+class Message : public AbstractMessage
+{
 public:
-    Message() : id_(0), name_("") {}
-    explicit Message(const QJsonObject& result) : response_(result) {}
-    Message(int id, const QString& name) : id_(id), name_(name) {}
+//    Message();
+//    Message(int id, const QString& name, const QJsonObject& result)
+//        : AbstractMessage(name), id_(id), response_(result) {}
 
     template<typename T>
-    Message& arg(const QString& name, const T& value) {
+    Message& setArgument(const T& value) {
         QJsonValue item;
         item << value;
-        response_[name] = item;
+        arguments_[nextParam()] = item;
         return *this;
     }
 
     template<typename T>
-    Message& arg(const QString& name, const Optional<T>& value) {
+    Message& setArgument(const Optional<T>& value) {
         if (value.presence) {
-            arg(name, value.value);
+            return setArgument(value.value);
         }
+        Q_UNUSED(nextParam());
         return *this;
     }
 
     template<typename T>
-    T arg(const QString& name) {
-        return cast_watcher<T>(response_[name]);
+    T argument(const QString& name) const {
+        return cast_watcher<T>(arguments_[name]);
     }
 
-    const QJsonObject& arguments() const {
-        return response_;
-    }
+    const QJsonObject& arguments() const;
+    virtual void setDelayedReply();
 
     int id() const {
         return id_;
     }
-    const QString& name() const {
-        return name_;
-    }
 private:
-    QJsonObject response_;
     int id_;
-    QString name_;
 };
 
 #endif  // WEBSOCKETMESSAGE_H_

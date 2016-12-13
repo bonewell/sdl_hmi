@@ -53,7 +53,7 @@ TTS
 
         if (ttsPopUp.async) {
             console.warn('speak send abort');
-            sendError(handle, Common.Result.ABORTED);
+            fail(handle, Common.Result.ABORTED);
         }
         var message = ttsChunksToString(ttsChunks);
         ttsPopUp.activate(message);

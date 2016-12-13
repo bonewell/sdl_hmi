@@ -306,7 +306,7 @@ UI
         if (sendErrorResponce) {
             console.debug("exit with result code: ", resultCode)
             handle.code = resultCode;
-            sendResult(handle);
+            reply(handle);
             return;
         }
 
@@ -321,7 +321,7 @@ UI
         })
 
         handle.code = resultCode;
-        sendResult(handle);
+        reply(handle);
     }
 
     function setGlobalProperties (vrHelpTitle, vrHelp, menuTitle, menuIcon,
@@ -444,21 +444,21 @@ UI
         if (contentLoader.item.systemContext !== Common.SystemContext.SYSCTXT_MAIN) {
             handle.code = Common.Result.REJECTED;
             handle.message = "System Context isn't MAIN";
-            sendResult(handle);
+            reply(handle);
             return;
         }
         if(dataContainer.scrollableMessageModel.running){
             //send error response if scrollable message already running
             handle.code = Common.Result.ABORTED;
             handle.message = "ScrollableMessage already running";
-            sendResult(handle);
+            reply(handle);
             return;
         }
 
         dataContainer.scrollableMessageModel.longMessageText = messageText.fieldText
         if (timeout === 0) {
             handle.message = "Timeout = 0";
-            sendResult(handle);
+            reply(handle);
             return;
         } else {
             dataContainer.scrollableMessageModel.timeout = timeout
@@ -494,7 +494,7 @@ UI
 
         if (dataContainer.uiAudioPassThru.running) {
             console.debug("aborted")
-            sendError(handle, Common.Result.ABORTED);
+            fail(handle, Common.Result.ABORTED);
             return;
         }
 
@@ -513,11 +513,11 @@ UI
 
         if (!dataContainer.uiAudioPassThru.running) {
             console.debug("rejected")
-            sendError(handle, Common.Result.REJECTED);
+            fail(handle, Common.Result.REJECTED);
             return;
         }
         performAudioPassThruPopup.complete(Common.Result.SUCCESS)
-        sendResult(handle);
+        reply(handle);
     }
 
     function closePopUp(handle, methodName) {
@@ -529,7 +529,7 @@ UI
         if (dataContainer.activePopup.length === 0) {
             handle.code = Common.Result.ABORT;
             handle.message = "No active PopUps";
-            sendResult(handle);
+            reply(handle);
             return;
         }
 

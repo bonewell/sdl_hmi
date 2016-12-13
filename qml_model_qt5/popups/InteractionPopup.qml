@@ -158,11 +158,11 @@ ContextPopup {
                 break
             case Common.Result.ABORTED:
                 async.code = Common.Result.ABORTED;
-                sdlUI.sendResult(async);
+                sdlUI.reply(async);
                 break
             case Common.Result.TIMED_OUT:
                 async.code = Common.Result.TIMED_OUT;
-                sdlUI.sendResult(async);
+                sdlUI.reply(async);
                 break
         }
         timer.stop()

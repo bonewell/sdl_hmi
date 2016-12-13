@@ -9,11 +9,11 @@ class WebSocketWatcher : public Watcher
 {
     Q_OBJECT
 public:
-    WebSocketWatcher();
-    virtual Message response();
-    void response(const QJsonObject &value);
+    explicit WebSocketWatcher(QObject *parent = 0);
+    virtual const Message& response() const;
+    void call(const QJsonObject &params);
 private:
-    QJsonObject output_;
+    Message response_;
 };
 
 #endif  // WEBSOCKETWATCHER_H

@@ -2,6 +2,7 @@
 #define VEHICLEINFO_H
 
 #include "core/abstractadapter.h"
+#include "core/abstractitem.h"
 #include "protocol/structures.h"
 
 #define VEHICLEINFO_INTROSPECTION \

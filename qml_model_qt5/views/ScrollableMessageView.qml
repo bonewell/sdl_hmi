@@ -48,7 +48,7 @@ GeneralView {
         dataContainer.scrollableMessageModel.running = false
         handle = dataContainer.scrollableMessageModel.async;
         handle.code = dataContainer.scrollableMessageModel.result;
-        sdlUI.sendResult(handle);
+        sdlUI.reply(handle);
     }
     Component.onCompleted: {
         dataContainer.scrollableMessageModel.result = Common.Result.ABORTED

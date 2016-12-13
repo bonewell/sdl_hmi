@@ -8,25 +8,25 @@
 #include <QMetaMethod>
 
 #include "core/convert.h"
-#include <core/message.h>
+#include "core/message.h"
 
 class PrivateInterface;
 
+/**
+ * @brief The Signal class
+ * instance of this class is used to send notificaftion in the bus
+ */
 class Signal
 {
 public:
-    Signal(const QMetaMethod& meta, PrivateInterface& impl);
+    Signal(const QString& name, const QList<QByteArray>& params,
+           PrivateInterface& impl);
     void send();
 
     template<typename T>
     Signal& arg(const T& value) {
-        message_.arg(names_[index_++], value);
+        message_.setArgument(value);
         return *this;
-    }
-
-    template<typename T>
-    Signal& arg(const QVariantMap& value) {
-        return arg(single<T>(value));
     }
 
     template<typename T>
@@ -35,12 +35,8 @@ public:
     }
 
 private:
-    inline QString name() const;
-    const QMetaMethod meta_;
     PrivateInterface& impl_;
-    const QList<QByteArray> names_;
     Message message_;
-    int index_;
 };
 
 #endif // SIGNAL_H

@@ -2,6 +2,7 @@
 #define VR_H
 
 #include "core/abstractadapter.h"
+#include "core/abstractitem.h"
 #include "protocol/structures.h"
 
 #define VR_INTROSPECTION \

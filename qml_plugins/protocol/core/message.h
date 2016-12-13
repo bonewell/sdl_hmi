@@ -3,9 +3,9 @@
 
 #ifdef DBUS
 #  include "dbus/dbusmessage.h"
-#elif WEBSOCKET
+#elif defined(WEBSOCKET)
 #  include "websocket/websocketmessage.h"
-#elif MQUEUE
+#elif defined(MQUEUE)
 #  include "mqueue/mqueuemessage.h"
 #endif
 

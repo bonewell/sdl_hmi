@@ -2,8 +2,10 @@
 
 #include <QMetaMethod>
 
-AbstractAdapter::AbstractAdapter(QObject *item, QObject *object) :
-    Adaptor(object), impl_(item, object), meta_(), meta_item_(), msgs_()
+#include "core/abstractitem.h"
+
+AbstractAdapter::AbstractAdapter(QObject *parent) :
+    Adaptor(parent), impl_(parent, parent), meta_(), meta_item_(), msgs_()
 {
 }
 
@@ -42,6 +44,16 @@ void AbstractAdapter::saveInvokable(const QMetaMethod &meta)
     }
 }
 
+void AbstractAdapter::sendReply(Message &request, const Message &response)
+{
+    impl_.sendReply(request, response);
+}
+
+void AbstractAdapter::sendError(Message &request, const QString &name, const QString &text)
+{
+    impl_.sendError(request, name, text);
+}
+
 bool AbstractAdapter::compare(const QMetaMethod &m1, const QMetaMethod &m2) const
 {
     return m1.name().toLower() == m2.name().toLower();
@@ -62,57 +74,21 @@ void AbstractAdapter::publish(const QMetaMethod &meta)
     }
 }
 
-Slave& AbstractAdapter::invoke(const QString& name, const Message &message)
+Procedure &AbstractAdapter::call(const QString& name, const Message &message)
 {
-    Handle hdl = handle();
-    QMetaMethod meta = impl_.item()->metaObject()->method(meta_[name]);
-    QString reply_name = name;
-    reply_name[0] = reply_name[0].toUpper();
-    reply_name = "Reply" + reply_name;
-    QMetaMethod reply_meta = impl_.item()->metaObject()->method(meta_item_[reply_name]);
-    Q_ASSERT(meta.isValid());
-    Q_ASSERT(reply_meta.isValid());
-    Slave* s = new Slave(hdl, message, meta, reply_meta, impl_);
-    if (s->hasHandle()) {
-        msgs_[hdl.uid] = s;
-    }
-    return *s;
+    return item_->call(name, message);
 }
 
-Slave& AbstractAdapter::reply(const Handle& handle)
-{
-    Slave& s = *q_check_ptr(msgs_.take(handle.uid));
-    s.out(handle.code).out(handle.message); // no effect for error
-    return s;
-}
-
-Courier& AbstractAdapter::request(const QString& name, const QJSValue &callback,
-    CourierCallback func)
+Method& AbstractAdapter::request(const QString& name, MethodCallback *callback)
 {
     QMetaMethod meta = impl_.item()->metaObject()->method(meta_item_[name]);
-    return *new Courier(meta, callback, func, impl_);
+    return *new Method(name, meta.parameterNames(), callback, impl_);
 }
 
-Signal& AbstractAdapter::signal(const QString& name)
+Signal& AbstractAdapter::notification(const QString& name)
 {
     QMetaMethod meta = impl_.item()->metaObject()->method(meta_item_[name]);
-    return *new Signal(meta, impl_);
-}
-
-void AbstractAdapter::sendError(Handle handle, const QString& error, const QString& text)
-{
-    reply(handle).error(error, text);
-}
-
-void AbstractAdapter::sendResult(Handle handle)
-{
-    reply(handle).send();
-}
-
-Handle AbstractAdapter::handle() const
-{
-    static int i = 0;
-    return Handle(++i);
+    return *new Signal(name, meta.parameterNames(), impl_);
 }
 
 void AbstractAdapter::subscribe(const QMetaMethod &meta)

@@ -3,53 +3,53 @@
 void BasicCommunicationAdapter::UpdateAppList(const QList<HMIApplication> &applications,
     const Message &message)
 {
-    invoke("UpdateAppList", message).in(applications).run();
+    call("updateAppList", message).in(applications).run();
 }
 
 void BasicCommunicationAdapter::UpdateDeviceList(const QList<DeviceInfo> &deviceList,
     const Message &message)
 {
-    invoke("UpdateDeviceList", message).in(deviceList).run();
+    call("updateDeviceList", message).in(deviceList).run();
 }
 
 void BasicCommunicationAdapter::AllowDeviceToConnect(const DeviceInfo &device,
     const Message &message)
 {
-    invoke("AllowDeviceToConnect", message).in(device).run();
+    call("allowDeviceToConnect", message).in(device).run();
 }
 
 void BasicCommunicationAdapter::ActivateApp(int appID, const Optional<int> &priority,
     const Optional<int> &level, const Message &message)
 {
-    invoke("ActivateApp", message).in(appID).in(priority).in(level).run();
+    call("activateApp", message).in(appID).in(priority).in(level).run();
 }
 
 void BasicCommunicationAdapter::MixingAudioSupported(const Message &message)
 {
-    invoke("MixingAudioSupported", message).run();
+    call("mixingAudioSupported", message).run();
 }
 
 void BasicCommunicationAdapter::DialNumber(const QString &number, int appID,
     const Message &message)
 {
-    invoke("DialNumber", message).in(number).in(appID).run();
+    call("dialNumber", message).in(number).in(appID).run();
 }
 
 void BasicCommunicationAdapter::SystemRequest(int requestType, const QString &fileName,
     const Optional<QString> &appID, const Message &message)
 {
-    invoke("SystemRequest", message).in(requestType).in(fileName).in(appID).run();
+    call("systemRequest", message).in(requestType).in(fileName).in(appID).run();
 }
 
 void BasicCommunicationAdapter::PolicyUpdate(const QString &file, int timeout,
     const QList<int> &retry, const Message &message)
 {
-    invoke("PolicyUpdate", message).in(file).in(timeout).in(retry).run();
+    call("policyUpdate", message).in(file).in(timeout).in(retry).run();
 }
 
 void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
 {
-    invoke("GetSystemInfo", message).run();
+    call("getSystemInfo", message).run();
 }
 
 void BasicCommunicationAdapter::OnResumeAudioSource(int appID)
@@ -95,62 +95,62 @@ void BasicCommunicationAdapter::OnPutFile(const Optional<int> &offset,
 
 void BasicCommunication::onReady()
 {
-    adapter->signal("OnReady").send();
+    notification("OnReady").send();
 }
 
 void BasicCommunication::onStartDeviceDiscovery()
 {
-    adapter->signal("OnStartDeviceDiscovery").send();
+    notification("OnStartDeviceDiscovery").send();
 }
 
 void BasicCommunication::onUpdateDeviceList()
 {
-    adapter->signal("OnUpdateDeviceList").send();
+    notification("OnUpdateDeviceList").send();
 }
 
 void BasicCommunication::onPhoneCall(bool isActive)
 {
-    adapter->signal("OnPhoneCall").arg(isActive).send();
+    notification("OnPhoneCall").arg(isActive).send();
 }
 
 void BasicCommunication::onEmergencyEvent(bool enabled)
 {
-    adapter->signal("OnEmergencyEvent").arg(enabled).send();
+    notification("OnEmergencyEvent").arg(enabled).send();
 }
 
 void BasicCommunication::onDeviceChosen(const QVariantMap &deviceInfo)
 {
-    adapter->signal("OnDeviceChosen").arg<DeviceInfo>(deviceInfo).send();
+    notification("OnDeviceChosen").arg<DeviceInfo>(deviceInfo).send();
 }
 
 void BasicCommunication::onFindApplications(const QVariant &deviceInfo)
 {
-    adapter->signal("OnFindApplications").arg<Optional<DeviceInfo> >(deviceInfo).send();
+    notification("OnFindApplications").arg<Optional<DeviceInfo> >(deviceInfo).send();
 }
 
 void BasicCommunication::onAppActivated(int appID)
 {
-    adapter->signal("OnAppActivated").arg(appID).send();
+    notification("OnAppActivated").arg(appID).send();
 }
 
 void BasicCommunication::onAppDeactivated(int appID)
 {
-    adapter->signal("OnAppDeactivated").arg(appID).send();
+    notification("OnAppDeactivated").arg(appID).send();
 }
 
 void BasicCommunication::onExitApplication(int reason, int appID)
 {
-    adapter->signal("OnExitApplication").arg(reason).arg(appID).send();
+    notification("OnExitApplication").arg(reason).arg(appID).send();
 }
 
 void BasicCommunication::onExitAllApplications(int reason)
 {
-    adapter->signal("OnExitAllApplications").arg(reason).send();
+    notification("OnExitAllApplications").arg(reason).send();
 }
 
 void BasicCommunication::onAwakeSDL()
 {
-    adapter->signal("OnAwakeSDL").send();
+    notification("OnAwakeSDL").send();
 }
 
 void BasicCommunication::onSystemRequest(int requestType, const QVariant &url,
@@ -159,7 +159,7 @@ void BasicCommunication::onSystemRequest(int requestType, const QVariant &url,
 {
 // fileName is mandatory but we added default value to the signature of method
 // because of C++ rules
-    adapter->signal("OnSystemRequest").arg(requestType).arg<Optional<QString> >(url)
+    notification("OnSystemRequest").arg(requestType).arg<Optional<QString> >(url)
             .arg<Optional<int> >(fileType).arg<Optional<int> >(offset)
             .arg<Optional<int> >(length).arg<Optional<int> >(timeout)
             .arg(fileName).arg<Optional<QString> >(appID).send();
@@ -167,38 +167,38 @@ void BasicCommunication::onSystemRequest(int requestType, const QVariant &url,
 
 void BasicCommunication::onSystemInfoChanged(int language)
 {
-    adapter->signal("OnSystemInfoChanged").arg(language).send();
+    notification("OnSystemInfoChanged").arg(language).send();
 }
 
 void BasicCommunication::onIgnitionCycleOver()
 {
-    adapter->signal("OnIgnitionCycleOver").send();
+    notification("OnIgnitionCycleOver").send();
 }
 
 void BasicCommunication::onDeactivateHMI(bool isDeactivated)
 {
-    adapter->signal("OnDeactivateHMI").arg(isDeactivated).send();
+    notification("OnDeactivateHMI").arg(isDeactivated).send();
 }
 
 void BasicCommunication::onEventChanged(int eventName, bool isActive)
 {
-    adapter->signal("OnEventChanged").arg(eventName).arg(isActive).send();
+    notification("OnEventChanged").arg(eventName).arg(isActive).send();
 }
 
 void BasicCommunication::replyAllowDeviceToConnect(const QVariantMap& handle,
                                                    bool allow)
 {
-    adapter->reply(handle).out(allow).send();
+    response(handle).out(allow).send();
 }
 
 void BasicCommunication::replyMixingAudioSupported(const QVariantMap& handle,
                                                    bool attenuatedSupported)
 {
-    adapter->reply(handle).out(attenuatedSupported).send();
+    response(handle).out(attenuatedSupported).send();
 }
 
 void BasicCommunication::replyGetSystemInfo(const QVariantMap& handle,
     const QString &ccpu_version, int language, const QString &wersCountryCode)
 {
-    adapter->reply(handle).out(ccpu_version).out(language).out(wersCountryCode).send();
+    response(handle).out(ccpu_version).out(language).out(wersCountryCode).send();
 }

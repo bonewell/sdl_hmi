@@ -16,6 +16,11 @@
 #include "core/optional.h"
 
 #define IMPLICIT_CASTING(T) \
+T() {} \
+T(const QVariantMap& map) { \
+    Argument<const QVariantMap> a(map); \
+    extract(a); \
+} \
 operator QVariantMap() const { \
     QVariantMap map; \
     Argument<QVariantMap> a(map); \

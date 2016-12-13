@@ -1,5 +1,7 @@
 #include "sdl.h"
 
+#include "core/method.h"
+
 void SDLAdapter::OnAppPermissionChanged(int appID,
     const Optional<bool> &isAppPermissionsRevoked,
     const Optional<QList<PermissionItem> > &appRevokedPermissions,
@@ -22,111 +24,114 @@ void SDLAdapter::OnStatusUpdate(int status)
     emit qml->onStatusUpdate(status);
 }
 
-static void ReplyActivateApp(Courier &courier)
+InitResponse(ActivateAppResponse)
 {
-    courier.out<bool>("isSDLAllowe").out<Optional<DeviceInfo> >("device")
-        .out<bool>("isPermissionsConsentNeeded").out<bool>("isAppPermissionsRevoked")
-        .out<Optional<QList<PermissionItem> > >("appRevokedPermissions")
-        .out<bool>("isAppRevoked").out<Optional<int> >("priority").invoke();
+    response.out<bool>("isSDLAllowe").out<Optional<DeviceInfo> >("device")
+            .out<bool>("isPermissionsConsentNeeded")
+            .out<bool>("isAppPermissionsRevoked")
+            .out<Optional<QList<PermissionItem> > >("appRevokedPermissions")
+            .out<bool>("isAppRevoked").out<Optional<int> >("priority").run();
 }
 
-static void ReplyGetUserFriendlyMessage(Courier &courier)
+InitResponse(GetUserFriendlyMessageResponse)
 {
-    courier.out<Optional<QList<UserFriendlyMessage> > >("messages").invoke();
+    response.out<Optional<QList<UserFriendlyMessage> > >("messages").run();
 }
 
-static void ReplyGetListOfPermissions(Courier &courier)
+InitResponse(GetListOfPermissionsResponse)
 {
-    courier.out<QList<PermissionItem> >("allowedFunctions").invoke();
+    response.out<QList<PermissionItem> >("allowedFunctions").run();
 }
 
-static void ReplyUpdateSDL(Courier &courier)
+InitResponse(UpdateSDLResponse)
 {
-    courier.out<int>("result").invoke();
+    response.out<int>("result").run();
 }
 
-static void ReplyGetStatusUpdate(Courier &courier)
+InitResponse(GetStatusUpdateResponse)
 {
-    courier.out<int>("status").invoke();
+    response.out<int>("status").run();
 }
 
-static void ReplyGetURLS(Courier &courier)
+InitResponse(GetURLSResponse)
 {
-    courier.out<Optional<QList<ServiceInfo> > >("urls").invoke();
+    response.out<Optional<QList<ServiceInfo> > >("urls").run();
 }
 
 void SDL::activateApp(const QJSValue &callback, int appID)
 {
-    adapter->request("ActivateApp", callback, ReplyActivateApp).in(appID).call();
+    request("ActivateApp", new ActivateAppResponse(callback))
+            .in(appID).send();
 }
 
 void SDL::getUserFriendlyMessage(const QJSValue &callback,
     const QStringList &messageCodes, const QVariant &language)
 {
-    adapter->request("GetUserFriendlyMessage", callback,
-                     ReplyGetUserFriendlyMessage)
-            .in(messageCodes).in<Optional<int> >(language).call();
+    request("GetUserFriendlyMessage",
+                     new GetUserFriendlyMessageResponse(callback))
+            .in(messageCodes).in<Optional<int> >(language).send();
 }
 
 void SDL::getListOfPermissions(const QJSValue &callback, const QVariant &appID)
 {
-    adapter->request("GetListOfPermissions", callback,
-                     ReplyGetListOfPermissions).in<Optional<int> >(appID).call();
+    request("GetListOfPermissions",
+                     new GetListOfPermissionsResponse(callback))
+            .in<Optional<int> >(appID).send();
 }
 
 void SDL::updateSDL(const QJSValue &callback)
 {
-    adapter->request("UpdateSDL", callback, ReplyUpdateSDL).call();
+    request("UpdateSDL", new UpdateSDLResponse(callback)).send();
 }
 
 void SDL::getStatusUpdate(const QJSValue &callback)
 {
-    adapter->request("GetStatusUpdate", callback, ReplyGetStatusUpdate).call();
+    request("GetStatusUpdate", new GetStatusUpdateResponse(callback)).send();
 }
 
 void SDL::getURLS(const QJSValue &callback, int service)
 {
-    adapter->request("GetURLS", callback, ReplyGetURLS).in(service).call();
+    request("GetURLS", new GetURLSResponse(callback)).in(service).send();
 }
 
 void SDL::onAllowSDLFunctionality(const QVariant &device, bool allowed, int source)
 {
     // device is optional parameter, but C++ rules denies using mandatory parameters after optional
-    adapter->signal("OnAllowSDLFunctionality").arg<Optional<DeviceInfo> >(device)
+    notification("OnAllowSDLFunctionality").arg<Optional<DeviceInfo> >(device)
             .arg(allowed).arg(source).send();
 }
 
 void SDL::onReceivedPolicyUpdate(const QString &policyfile)
 {
-    adapter->signal("OnReceivedPolicyUpdate").arg(policyfile).send();
+    notification("OnReceivedPolicyUpdate").arg(policyfile).send();
 }
 
 void SDL::onPolicyUpdate()
 {
-    adapter->signal("OnPolicyUpdate").send();
+    notification("OnPolicyUpdate").send();
 }
 
 void SDL::onAppPermissionConsent(const QVariant &appID,
     const QVariantList &consentedFunctions, int source)
 {
     // appID is optional parameter, but C++ rules denies using mandatory parameters after optional
-    adapter->signal("OnAppPermissionConsent").arg<Optional<int> >(appID)
+    notification("OnAppPermissionConsent").arg<Optional<int> >(appID)
             .arg<QList<PermissionItem> >(consentedFunctions).arg(source).send();
 }
 
 void SDL::onSystemError(int error)
 {
-    adapter->signal("OnSystemError").arg(error).send();
+    notification("OnSystemError").arg(error).send();
 }
 
 void SDL::addStatisticsInfo(int statisticType)
 {
-    adapter->signal("AddStatisticsInfo").arg(statisticType).send();
+    notification("AddStatisticsInfo").arg(statisticType).send();
 }
 
 void SDL::onDeviceStateChanged(int deviceState, const QString &deviceInternalId,
     const QVariant &deviceId)
 {
-    adapter->signal("OnDeviceStateChanged").arg(deviceState).arg(deviceInternalId)
+    notification("OnDeviceStateChanged").arg(deviceState).arg(deviceInternalId)
             .arg<Optional<DeviceInfo> >(deviceId).send();
 }

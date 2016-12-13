@@ -94,7 +94,7 @@ Navigation
         } else {
             handle.code = Common.Result.INVALID_DATA;
             handle.message = "distanceToManeuver absence";
-            sendResult(handle);
+            reply(handle);
             return;
         }
         if (distanceToManeuverScale !== undefined) {
@@ -102,7 +102,7 @@ Navigation
         } else {
             handle.code = Common.Result.INVALID_DATA;
             handle.message = "distanceToManeuverScale absence";
-            sendResult(handle);
+            reply(handle);
             return;
         }
         if (maneuverComplete !== undefined) {
@@ -117,12 +117,12 @@ Navigation
         } else {
             handle.code = Common.Result.INVALID_DATA;
             handle.message = "appID absence";
-            sendResult(handle);
+            reply(handle);
             return;
         }
 
         dataContainer.setApplicationProperties(appID, { navigationModel : dataToUpdate } )
-        sendResult(handle);
+        reply(handle);
         contentLoader.go("./views/TurnByTurnView.qml", appID)
     }
 

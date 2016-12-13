@@ -60,16 +60,16 @@ ContextPopup {
         case Common.Result.ABORTED:
             console.debug("exit with abort")
             // TODO: code of error should be string like "Error.ABORTED"
-            sdlUI.sendError(async, Common.Result.ABORTED)
+            sdlUI.fail(async, Common.Result.ABORTED)
             break;
         case Common.Result.SUCCESS:
             console.debug("exit with success")
-            sdlUI.sendResult(async)
+            sdlUI.reply(async)
             break;
         case Common.Result.RETRY:
             console.debug("exit with retry")
             // TODO: code of error should be string like "Error.RETRY"
-            sdlUI.sendError(async, Common.Result.RETRY)
+            sdlUI.fail(async, Common.Result.RETRY)
             break;
         }
         hide()

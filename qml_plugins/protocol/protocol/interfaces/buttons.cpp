@@ -3,21 +3,21 @@
 void Buttons::onButtonEvent(int name, int mode, const QVariant &customButtonID,
     const QVariant &appID)
 {
-    adapter->signal("OnButtonEvent").arg(name).arg(mode)
+    notification("OnButtonEvent").arg(name).arg(mode)
             .arg<Optional<int> >(customButtonID).arg<Optional<int> >(appID).send();
 }
 
 void Buttons::onButtonPress(int name, int mode, const QVariant &customButtonID,
     const QVariant &appID)
 {
-    adapter->signal("OnButtonPress").arg(name).arg(mode)
+    notification("OnButtonPress").arg(name).arg(mode)
             .arg<Optional<int> >(customButtonID).arg<Optional<int> >(appID).send();
 }
 
 void Buttons::replyGetCapabilities(const QVariantMap& handle, const QVariantList &capabilities,
     const QVariant &presetBankCapabilities)
 {
-    adapter->reply(handle).out<QList<ButtonCapabilities> >(capabilities)
+    response(handle).out<QList<ButtonCapabilities> >(capabilities)
             .out<Optional<PresetBankCapabilities> >(presetBankCapabilities).send();
 }
 
@@ -28,5 +28,5 @@ void ButtonsAdapter::OnButtonSubscription(int name, bool isSubscribed, int appID
 
 void ButtonsAdapter::GetCapabilities(const Message &message)
 {
-    invoke("GetCapabilities", message).run();
+    call("getCapabilities", message).run();
 }

@@ -39,11 +39,13 @@ set(CMAKE_AUTOMOC ON)
 set(SOURCES
   protocol_plugin.cc
   core/service.cpp
+  core/abstractmessage.cpp
   core/abstractadapter.cpp
-  core/courier.cpp
+  core/abstractitem.cpp
   core/optional.cpp
-  core/slave.cpp
+  core/procedure.cpp
   core/signal.cpp
+  core/method.cpp
   protocol/interfaces/buttons.cpp
   protocol/interfaces/tts.cpp
   protocol/interfaces/vr.cpp
@@ -59,12 +61,14 @@ if(${TRANSPORT} STREQUAL "dbus")
   list(APPEND SOURCES
     dbus/dbusconnector.cpp
     dbus/dbuswatcher.cpp
+    dbus/dbusmessage.cpp
   )
   add_definitions(-DDBUS)
 elseif(${TRANSPORT} STREQUAL "websocket")
   list(APPEND SOURCES
     websocket/websocketconnector.cpp
     websocket/websocketwatcher.cpp
+    websocket/websocketmessage.cpp
   )
   add_definitions(-DWEBSOCKET)
 endif()

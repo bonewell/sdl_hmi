@@ -59,7 +59,7 @@ QString DBus::createSlot(const QMetaMethod& meta)
 
 void DBus::setDelayedReply(Message &message)
 {
-    message.setDelayedReply(true);
+    message.setDelayedReply();
 }
 
 void DBus::sendReply(Message &request, const Message &response)
@@ -75,14 +75,14 @@ void DBus::sendError(Message &request, const QString &name, const QString &text)
     QDBusConnection::sessionBus().send(error);
 }
 
-void DBus::sendSignal(const QString &name, const Message &message)
+void DBus::sendSignal(const Message &message)
 {
-    QDBusMessage signal = QDBusMessage::createSignal("/", name_, name);
+    QDBusMessage signal = QDBusMessage::createSignal("/", name_, message.name());
     signal.setArguments(message.arguments());
     QDBusConnection::sessionBus().send(signal);
 }
 
-Watcher *DBus::call(const QString &name, const Message &request)
+Watcher *DBus::sendRequest(const Message &request)
 {
-    return new DBusWatcher(name, request.arguments(), interface_);
+    return new DBusWatcher(request.name(), request.arguments(), interface_);
 }

@@ -11,7 +11,7 @@ class Watcher : public QObject
 public:
     explicit Watcher(QObject *parent = 0) : QObject(parent) {}
     virtual ~Watcher() {}
-    virtual Message response() = 0;
+    virtual const Message& response() = 0;
 signals:
     void finished();
 };

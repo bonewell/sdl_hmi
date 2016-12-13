@@ -28,8 +28,8 @@ public:
     virtual void setDelayedReply(Message& message);
     virtual void sendReply(Message& request, const Message &response);
     virtual void sendError(Message& request, const QString& name, const QString& text);
-    virtual void sendSignal(const QString& name, const Message &message);
-    virtual Watcher* call(const QString& name, const Message& request);
+    virtual void sendSignal(const Message &message);
+    virtual Watcher* sendRequest(const Message& request);
     virtual QObject* item() { return item_; }
 private:
     inline QString createSlot(const QMetaMethod& meta);

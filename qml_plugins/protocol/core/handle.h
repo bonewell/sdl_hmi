@@ -3,12 +3,14 @@
 #include <QString>
 #include <QVariantMap>
 
+typedef int HandleId;
+
 struct Handle
 {
-    int uid;
+    HandleId uid;
     int code;
     QString message;
-    explicit Handle(int id) : uid(id), code(0), message() {}
+    explicit Handle(HandleId id) : uid(id), code(0), message() {}
     Handle(const QVariantMap& map) {
         uid = map["uid"].toInt();
         code = map["code"].toInt();

@@ -249,7 +249,7 @@ Rectangle {
             switch (reason) {
             case Common.Result.SUCCESS:
                 async.message = "UI.Alert";
-                sdlUI.sendResult(async);
+                sdlUI.reply(async);
                 break
             // For other cases
             }

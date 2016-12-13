@@ -5,51 +5,57 @@
 #include <QList>
 #include <QByteArray>
 #include <QMetaMethod>
+#include <QVector>
+#include <QArgument>
 
 #include "core/message.h"
 #include "core/handle.h"
 #include "core/convert.h"
 
-class PrivateInterface;
+class AbstractItem;
 
-class Slave : public QObject
+/**
+ * @brief The Procedure class
+ * instance of this class is used to transmit request to QML and
+ * to send response in the bus
+ */
+class Procedure : public QObject
 {
     Q_OBJECT
 
 public:
-    Slave(const Handle& handle, const Message& message,
-          const QMetaMethod& meta, const QMetaMethod &reply_meta,
-          PrivateInterface &impl);
+    Procedure(AbstractItem* item, const QString& name, const QList<QByteArray>& input,
+              const QList<QByteArray>& output, const Handle& handle,
+              const Message& message);
 
     template<typename T>
-    Slave& in(const T& value) {
-        QVariant var;
-        var << value;
-        input_[names_[index_++]] = var;
+    Procedure& in(const T& value) {
+//        QVariant var;
+//        var << value;
+//        input_[names_[index_++]] = var;
         return *this;
     }
 
     template<typename T>
-    Slave& out(const T& value) {
-        QString name = QString(reply_names_[reply_index_++]);
-        response_.arg(name, value);
+    Procedure& out(const T& value) {
+//        response_.setArgument<T>(value);
         return *this;
     }
 
     template<typename T>
-    Slave& out(const QVariantMap& value) {
+    Procedure& out(const QVariantMap& value) {
         return out(single<T>(value));
     }
 
     template<typename T>
-    Slave& out(const QVariantList& value) {
+    Procedure& out(const QVariantList& value) {
         return out(multiple<typename T::value_type>(value));
     }
 
-    void run();
 #ifdef WEBSOCKET
     void execute();
 #endif  // WEBSOCKET
+    void run();
     void send();
     void error(const QString& name, const QString& text);
     bool hasHandle() const;
@@ -63,20 +69,19 @@ private slots:
     void sendError(const QString& name, const QString& text);
 
 private:
-    inline std::string name() const;
     inline bool canSplit(int max) const;
     bool invoke();
+    AbstractItem* item_;
+    const QString name_;
     const Handle handle_;
-    const QMetaMethod meta_;
-    const QMetaMethod reply_meta_;
     Message request_;
-    PrivateInterface& impl_;
-    int index_;
-    int reply_index_;
-    QList<QByteArray> names_;
-    QList<QByteArray> reply_names_;
-    QVariantMap input_;
     Message response_;
+//    int index_;
+    QList<QByteArray> input_;
+    QList<QByteArray> output_;
+    QVariantMap params_;
+    static const int kMaxArgs = 10;
+    QVector<QGenericArgument> args_;
 };
 
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_SLAVE_H_

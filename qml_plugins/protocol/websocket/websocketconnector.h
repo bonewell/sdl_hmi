@@ -30,8 +30,8 @@ public:
     virtual void setDelayedReply(Message& message);
     virtual void sendReply(Message& request, const Message& response);
     virtual void sendError(Message& request, const QString& name, const QString& text);
-    virtual void sendSignal(const QString& name, const Message& message);
-    virtual Watcher* call(const QString& name, const Message &request);
+    virtual void sendSignal(const Message& message);
+    virtual Watcher* sendRequest(const Message &request);
     virtual QObject* item() { return item_; }
 private slots:
     void checkin();
@@ -40,6 +40,7 @@ private slots:
 private:
     typedef QPair<QObject*, QMetaMethod> Notification;
     typedef QMap<QString, Notification> SubscribeList;
+    typedef QMap<int, WebSocketWatcher*> WatchersList;
     inline int generateId();
     inline QString name(const QMetaMethod &meta) const;
     inline bool isCheckinSuccess(const QJsonObject& json);
@@ -65,7 +66,7 @@ private:
     int request_id_;
     int checkin_id_;
     int unckeckin_id_;
-    QMap<int, WebSocketWatcher*> watchers_;
+    WatchersList watchers_;
 signals:
     void jsonReceived(const QJsonObject& json);
 };

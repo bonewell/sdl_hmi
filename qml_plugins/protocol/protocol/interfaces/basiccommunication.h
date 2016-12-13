@@ -2,6 +2,7 @@
 #define BASICCOMMUNICATION_H
 
 #include "core/abstractadapter.h"
+#include "core/abstractitem.h"
 #include "protocol/structures.h"
 
 #define BASICCOMMUNICATION_INTROSPECTION \

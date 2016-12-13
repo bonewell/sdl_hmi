@@ -12,7 +12,7 @@ void NavigationAdapter::OnVideoDataStreaming(bool available)
 
 void NavigationAdapter::IsReady(const Message &message)
 {
-    invoke("IsReady", message).run();
+    call("IsReady", message).run();
 }
 
 void NavigationAdapter::SendLocation(int appID, const Optional<double> &longitudeDegrees,
@@ -22,7 +22,7 @@ void NavigationAdapter::SendLocation(int appID, const Optional<double> &longitud
     const Optional<DateTime> &timeStamp, const Optional<OASISAddress> &address,
     const Message &message)
 {
-    invoke("SendLocation", message).in(appID).in(longitudeDegrees).in(latitudeDegrees)
+    call("sendLocation", message).in(appID).in(longitudeDegrees).in(latitudeDegrees)
         .in(locationName).in(locationDescription).in(addressLines).in(phoneNumber)
             .in(locationImage).in(timeStamp).in(address).run();
 }
@@ -33,7 +33,7 @@ void NavigationAdapter::ShowConstantTBT(const QList<TextFieldStruct> &navigation
     const Optional<bool> &maneuverComplete, const Optional<QList<SoftButton> > &softButtons,
     int appID, const Message &message)
 {
-    invoke("ShowConstantTBT", message).in(navigationTexts).in(turnIcon).in(nextTurnIcon)
+    call("showConstantTBT", message).in(navigationTexts).in(turnIcon).in(nextTurnIcon)
         .in(distanceToManeuver).in(distanceToManeuverScale).in(maneuverComplete)
             .in(softButtons).in(appID).run();
 }
@@ -41,67 +41,67 @@ void NavigationAdapter::ShowConstantTBT(const QList<TextFieldStruct> &navigation
 void NavigationAdapter::AlertManeuver(const Optional<QList<SoftButton> > &softButtons,
     int appID, const Message &message)
 {
-    invoke("AlertManeuver", message).in(softButtons).in(appID).run();
+    call("alertManeuver", message).in(softButtons).in(appID).run();
 }
 
 void NavigationAdapter::UpdateTurnList(const Optional<QList<Turn> > &turnList,
     const Optional<QList<SoftButton> > &softButtons, int appID, const Message &message)
 {
-    invoke("UpdateTurnList", message).in(turnList).in(softButtons).in(appID).run();
+    call("updateTurnList", message).in(turnList).in(softButtons).in(appID).run();
 }
 
 void NavigationAdapter::StartStream(const QString &url, int appID, const Message &message)
 {
-    invoke("StartStream", message).in(url).in(appID).run();
+    call("startStream", message).in(url).in(appID).run();
 }
 
 void NavigationAdapter::StopStream(int appID, const Message &message)
 {
-    invoke("StopStream", message).in(appID).run();
+    call("stopStream", message).in(appID).run();
 }
 
 void NavigationAdapter::StartAudioStream(const QString &url, int appID, const Message &message)
 {
-    invoke("StartAudioStream", message).in(url).in(appID).run();
+    call("startAudioStream", message).in(url).in(appID).run();
 }
 
 void NavigationAdapter::StopAudioStream(int appID, const Message &message)
 {
-    invoke("StopAudioStream", message).in(appID).run();
+    call("stopAudioStream", message).in(appID).run();
 }
 
 void NavigationAdapter::GetWayPoints(const Optional<int> &wayPointType, const Message &message)
 {
-    invoke("GetWayPoints", message).in(wayPointType).run();
+    call("getWayPoints", message).in(wayPointType).run();
 }
 
 void NavigationAdapter::SubscribeWayPoints(const Message &message)
 {
-    invoke("SubscribeWayPoints", message).run();
+    call("subscribeWayPoints", message).run();
 }
 
 void NavigationAdapter::UnsubscribeWayPoints(const Message &message)
 {
-    invoke("UnsubscribeWayPoints", message).run();
+    call("unsubscribeWayPoints", message).run();
 }
 
 void Navigation::replyIsReady(const QVariantMap& handle, bool available)
 {
-    adapter->reply(handle).out(available).send();
+    response(handle).out(available).send();
 }
 
 void Navigation::replyGetWayPoints(const QVariantMap &handle, int appID,
     const QVariant &wayPoints)
 {
-    adapter->reply(handle).out(appID).out<Optional<LocationDetails> >(wayPoints).send();
+    response(handle).out(appID).out<Optional<LocationDetails> >(wayPoints).send();
 }
 
 void Navigation::onTBTClientState(int state)
 {
-    adapter->signal("OnTBTClientState").arg(state).send();
+    notification("OnTBTClientState").arg(state).send();
 }
 
 void Navigation::onWayPointChange(const QVariantList &wayPoints)
 {
-    adapter->signal("OnWayPointChange").arg<QList<LocationDetails> >(wayPoints).send();
+    notification("OnWayPointChange").arg<QList<LocationDetails> >(wayPoints).send();
 }

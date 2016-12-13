@@ -2,6 +2,7 @@
 #define TTS_H
 
 #include "core/abstractadapter.h"
+#include "core/abstractitem.h"
 #include "protocol/structures.h"
 
 #define TTS_INTROSPECTION \

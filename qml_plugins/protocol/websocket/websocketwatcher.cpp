@@ -2,18 +2,19 @@
 
 #include <QVariantList>
 #include <QJsonObject>
+#include <QDebug>
 
-WebSocketWatcher::WebSocketWatcher() : Watcher()
+WebSocketWatcher::WebSocketWatcher(QObject *parent) : Watcher(parent)
 {
 }
 
-Message WebSocketWatcher::response()
+const Message& WebSocketWatcher::response() const
 {
-    return Message(output_);
+    return response_;
 }
 
-void WebSocketWatcher::response(const QJsonObject &value)
+void WebSocketWatcher::call(const QJsonObject &params)
 {
-    output_ = value;
+    response_.setArguments(params);
     emit finished();
 }

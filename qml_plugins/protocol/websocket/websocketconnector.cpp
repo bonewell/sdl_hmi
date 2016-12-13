@@ -108,12 +108,12 @@ void WebSocket::sendError(Message &request, const QString &name, const QString &
     send(msg);
 }
 
-void WebSocket::sendSignal(const QString &name, const Message &message)
+void WebSocket::sendSignal(const Message &message)
 {
     QJsonObject msg
     {
         {"jsonrpc", "2.0"},
-        {"method", component_name_ + "." + name},
+        {"method", component_name_ + "." + message.name()},
     };
     const QJsonObject& params = message.arguments();
     if (!params.empty()) {
@@ -122,20 +122,20 @@ void WebSocket::sendSignal(const QString &name, const Message &message)
     send(msg);
 }
 
-Watcher *WebSocket::call(const QString &name, const Message &request)
+Watcher *WebSocket::sendRequest(const Message &request)
 {
     int id = generateId();
     QJsonObject msg
     {
         {"jsonrpc", "2.0"},
         {"id", id},
-        {"method", component_name_ + "." + name}
+        {"method", component_name_ + "." + request.name()}
     };
     const QJsonObject& params = request.arguments();
     if (!params.empty()) {
         msg["params"] = params;
     }
-    WebSocketWatcher* watcher = new WebSocketWatcher();
+    WebSocketWatcher* watcher = new WebSocketWatcher(this);
     watchers_[id] = watcher;
     send(msg);
     return watcher;
@@ -204,8 +204,8 @@ bool WebSocket::isResponse(const QJsonObject &json) const
 
 void WebSocket::emitSignal(const QJsonObject &json) const
 {
-    QString name_notification = json["method"].toString();
-    SubscribeList::ConstIterator i = subscribes_.find(name_notification);
+    QString name = json["method"].toString();
+    SubscribeList::ConstIterator i = subscribes_.find(name);
     if (i != subscribes_.constEnd()) {
         const Notification& signal = i.value();
         if (!invoke(signal, json)) {
@@ -218,7 +218,8 @@ void WebSocket::invokeMethod(const QJsonObject &json) const
 {
     int id = json["id"].toInt();
     QString name_method = json["method"].toString();
-    Message request(id, name_method);
+    QJsonObject params = json["params"].toObject();
+    Message request(id, name_method, params);
     QString n = name_method.split(".").last();
     adapter_->invoke(n, request).execute();
 }
@@ -265,13 +266,14 @@ bool WebSocket::invoke(const Notification& signal, const QJsonObject& json) cons
     QVector<QGenericArgument> args(kMaxArgs);
 
     if (json.contains("params")) {
-        const QJsonObject& input = json.value("params").toObject();
+        QJsonObject input = json.value("params").toObject();
         int i = 0;
         const QList<QByteArray>& params = meta.parameterNames();
-        Message message;
         foreach (const QByteArray& name, params) {
             if (input.contains(name)) {
                 args[i++] = Q_ARG(QVariant, input[name].toVariant());
+            } else {
+                args[i++] = Q_ARG(QVariant, QVariant());
             }
         }
     }
@@ -288,9 +290,15 @@ bool WebSocket::invoke(const Notification& signal, const QJsonObject& json) cons
 void WebSocket::invokeCallback(const QJsonObject &json)
 {
     int id = json["id"].toInt();
-    WebSocketWatcher* watcher = watchers_.take(id);
-    const QJsonObject& result = json["result"].toObject();
-    watcher->response(result);
+    WatchersList::iterator i = watchers_.find(id);
+    if (i != watchers_.end()) {
+        QJsonObject result = json.value("result").toObject();
+        WebSocketWatcher* watcher = *i;
+        watcher->call(result);
+        watchers_.erase(i);
+    } else {
+        qWarning() << "Unexpected response with id: " << id;
+    }
 }
 
 void WebSocket::processError(const QJsonObject &json) const

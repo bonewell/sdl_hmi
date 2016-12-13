@@ -2,32 +2,34 @@
 #define DBUSMESSAGE_H
 
 #include <QtDBus/QDBusMessage>
+#include <QVariantList>
 
+#include "core/abstractmessage.h"
 #include "dbus/dbuscastwatcher.h"
 
-class Message : public QDBusMessage
+class Message : public QDBusMessage, public AbstractMessage
 {
 public:
-    Message() {}
-    explicit Message(const QVariantList& arguments)
-        : arguments_(arguments), index_(0) {}
+    Message();
+//    explicit Message(const QVariantList& arguments)
+//        : arguments_(arguments), index_(0) {}
+    virtual void setDelayedReply() const;
+    void setArguments(const QVariantList& arguments);
 
     template<typename T>
-    Message& arg(const QString& name, const T& value) {
-        Q_UNUSED(name);
+    void setArgument(const T& value) {
         *this << QVariant::fromValue(value);
-        return *this;
     }
 
     template<typename T>
-    T arg(const QString &name) {
+    T argument(const QString &name) {
         Q_UNUSED(name);
-        return cast_watcher<T>(arguments_[index_++]);
+        return cast_watcher<T>(i_.next());
     }
 
 private:
     QVariantList arguments_;
-    int index_;
+    QListIterator<QVariant> i_;
 };
 
 #endif // DBUSMESSAGE_H
