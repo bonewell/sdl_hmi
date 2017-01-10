@@ -5,7 +5,7 @@
 #include "core/abstractitem.h"
 
 AbstractAdapter::AbstractAdapter(QObject *parent) :
-    Adaptor(parent), impl_(parent, parent), meta_(), meta_item_(), msgs_()
+    Adaptor(parent), impl_(parent, parent), meta_(), meta_item_()
 {
 }
 
@@ -44,14 +44,14 @@ void AbstractAdapter::saveInvokable(const QMetaMethod &meta)
     }
 }
 
-void AbstractAdapter::sendReply(Message &request, const Message &response)
+void AbstractAdapter::sendReply(CoreMessage &request, const CoreMessage &response)
 {
-    impl_.sendReply(request, response);
+    impl_.sendReply(request.msg(), response.msg());
 }
 
-void AbstractAdapter::sendError(Message &request, const QString &name, const QString &text)
+void AbstractAdapter::sendError(CoreMessage &request, const QString &name, const QString &text)
 {
-    impl_.sendError(request, name, text);
+    impl_.sendError(request.msg(), name, text);
 }
 
 bool AbstractAdapter::compare(const QMetaMethod &m1, const QMetaMethod &m2) const
@@ -74,7 +74,7 @@ void AbstractAdapter::publish(const QMetaMethod &meta)
     }
 }
 
-Procedure &AbstractAdapter::call(const QString& name, const Message &message)
+Procedure &AbstractAdapter::call(const QString& name, Message message)
 {
     return item_->call(name, message);
 }

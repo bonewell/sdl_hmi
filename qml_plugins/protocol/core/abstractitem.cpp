@@ -53,7 +53,6 @@ void AbstractItem::setAdapter(AbstractAdapter *adapter)
 
 Procedure &AbstractItem::call(const QString& name, const Message &message)
 {
-    message.setDelayedReply();
     QMetaMethod meta = qmlMeta_->method(qmlMethods_[name]);
     Q_ASSERT(meta.isValid());
     QList<QByteArray> input_params = meta.parameterNames();
@@ -63,9 +62,9 @@ Procedure &AbstractItem::call(const QString& name, const Message &message)
         output_params = reply_meta.parameterNames();
     }
     Handle hdl = handle();
-    Procedure* procedure = new Procedure(this, name, input_params, output_params,
-                                         hdl, message);
+    Procedure* procedure = new Procedure(this, name, input_params, output_params, message);
     if (procedure->hasHandle()) {
+        procedure->in(hdl);
         procedures_[hdl.uid] = procedure;
     }
     return *procedure;
@@ -82,12 +81,12 @@ bool AbstractItem::invoke(const QString& name,
             args[7], args[8], args[9]);
 }
 
-void AbstractItem::sendReply(Message &request, const Message &response)
+void AbstractItem::sendReply(CoreMessage &request, const CoreMessage &response)
 {
     adapter_->sendReply(request, response);
 }
 
-void AbstractItem::sendError(Message &request, const QString &name, const QString &text)
+void AbstractItem::sendError(CoreMessage &request, const QString &name, const QString &text)
 {
     adapter_->sendError(request, name, text);
 }

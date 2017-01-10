@@ -1,13 +1,42 @@
 #include "dbusmessage.h"
 
-Message::Message() : QDBusMessage(), AbstractMessage(), i_(arguments_) {}
+DBusMessage::DBusMessage() : AbstractMessage(), i_(arguments_) {}
 
-void Message::setArguments(const QVariantList& arguments)
+DBusMessage::DBusMessage(Message &message) : AbstractMessage(),
+    p_(&message), i_(arguments_)
+{
+    setArguments(p_->arguments());
+}
+
+DBusMessage& DBusMessage::operator=(const DBusMessage& other)
+{
+    if (this != &other) {
+        *this = other;
+    }
+    return *this;
+}
+
+void DBusMessage::setArguments(const QVariantList& arguments)
 {
     arguments_ = arguments;
 }
 
-void Message::setDelayedReply() const
+const QVariantList &DBusMessage::arguments() const
 {
-    QDBusMessage::setDelayedReply(true);
+    return arguments_;
+}
+
+QDBusMessage DBusMessage::createReply(const QVariantList &output)
+{
+    return p_->createReply(output);
+}
+
+QDBusMessage DBusMessage::createErrorReply(const QString &name, const QString &msg)
+{
+    return p_->createErrorReply(name, msg);
+}
+
+void DBusMessage::setDelayedReply() const
+{
+    p_->setDelayedReply(true);
 }

@@ -8,7 +8,7 @@
 #include <QMetaMethod>
 
 #include "core/convert.h"
-#include "core/message.h"
+#include "core/coremessage.h"
 
 class PrivateInterface;
 
@@ -36,7 +36,7 @@ public:
 
 private:
     PrivateInterface& impl_;
-    Message message_;
+    CoreMessage message_;
 };
 
 #endif // SIGNAL_H

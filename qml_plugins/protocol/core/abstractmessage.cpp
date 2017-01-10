@@ -1,6 +1,7 @@
 #include "core/abstractmessage.h"
 
-AbstractMessage::AbstractMessage() : i_(params_) {}
+AbstractMessage::AbstractMessage()
+    : i_(params_), j_(values_) {}
 
 AbstractMessage::~AbstractMessage() {}
 

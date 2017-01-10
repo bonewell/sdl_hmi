@@ -1,8 +1,9 @@
 #ifndef SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_PRIVATEINTERFACE_H_
 #define SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_PRIVATEINTERFACE_H_
 
+#include "core/message.h"
+
 class AbstractAdapter;
-class Message;
 class Watcher;
 class QString;
 class QMetaMethod;

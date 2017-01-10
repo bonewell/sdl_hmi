@@ -1,6 +1,8 @@
 #ifndef BASICCOMMUNICATION_H
 #define BASICCOMMUNICATION_H
 
+#include <QtDBus/QDBusMessage>
+
 #include "core/abstractadapter.h"
 #include "core/abstractitem.h"
 #include "protocol/structures.h"
@@ -116,7 +118,7 @@
 
 class BasicCommunication;
 
-class BasicCommunicationAdapter : public AbstractAdapter
+class BasicCommunicationAdapter : public AbstractAdapter, public PrivateAdapter
 {
     Q_OBJECT
     ADAPTER_INFO(600, "com.ford.sdl.hmi.BasicCommunication", BASICCOMMUNICATION_INTROSPECTION)
@@ -136,7 +138,8 @@ public slots:
         const Optional<QString>& appID, const Message &message);
     void PolicyUpdate(const QString& file, int timeout, const QList<int>& retry,
         const Message& message);
-    void GetSystemInfo(const Message& message);
+    //void GetSystemInfo(const Message& message);
+    void GetSystemInfo();
 
 // Incoming notifications
 private slots:

@@ -39,7 +39,8 @@ set(CMAKE_AUTOMOC ON)
 set(SOURCES
   protocol_plugin.cc
   core/service.cpp
-  core/abstractmessage.cpp
+  core/coremessage.cpp
+#  core/abstractmessage.cpp
   core/abstractadapter.cpp
   core/abstractitem.cpp
   core/optional.cpp

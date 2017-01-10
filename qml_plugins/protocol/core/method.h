@@ -7,7 +7,7 @@
 #include <QVariant>
 #include <QMetaMethod>
 
-#include "core/message.h"
+#include "core/coremessage.h"
 #include "core/convert.h"
 
 class Method;
@@ -80,8 +80,8 @@ private slots:
 private:
     PrivateInterface &impl_;
     MethodCallback* callback_;
-    Message request_;
-    Message response_;
+    CoreMessage request_;
+    CoreMessage response_;
     QJSValueList output_;
     Watcher* watcher_;
 };

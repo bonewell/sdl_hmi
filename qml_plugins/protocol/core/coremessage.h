@@ -1,5 +1,5 @@
-#ifndef ABSTRACT_MESSAGE_H
-#define ABSTRACT_MESSAGE_H
+#ifndef COREMESSAGE_H
+#define COREMESSAGE_H
 
 #include <QString>
 #include <QList>
@@ -7,16 +7,18 @@
 #include <QVariant>
 
 #include "core/convert.h"
+#include "core/message.h"
 
-class AbstractMessage
+class CoreMessage
 {
 public:
-    AbstractMessage();
-    virtual ~AbstractMessage();
-    virtual void setDelayedReply() const = 0;
+    CoreMessage();
+    CoreMessage(const Message& msg);
     void setName(const QString& name);
     const QString& name() const;
     void setParams(const QList<QByteArray>& params);
+    Message& msg();
+    const Message& msg() const;
 
     template<typename T>
     void setArgument(const T& value) {
@@ -29,17 +31,18 @@ public:
     template<typename T>
     T argument(const QString &name) {
 //        params_.indexOf(name.toLatin1());
-        Q_UNUSED(name);
-        return cast_watcher<T>(i_.next());
+//        Q_UNUSED(name);
+//        return cast_watcher<T>(i_.next());
+        return T();
     }
-protected:
-    const QByteArray& nextParam();
+
 private:
     QString name_;
     QList<QByteArray> params_;
     QListIterator<QByteArray> i_;
     QVariantList values_;
     QMutableListIterator<QVariant> j_;
+    Message msg_;
 };
 
-#endif // ABSTRACT_MESSAGE_H
+#endif // COREMESSAGE_H

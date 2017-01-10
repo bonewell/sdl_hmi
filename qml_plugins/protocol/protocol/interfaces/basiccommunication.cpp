@@ -47,9 +47,10 @@ void BasicCommunicationAdapter::PolicyUpdate(const QString &file, int timeout,
     call("policyUpdate", message).in(file).in(timeout).in(retry).run();
 }
 
-void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
+//void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
+void BasicCommunicationAdapter::GetSystemInfo()
 {
-    call("getSystemInfo", message).run();
+    call("getSystemInfo").run();
 }
 
 void BasicCommunicationAdapter::OnResumeAudioSource(int appID)

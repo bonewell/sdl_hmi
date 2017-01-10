@@ -12,5 +12,5 @@ Signal::Signal(const QString &name, const QList<QByteArray>& params,
 
 void Signal::send()
 {
-    impl_.sendSignal(message_);
+    impl_.sendSignal(message_.msg());
 }

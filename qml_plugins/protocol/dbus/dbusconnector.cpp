@@ -6,6 +6,7 @@
 #include <QtQuick/QQuickItem>
 
 #include "dbus/dbuswatcher.h"
+#include "core/coremessage.h"
 
 DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
     interface_(0)
@@ -28,7 +29,7 @@ void DBus::connect(const QString &service, const QString &interface)
     service_name_ = service;
     interface_name_ = interface;
     interface_ = new QDBusInterface(service_name_, "/", interface_name_,
-                                    QDBusConnection::sessionBus(), item_);
+                                    QDBusConnection::sessionBus(), object_);
 }
 
 void DBus::subscribe(QObject* adapter, const QMetaMethod& meta)
@@ -59,7 +60,7 @@ QString DBus::createSlot(const QMetaMethod& meta)
 
 void DBus::setDelayedReply(Message &message)
 {
-    message.setDelayedReply();
+    message.setDelayedReply(true);
 }
 
 void DBus::sendReply(Message &request, const Message &response)

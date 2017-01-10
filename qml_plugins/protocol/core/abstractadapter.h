@@ -49,7 +49,7 @@ protected:
     virtual QString serviceName() { return ""; }
     virtual QString interfaceName() { return ""; }
     AbstractItem* item_;
-    Procedure& call(const QString& name, const Message& message);
+    Procedure& call(const QString& name, Message message);
 
 private:
     inline void subscribe(const QMetaMethod& meta);
@@ -57,14 +57,13 @@ private:
     inline Handle handle() const;
     inline bool compare(const QMetaMethod& m1, const QMetaMethod& m2) const;
     inline void saveInvokable(const QMetaMethod& meta);
-    void sendReply(Message& request, const Message &response);
-    void sendError(Message& request, const QString& name, const QString& text);
+    void sendReply(CoreMessage& request, const CoreMessage &response);
+    void sendError(CoreMessage& request, const QString& name, const QString& text);
     Signal& notification(const QString& name);
     Method& request(const QString &name, MethodCallback *callback);
     PrivateAdapter impl_;
     QMap<QString, int> meta_;
     QMap<QString, int> meta_item_;
-    QMap<int, Procedure*> msgs_;
     friend class AbstractItem;
 };
 

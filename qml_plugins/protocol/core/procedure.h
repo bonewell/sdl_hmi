@@ -8,7 +8,7 @@
 #include <QVector>
 #include <QArgument>
 
-#include "core/message.h"
+#include "core/coremessage.h"
 #include "core/handle.h"
 #include "core/convert.h"
 
@@ -25,20 +25,31 @@ class Procedure : public QObject
 
 public:
     Procedure(AbstractItem* item, const QString& name, const QList<QByteArray>& input,
-              const QList<QByteArray>& output, const Handle& handle,
-              const Message& message);
+              const QList<QByteArray>& output, const Message& message);
 
     template<typename T>
     Procedure& in(const T& value) {
-//        QVariant var;
-//        var << value;
-//        input_[names_[index_++]] = var;
-        return *this;
+        return setValue(Q_ARG(T, value));
+        // что если Т это структура или список
     }
 
     template<typename T>
+    Procedure& in(const Optional<T>& value) {
+        QVariant var;
+        var << value;
+        return setValue(Q_ARG(QVariant, var));
+    }
+
+//    template<typename T>
+//    Procedure& in(const QList<T>& value) {
+//        QVariantList var;
+//       var << value;
+//        return setValue(Q_ARG(QVariantList, var));
+//    }
+
+    template<typename T>
     Procedure& out(const T& value) {
-//        response_.setArgument<T>(value);
+        response_.setArgument<T>(value);
         return *this;
     }
 
@@ -70,18 +81,18 @@ private slots:
 
 private:
     inline bool canSplit(int max) const;
+    Procedure& setValue(const QGenericArgument& value);
     bool invoke();
     AbstractItem* item_;
     const QString name_;
-    const Handle handle_;
-    Message request_;
-    Message response_;
-//    int index_;
+    CoreMessage request_;
+    CoreMessage response_;
     QList<QByteArray> input_;
     QList<QByteArray> output_;
     QVariantMap params_;
     static const int kMaxArgs = 10;
     QVector<QGenericArgument> args_;
+    QMutableVectorIterator<QGenericArgument> i_;
 };
 
 #endif  // SRC_COMPONENTS_QT_HMI_QML_PLUGINS_PROTOCOL_CORE_SLAVE_H_

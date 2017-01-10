@@ -7,13 +7,13 @@
 
 Procedure::Procedure(AbstractItem* item, const QString& name,
                      const QList<QByteArray>& input,
-              const QList<QByteArray>& output, const Handle& handle,
+              const QList<QByteArray>& output,
               const Message& message)
-    : item_(item), name_(name), handle_(handle), request_(message),
-      input_(input), output_(output), args_(kMaxArgs)
+    : item_(item), name_(name), request_(message),
+      input_(input), output_(output), args_(kMaxArgs), i_(args_)
 {
 //    request_.setName(name);
-//    response_.setName(name);
+    response_.setName(name);
 //    QList<QByteArray> reply_names = reply_meta.parameterNames();
 //    reply_names.removeAll("handle");
 //    reply_names.push_front("message");
@@ -26,27 +26,30 @@ Procedure::Procedure(AbstractItem* item, const QString& name,
 
 void Procedure::run()
 {
-    if (!invoke()) {
+//    if (!invoke()) {
+    if (!item_->invoke(name_, args_)) {
         QString text = "No method " + name_;
         error("Error.NoMethod", text);
     }
     if (!hasHandle()) {
-        out(handle_.code).out(handle_.message).send();
+        int code = 0;
+        QString text = "";
+        out(code).out(text).send();
     }
 }
 
-bool Procedure::hasHandle() const {
-    return true;
-//    return names_.size() > 0 && names_[0] == "handle";
+bool Procedure::hasHandle() const
+{
+    return true;// names_.size() > 0 && names_[0] == "handle";
 }
 
 bool Procedure::canSplit(int max) const
 {
-//    if (hasHandle()) {
-//        return names_.size() < max;
-//    } else {
-//        return names_.size() <= max;
-//    }
+    if (hasHandle()) {
+        return true; //names_.size() < max;
+    } else {
+        return true; //names_.size() <= max;
+    }
     return true;
 }
 
@@ -57,14 +60,14 @@ bool Procedure::invoke()
 
     int i = 0;
 
-    QVariant hdl = QVariantMap(handle_);
-    if (hasHandle()) {
-        args[i++] = Q_ARG(QVariant, hdl);
-    }
+//    QVariant hdl = QVariantMap(handle_);
+//    if (hasHandle()) {
+//        args[i++] = Q_ARG(QVariant, hdl);
+//    }
 
     if (canSplit(kMaxArgs)) {
         foreach (const QByteArray& v, input_) {
-            if (input_.contains(v)) {
+            if (params_.contains(v)) {
                 args[i] = Q_ARG(QVariant, params_[v]);
             }
             ++i;
@@ -74,6 +77,14 @@ bool Procedure::invoke()
     }
 
     return item_->invoke(name_, args);
+}
+
+Procedure &Procedure::setValue(const QGenericArgument& value)
+{
+    if (i_.hasNext()) {
+        i_.next() = value;
+    }
+    return *this;
 }
 
 void Procedure::send()

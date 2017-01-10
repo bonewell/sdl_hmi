@@ -23,7 +23,7 @@ Method::~Method()
 
 void Method::send()
 {
-    watcher_ = impl_.sendRequest(request_);
+    watcher_ = impl_.sendRequest(request_.msg());
     connect(watcher_, &Watcher::finished, this, &Method::call);
 }
 

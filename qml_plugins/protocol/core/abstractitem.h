@@ -6,6 +6,7 @@
 
 #include "core/context.h"
 #include "core/handle.h"
+#include "core/coremessage.h"
 
 #define CONNECT_ADAPTER(Item, Adapter) \
     Q_INTERFACES(QQmlParserStatus) \
@@ -21,7 +22,7 @@ class Procedure;
 class Signal;
 class Method;
 class MethodCallback;
-class Message;
+class CoreMessage;
 
 class AbstractItem : public QObject, public QQmlParserStatus, public Context
 {
@@ -54,8 +55,8 @@ private:
     Procedure& call(const QString& name, const Message &message);
     bool invoke(const QString& name, const QVector<QGenericArgument>& args,
                 Qt::ConnectionType type = Qt::DirectConnection);
-    void sendReply(Message& request, const Message &response);
-    void sendError(Message& request, const QString& name, const QString& text);
+    void sendReply(CoreMessage& request, const CoreMessage &response);
+    void sendError(CoreMessage& request, const QString& name, const QString& text);
     QObject *object_;
     AbstractAdapter* adapter_;
     const QMetaObject* cppMeta_;
