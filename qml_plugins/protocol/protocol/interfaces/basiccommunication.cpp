@@ -47,7 +47,6 @@ void BasicCommunicationAdapter::PolicyUpdate(const QString &file, int timeout,
     call("policyUpdate", message).in(file).in(timeout).in(retry).run();
 }
 
-//void BasicCommunicationAdapter::GetSystemInfo(const Message &message)
 void BasicCommunicationAdapter::GetSystemInfo()
 {
     call("getSystemInfo").run();

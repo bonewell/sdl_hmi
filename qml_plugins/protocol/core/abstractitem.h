@@ -13,7 +13,7 @@
 public: \
     explicit Item(QObject *parent = 0) : AbstractItem(parent) {} \
     virtual void componentComplete() { \
-        setAdapter(new Adapter(this, object())); \
+        setAdapter(new Adapter(this)); \
         AbstractItem::componentComplete(); \
     }
 
@@ -28,7 +28,6 @@ class AbstractItem : public QObject, public QQmlParserStatus, public Context
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
-    Q_PROPERTY(QObject* object MEMBER object_)
 
 public:
     virtual ~AbstractItem() {}
@@ -40,7 +39,6 @@ public:
 
 protected:
     explicit AbstractItem(QObject *parent = 0);
-    QObject* object() const;
     void setAdapter(AbstractAdapter* adapter);
     Procedure& response(const Handle &handle);
     Signal& notification(const QString& name);
@@ -51,13 +49,15 @@ private:
     typedef QMap<QString, IndexMethod> MetaList;
     typedef QMap<HandleId, Procedure*> ProceduresList;
     inline Handle handle() const;
+    inline QString signalName(const QMetaMethod& meta) const;
+    inline QString methodName(const QMetaMethod& meta) const;
     inline QString replyName(const QString& name) const;
     Procedure& call(const QString& name, const Message &message);
+    Procedure& call(const QString& name);
     bool invoke(const QString& name, const QVector<QGenericArgument>& args,
                 Qt::ConnectionType type = Qt::DirectConnection);
     void sendReply(CoreMessage& request, const CoreMessage &response);
     void sendError(CoreMessage& request, const QString& name, const QString& text);
-    QObject *object_;
     AbstractAdapter* adapter_;
     const QMetaObject* cppMeta_;
     MetaList cppMethods_;

@@ -92,7 +92,7 @@ qt5_use_modules(${target} ${QT_MODULES})
 set(model_dir ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/)
 set(copy_destination ${CMAKE_CURRENT_BINARY_DIR}/../../qml_model_qt5/${destination})
 
-target_link_libraries(${target} log4cxx)
+target_link_libraries(${target})
 
 add_custom_target(copy_library_${target} ALL
   COMMAND ${CMAKE_COMMAND} -E copy_if_different

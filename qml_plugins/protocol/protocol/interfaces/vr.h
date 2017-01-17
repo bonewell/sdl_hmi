@@ -78,7 +78,7 @@ class VR;
 class VRAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO(500, "com.ford.sdl.hmi.VR", VR_INTROSPECTION)
+    ADAPTER_INFO(500, VR, VR_INTROSPECTION)
     REGISTER_ADAPTER(VRAdapter, VR)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.VR")
 

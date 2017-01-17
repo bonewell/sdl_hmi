@@ -32,7 +32,7 @@ class Buttons;
 class ButtonsAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO(200, "com.ford.sdl.hmi.Buttons", BUTTONS_INTROSPECTION)
+    ADAPTER_INFO(200, Buttons, BUTTONS_INTROSPECTION)
     REGISTER_ADAPTER(ButtonsAdapter, Buttons)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.Buttons")
 

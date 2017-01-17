@@ -118,10 +118,10 @@
 
 class BasicCommunication;
 
-class BasicCommunicationAdapter : public AbstractAdapter, public PrivateAdapter
+class BasicCommunicationAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO(600, "com.ford.sdl.hmi.BasicCommunication", BASICCOMMUNICATION_INTROSPECTION)
+    ADAPTER_INFO(600, BasicCommunication, BASICCOMMUNICATION_INTROSPECTION)
     REGISTER_ADAPTER(BasicCommunicationAdapter, BasicCommunication)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.BasicCommunication")
 
@@ -138,7 +138,6 @@ public slots:
         const Optional<QString>& appID, const Message &message);
     void PolicyUpdate(const QString& file, int timeout, const QList<int>& retry,
         const Message& message);
-    //void GetSystemInfo(const Message& message);
     void GetSystemInfo();
 
 // Incoming notifications

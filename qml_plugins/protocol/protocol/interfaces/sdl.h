@@ -39,7 +39,7 @@ class SDL;
 class SDLAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO(1000, "com.ford.sdl.hmi.SDL", SDL_INTROSPECTION)
+    ADAPTER_INFO(1000, SDL, SDL_INTROSPECTION)
     REGISTER_ADAPTER(SDLAdapter, SDL)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.SDL")
 

@@ -8,7 +8,7 @@
 #include "dbus/dbuswatcher.h"
 #include "core/coremessage.h"
 
-DBus::DBus(QObject *item, QObject *object) : item_(item), object_(object),
+DBus::DBus(QObject *object) : object_(object),
     interface_(0)
 {
 }
@@ -20,16 +20,18 @@ void DBus::setAdapter(AbstractAdapter *adapter)
 
 void DBus::init(int uid, const QString& name) {
     Q_UNUSED(uid);
-    name_ = name;
-    QDBusConnection::sessionBus().registerObject("/", object_);
+    path_ = "/" + name;
+    name_ = "com.ford.sdl.hmi." + name;
+    QDBusConnection::sessionBus().registerObject(path_, object_);
 }
 
 void DBus::connect(const QString &service, const QString &interface)
 {
     service_name_ = service;
     interface_name_ = interface;
-    interface_ = new QDBusInterface(service_name_, "/", interface_name_,
-                                    QDBusConnection::sessionBus(), object_);
+//    interface_ = new QDBusInterface(service_name_, "/", interface_name_,
+//                                    QDBusConnection::sessionBus(),
+//                                    reinterpret_cast<QObject*>(this));
 }
 
 void DBus::subscribe(QObject* adapter, const QMetaMethod& meta)
@@ -76,14 +78,14 @@ void DBus::sendError(Message &request, const QString &name, const QString &text)
     QDBusConnection::sessionBus().send(error);
 }
 
-void DBus::sendSignal(const Message &message)
+void DBus::sendSignal(const QString& nick, const Message &message)
 {
-    QDBusMessage signal = QDBusMessage::createSignal("/", name_, message.name());
+    QDBusMessage signal = QDBusMessage::createSignal(path_, name_, nick);
     signal.setArguments(message.arguments());
     QDBusConnection::sessionBus().send(signal);
 }
 
-Watcher *DBus::sendRequest(const Message &request)
+Watcher *DBus::sendRequest(const QString &nick, const Message &request)
 {
-    return new DBusWatcher(request.name(), request.arguments(), interface_);
+    return new DBusWatcher(nick, request.arguments(), interface_);
 }

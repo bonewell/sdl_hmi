@@ -525,7 +525,7 @@ class VehicleInfo;
 class VehicleInfoAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO(100, "com.ford.sdl.hmi.VehicleInfo", VEHICLEINFO_INTROSPECTION)
+    ADAPTER_INFO(100, VehicleInfo, VEHICLEINFO_INTROSPECTION)
     REGISTER_ADAPTER(VehicleInfoAdapter, VehicleInfo)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.VehicleInfo")
 

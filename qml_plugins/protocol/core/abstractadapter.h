@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QString>
 #include <QObject>
+#include <QDebug>
 
 #include "core/procedure.h"
 #include "core/method.h"
@@ -12,15 +13,17 @@
 #include "core/signal.h"
 
 #define ADAPTER_INFO(Uid, Name, Introspection) \
-    ADAPTER_INFORMATION(Name, Introspection) \
 private: \
     virtual int uid() { return Uid; } \
-    virtual QString name() { return Name; }
+    virtual QString name() { \
+        qDebug() << "Interface: " << metaObject()->classInfo(0).value(); \
+        return #Name; \
+    }
 
 #define REGISTER_ADAPTER(Adapter, Item) \
 public: \
-    Adapter(Item *item, QObject* object) : \
-        AbstractAdapter(object), \
+    explicit Adapter(Item *item) : \
+        AbstractAdapter(reinterpret_cast<QObject*>(item)), \
         qml(item) {} \
 private: \
     Item *qml;
@@ -40,7 +43,6 @@ class AbstractAdapter : public Adaptor
 public:
     explicit AbstractAdapter(QObject *parent = 0);
     void init();
-    void initInvokables(const QMetaObject* metaObject);
 
 protected:
     virtual bool isConnected() { return false; }
@@ -50,19 +52,18 @@ protected:
     virtual QString interfaceName() { return ""; }
     AbstractItem* item_;
     Procedure& call(const QString& name, Message message);
+    Procedure& call(const QString& name);
 
 private:
     inline void subscribe(const QMetaMethod& meta);
-    inline void publish(const QMetaMethod& meta);
     inline Handle handle() const;
-    inline bool compare(const QMetaMethod& m1, const QMetaMethod& m2) const;
     inline void saveInvokable(const QMetaMethod& meta);
     void sendReply(CoreMessage& request, const CoreMessage &response);
     void sendError(CoreMessage& request, const QString& name, const QString& text);
-    Signal& notification(const QString& name);
-    Method& request(const QString &name, MethodCallback *callback);
+    Signal& notification(const QString& name, const QMetaMethod& meta);
+    Method& request(const QString& name, const QMetaMethod& meta,
+                    MethodCallback* callback);
     PrivateAdapter impl_;
-    QMap<QString, int> meta_;
     QMap<QString, int> meta_item_;
     friend class AbstractItem;
 };

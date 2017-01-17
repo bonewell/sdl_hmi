@@ -1,26 +1,34 @@
 #include "abstractitem.h"
 
 #include <QVector>
+#include <QDebug>
 
 #include "core/abstractadapter.h"
 #include "core/procedure.h"
 #include "core/signal.h"
 
 AbstractItem::AbstractItem(QObject *parent)
-    : QObject(parent), object_(0), adapter_(0), cppMeta_(0), qmlMeta_(0) {}
-
-QObject* AbstractItem::object() const
-{
-    return object_;
-}
+    : QObject(parent), adapter_(0), cppMeta_(0), qmlMeta_(0) {}
 
 void AbstractItem::classBegin()
 {
+    // Save signals and methods
     cppMeta_ = metaObject();
     for(int i = cppMeta_->methodOffset(); i < cppMeta_->methodCount(); ++i) {
         QMetaMethod meta = cppMeta_->method(i);
-        QString name = QString::fromLatin1(meta.name());
-        cppMethods_[name] = meta.methodIndex();
+        switch (meta.methodType()) {
+        case QMetaMethod::Method:
+            if (meta.access() == QMetaMethod::Public) {
+                cppMethods_[methodName(meta)] = meta.methodIndex();
+            }
+            break;
+        case QMetaMethod::Signal:
+            cppMethods_[signalName(meta)] = meta.methodIndex();
+            break;
+        default:
+            // It is not interesting.
+            break;
+        }
     }
 }
 
@@ -49,6 +57,18 @@ void AbstractItem::setAdapter(AbstractAdapter *adapter)
 {
     adapter_ = adapter;
     adapter_->init();
+}
+
+Procedure &AbstractItem::call(const QString& name)
+{
+    if (calledFromDBus()) {
+      qDebug() << "call: set delayed reply";
+      setDelayedReply(true);
+      qDebug() << "call: set delayed reply is done";
+      return call(name, message());
+    }
+    Message message;
+    return call(name, message);
 }
 
 Procedure &AbstractItem::call(const QString& name, const Message &message)
@@ -100,18 +120,33 @@ Procedure &AbstractItem::response(const Handle& handle)
 
 Signal& AbstractItem::notification(const QString& name)
 {
-    return adapter_->notification(name);
+    QMetaMethod meta = cppMeta_->method(cppMethods_[name]);
+    return adapter_->notification(name, meta);
 }
 
 Method &AbstractItem::request(const QString& name, MethodCallback* callback)
 {
-    return adapter_->request(name, callback);
+    QMetaMethod meta = cppMeta_->method(cppMethods_[name]);
+    return adapter_->request(name, meta, callback);
 }
 
 Handle AbstractItem::handle() const
 {
     static int i = 0;
     return Handle(++i);
+}
+
+QString AbstractItem::methodName(const QMetaMethod& meta) const
+{
+    QString name = QString::fromLatin1(meta.name());
+    name[0] = name[0].toUpper();
+    return name;
+}
+
+QString AbstractItem::signalName(const QMetaMethod &meta) const
+{
+    QString name = QString::fromLatin1(meta.name());
+    return name;
 }
 
 QString AbstractItem::replyName(const QString &name) const

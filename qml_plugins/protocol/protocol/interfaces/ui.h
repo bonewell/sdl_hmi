@@ -212,7 +212,7 @@ class UI;
 class UIAdapter : public AbstractAdapter
 {
     Q_OBJECT
-    ADAPTER_INFO(400, "com.ford.sdl.hmi.UI", UI_INTROSPECTION)
+    ADAPTER_INFO(400, UI, UI_INTROSPECTION)
     REGISTER_ADAPTER(UIAdapter, UI)
     CONNECT_SERVICE("com.ford.sdl.core", "com.ford.sdl.core.UI")
 
